@@ -4,12 +4,10 @@ MAINTAINER purush
 
 ENV PYTHONUNBUFFERED 1
 
-# RUN adduser purush
-# USER purush
-
 RUN mkdir /ipl
 WORKDIR /ipl
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
-WORKDIR /ipl
 
+# RUN adduser -D purush
+# USER purush
