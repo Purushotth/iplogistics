@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/ipl
+    command: >
+      sh -c "python ipl/manage.py runserver 0.0.0.0:8000"
+#  db:
+#    image: mysql:5.7
+#    volumes:
+#      - db_data:/var/lib/msql
+#    restart: always
+#    ports:
+#      # <Port exposed> : < MySQL Port running inside container>
+#      - '3307:3307'
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_DATABASE: ipl
+#      MYSQL_PASSWORD: root
+#      MYSQL_USER: root
+#volumes:
+#  db_data: {}

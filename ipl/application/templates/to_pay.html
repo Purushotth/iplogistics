@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load subtract %}
+{%block title %}TO PAY Customers{% endblock title %}
+{% block other_styles %}
+<style>
+   hr.rounded {
+   border-top: 3px dashed #bbb;
+   border-radius: 5px;
+   }
+   .form-control{
+   border:1px solid black;
+   }
+   .form-group{
+   margin-bottom: 25px;
+   }
+   h5{
+   margin-bottom: 15px;
+   }
+</style>
+{% endblock other_styles %}
+{% block modal-title %}Bill Generation{% endblock modal-title %}
+{% block body_content %}
+<div class="main-content">
+   <div class="wrapper">
+      <div class="container">
+         <h2 class="mb-4 ">{% block section_heading %}{% endblock section_heading %}</h2>
+         <form method="POST" name="update-payment form" action="" >
+            {% csrf_token %}
+            <div class="form-group row">
+               <div class="col-sm-6 has-feedback">
+                   <input type="hidden" id="to-pay-ids" name="order_list" type="text" value="">
+               </div>
+            </div>
+         </form>
+      </div>
+      <div class="row">
+         <div class="table-wrapper-scroll-y my-custom-scrollbar">
+            {% if update_status %}
+         <h3 class="text-success">Payment Status updated Successfully</h3>
+            {% endif %}
+            <h4 class="mb-4 ">Order List:</h4>
+            <div class="container mt-100">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="card">
+                        <div class="card-header">
+                           <table class="table table-bordered" id="ordersTable" >
+                              <thead>
+                                 <tr>
+                                    <th scope="col">G.R.NO</th>
+                                    <th scope="col">DATE</th>
+                                    <th scope="col">FROM</th>
+                                    <th scope="col">TO</th>
+                                    <th scope="col">Amount to be paid</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 {% for result in result_set %}
+                                 <tr>
+                                    <td>{{result.id}}</td>
+                                    <td>{{result.created_dtm|date:"d.m.y"}}</td>
+                                    <td>{{result.consignor_place}}</td>
+                                    <td>{{result.consignee_place}}</td>
+                                    <td>{{result.total_charges}}</td>
+                                 </tr>
+                                 {% endfor %}
+                              </tbody>
+                           </table>
+                           <div class="form-group" >
+                              <div class="controls col-md-4 ">
+                                 <button id="update-as-paid" type="button" class="btn btn-primary"
+                                    >
+                                 Update as Paid
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock body_content %}
+{% block other_scripts %}
+<script>
+   $('input').addClass("form-control");
+   $(".driver-contact").hide();
+   $('select[name=place_of_delivery]').addClass("form-control");
+   $('select[name=driver]').addClass("form-control");
+   $('input[type=date]').attr("required");
+   $('select[name=driver]').attr("required");
+      $(document).ready(function() {
+        $("#ordersTable").DataTable();
+        $('.dataTables_length').addClass('bs-select');
+
+        $("#update-as-paid").hide();
+       $('#ordersTable tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('selected');
+            if ($('.selected').length > 0){
+               $("#update-as-paid").show();
+            }
+            else{
+               $("#update-as-paid").hide();
+            }
+        } );
+      });
+    var order_list = []
+    $('#update-as-paid').click( function () {
+         $('.selected').each(function(){
+           order_list.push($(this).children('td:first').html());
+         });
+         console.log(order_list);
+         $('#to-pay-ids').val(""+order_list);
+         $('form')[0].submit();
+    });
+</script>
+
+{% endblock other_scripts %}

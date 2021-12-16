@@ -1,0 +1,122 @@
+{% load static %}
+<html lang="en">
+   <head>
+      <title>{% block title %}{% endblock title %}</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="{% static '/css/style.css' %}" />
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+      {% block other_styles %}
+      {% endblock other_styles %}
+   </head>
+   <body>
+      <div class="wrapper d-flex align-items-stretch">
+         <nav id="sidebar">
+            <div class="custom-menu">
+               <button type="button" id="sidebarCollapse" class="btn btn-primary">
+               <i class="fa fa-bars"></i>
+               <span class="sr-only">Toggle Menu</span>
+               </button>
+            </div>
+            <div class="p-4 pt-5">
+               <h1><a href="" class="logo">IPL</a></h1>
+               <ul class="list-unstyled components mb-5">
+                   {% if not secondary_user %}
+                  <li class="active">
+                     <a href="#insertMenu" data-toggle="collapse" aria-expanded="false"
+                        class="dropdown-toggle">Insert Modules
+                     </a>
+                     <ul class="collapse list-unstyled" id="insertMenu">
+                        <li>
+                           <a href="{{driver_url}}">Driver</a>
+                        </li>
+                        <li>
+                           <a href="{{truck_url}}">Truck</a>
+                        </li>
+                        <li>
+                           <a href="{{consignee_url}}">Consignee</a>
+                        </li>
+                        <li>
+                           <a href="{{consignor_url}}">Consignor</a>
+                        </li>
+                     </ul>
+                  </li>
+                  <li class="active">
+                     <a href="#ordersMenu" data-toggle="collapse" aria-expanded="false"
+                        class="dropdown-toggle">Orders
+                     </a>
+                     <ul class="collapse list-unstyled" id="ordersMenu">
+                        <li>
+                           <a href="{{landingpage_url}}">Create Order</a>
+                        </li>
+                        <li>
+                           <a href="{{loading_challan_url}}">Loading Challan</a>
+                        </li>
+                        <li>
+                           <a href="{{generate_bill_url}}">Generate Bill</a>
+                        </li>
+                     </ul>
+                  </li>
+                   {% endif %}
+                  <li>
+                     <a href="{{logout_url}}">Logout</a>
+                  </li>
+               </ul>
+
+               <div class="footer">
+                  <p>
+                     <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                     Copyright &copy;<script>document.write(new Date().getFullYear());</script> <br>All rights
+                     reserved
+               </div>
+            </div>
+         </nav>
+         <!-- Page Content  -->
+         <div id="content" class="p-4 p-md-5 pt-5">
+            {% block body_content %}
+            <h2 class="mb-4">{% block section_heading %}{% endblock section_heading %}</h2>
+            {% endblock body_content %}
+         </div>
+      </div>
+<!-- Modal -->
+<div class="modal fade" id="popupModal" tabindex="-1" role="dialog" aria-labelledby="popupModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="popupModalLabel">{% block modal-title %}{% endblock modal-title %}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you Sure Want to Proceed?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="$('form')[0].submit()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+      <script src="{% static '/js/jquery.min.js' %}"></script>
+      <script src="{% static '/js/popper.js' %}"></script>
+      <script src="{% static '/js/bootstrap.min.js' %}"></script>
+      <script src="{% static '/js/main.js' %}"></script>
+      <script src="{% static '/js/jquery.validate.js' %}"></script>
+      <script src="{% static '/js/validation.js' %}"></script>
+      <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+      <script>
+      function validateAndShowModal(){
+          if($("form").valid()){
+            $('#popupModal').modal('show');
+          }
+      }
+
+      </script>
+      {% block other_scripts %}
+      {% endblock other_scripts %}
+   </body>
+</html>
