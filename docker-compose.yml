@@ -9,7 +9,7 @@ services:
     volumes:
       - .:/ipl
     command: >
-      sh -c "python ipl/manage.py runserver 0.0.0.0:8000"
+      sh -c "python ipl/manage.py runserver"
 #  db:
 #    image: mysql:5.7
 #    volumes:
