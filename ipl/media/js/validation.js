@@ -85,7 +85,28 @@ $('form:not([method=GET])').each(function() {
             license_document:{
                 required: true,
 //                extension: "pdf|img|png|jpg|jpeg"
-            }
+            },
+            freight_charges:{
+                required: false
+            },
+            lr_charges:{
+                required: false
+            },
+            hamali_charges:{
+                required: false
+            },
+            door_collection:{
+                required: false
+            },
+            door_delivery:{
+                required: false
+            },
+            other_charges:{
+                required: false
+            },
+            total_charges:{
+                required: true
+            },
         },
         messages: {
             confirm_password:{
@@ -162,7 +183,6 @@ $('form:not([method=GET])').each(function() {
         },
         submitHandler: function(form) {
          // Manually validate MultiWidgets.
-         console.log(111111111111);
          var groupBoxes = $('[name]');
          if (groupBoxes && groupBoxes.length) {
             groupBoxes.trigger('blur').trigger('focus').valid();
@@ -171,7 +191,6 @@ $('form:not([method=GET])').each(function() {
          // Now validate each sub-form.
          var subForms = forms.children('[data-subform]');
          if (subForms && subForms.length) {
-            console.log("if");
             // Form has sub-forms. Validate everything and allow submit only when customer is on last page.
             var currentStep = subForms.filter(':visible');
             var stepId = currentStep.attr('id');
@@ -190,7 +209,6 @@ $('form:not([method=GET])').each(function() {
                 }
             }
          } else {
-            console.log("else");
             // Form doesn't have sub-forms. Validate hidden-inside-accordion fields.
             forms.validate().settings.ignore = ':hidden :not(input[data-target]:hidden), [readonly]';
             var isValid = forms.valid();

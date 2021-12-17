@@ -407,6 +407,7 @@
    $('#package-count').on('change' ,function(){
        $('#package-description').attr("rows", $('#package-count').val());
    });
+   $('#id_total_charges').attr("readonly", "readonly");
    $('.charges').on('change', function(){
        var totalCharges =0;
        $('.charges').each(function(i, obj) {
