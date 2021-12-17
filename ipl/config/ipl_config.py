@@ -1,1 +1,1 @@
-SECONDARY_USERS = ['purushcs70@gmail.com']
+SECONDARY_USERS = ['secondary@gmail.com']
