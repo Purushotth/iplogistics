@@ -25,8 +25,8 @@
      <div class="wrapper">
         <div class="container">
              <h2 class="mb-4 ">{% block section_heading %}Bill Generation{% endblock section_heading %}</h2>
-                    {% if no_orders_present%}
-                        <h3 class="text-danger">No Orders Found with the given criteria</h3>
+                    {% if no_orders_present %}
+                        <h3 class="text-danger">No Orders Found for the given criteria</h3>
                     {% endif %}
         <form method="POST" name="order-form" action="">
             {% csrf_token %}
@@ -41,7 +41,7 @@
                              {% endfor %}
                         </select>
                         <div class="help-block error">
-                            <span for="vehicle_no"></span>
+                            <span for="consignor"></span>
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
             <input id="submit-form-name" type="hidden" name="bill" value=0>
             </form>
         </div>
-                             <div class="row">
+                             <div class="row" id="matched-orders">
 
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
                     <h4 class="mb-4 ">Order List:</h4>
@@ -121,6 +121,11 @@
 {% endblock body_content %}
 {% block other_scripts %}
 <script>
+{% if result_set|length > 0 %}
+    $('#matched-orders').show();
+{% else %}
+    $('#matched-orders').hide();
+{% endif %}
 $('input').addClass("form-control");
 $(".driver-contact").hide();
 $('select[name=place_of_delivery]').addClass("form-control");

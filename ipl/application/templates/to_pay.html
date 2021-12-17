@@ -19,7 +19,7 @@
    }
 </style>
 {% endblock other_styles %}
-{% block modal-title %}Bill Generation{% endblock modal-title %}
+{% block modal-title %}Payment Status Update{% endblock modal-title %}
 {% block body_content %}
 <div class="main-content">
    <div class="wrapper">
@@ -34,11 +34,16 @@
             </div>
          </form>
       </div>
-      <div class="row">
-         <div class="table-wrapper-scroll-y my-custom-scrollbar">
-            {% if update_status %}
+      {% if update_status %}
          <h3 class="text-success">Payment Status updated Successfully</h3>
-            {% endif %}
+      {% endif %}
+
+      {% if result_set|length == 0 %}
+               <h3 class="text-success">No Orders found with Payment Status - TOPAY</h3>
+      {% endif %}
+      <div class="row"  id="matched-orders">
+         <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
             <h4 class="mb-4 ">Order List:</h4>
             <div class="container mt-100">
                <div class="row">
@@ -69,8 +74,7 @@
                            </table>
                            <div class="form-group" >
                               <div class="controls col-md-4 ">
-                                 <button id="update-as-paid" type="button" class="btn btn-primary"
-                                    >
+                                 <button id="update-as-paid" type="button" class="btn btn-primary">
                                  Update as Paid
                                  </button>
                               </div>
@@ -87,6 +91,11 @@
 {% endblock body_content %}
 {% block other_scripts %}
 <script>
+{% if result_set|length > 0 %}
+    $('#matched-orders').show();
+{% else %}
+    $('#matched-orders').hide();
+{% endif %}
    $('input').addClass("form-control");
    $(".driver-contact").hide();
    $('select[name=place_of_delivery]').addClass("form-control");
@@ -108,14 +117,13 @@
             }
         } );
       });
-    var order_list = []
     $('#update-as-paid').click( function () {
+         var order_list = []
          $('.selected').each(function(){
            order_list.push($(this).children('td:first').html());
          });
-         console.log(order_list);
          $('#to-pay-ids').val(""+order_list);
-         $('form')[0].submit();
+         validateAndShowModal();
     });
 </script>
 

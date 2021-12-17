@@ -234,9 +234,6 @@ class LoadingChallanView(LoginRequiredMixin, View):
 
 class BillGenerationView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        for obj in ShippingOrdersModel.objects.all():
-            obj.bill = None
-            obj.save()
         form = BillForm()
         result_set = ShippingOrdersModel.objects.exclude(loading_challan=None).filter(bill=None)
         if len(result_set) == 0:
