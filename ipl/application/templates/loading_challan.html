@@ -27,8 +27,8 @@
              <h2 class="mb-4 ">{% block section_heading %}Loading Challan{% endblock section_heading %}</h2>
             <div class="col-sm-12">
                 <div class="row">
-                    {% if no_orders_present%}
-                        <h3 class="text-danger">No Orders Found with the given criteria</h3>
+                    {% if result_set|length == 0 and r_method == "POST" %}
+                        <h3 class="text-danger">No Orders Found for the given criteria</h3>
                     {% endif %}
         <form method="POST" name="order-form" action="">
             {% csrf_token %}
@@ -36,7 +36,7 @@
             <label for="{{form.billing_date.id_for_label}}" class="col-sm-6 col-form-label">Billing Date
                 :</label>
             <div class='col-sm-6'>
-                <input name="billing_date" type="date" id="billing_date" required>
+                {{form.billing_date}}
                 <div class="help-block error">
                     <span for="{{ form.billing_date.html_name }}">{{ form.billing_date.errors.as_text | cut:"* " }}</span>
                 </div>
@@ -60,8 +60,8 @@
                     <label for="{{form.driver.id_for_label}}" class="col-sm-6 col-form-label">Select Driver
                         :</label>
                     <div class="col-sm-6 has-feedback">
-                        <select name="driver" class="form-control"
-                                onchange="$('#driver_mobile').val($('select[name=driver] option:selected').next('.driver-contact').val())">
+                        <select id="driver-details" name="driver" class="form-control"
+                                onchange="$('#driver_mobile').val($('select[name=driver] option:selected').next('.driver-contact').val())" required>
                             <option value="" selected>---------</option>
                              {% for driver in driver_list %}
                             <option value="{{driver.id}}">{{driver.name}}</option>
@@ -77,7 +77,7 @@
                     <label for="{{form.vehicle_no.id_for_label}}" class="col-sm-6 col-form-label">Vehicle No
                         :</label>
                     <div class="col-sm-6 has-feedback">
-                        <select name="vehicle_no" class="form-control">
+                        <select id="vehicle-details" name="vehicle_no" class="form-control" required>
                             <option value="" selected>---------</option>
                              {% for truck in truck_list %}
                                 <option value="{{truck.id}}">{{truck.truck_number}}</option>
@@ -174,20 +174,13 @@
   Fetch Orders
 </button>
             </div>
-            <div class="controls col-md-4 ">
-
-                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#popupModal"
-                                onclick="$('#submit-form-name').attr('value', 1)">
-  Generate Challan
-                        </button></div>
         </div>
             <input id="submit-form-name" type="hidden" name="challan" value=0>
             </form>
         </div>
             </div>
         </div>
-                             <div class="row">
+                             <div class="row" id="matched-orders">
 
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
                     <h4 class="mb-4 ">Orders that match the given criteria:</h4>
@@ -196,7 +189,6 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-
       <table class="table table-bordered" id="ordersTable" >
         <thead>
           <tr>
@@ -210,7 +202,6 @@
             <th scope="col">TOPAY(in Rs)</th>
             <th scope="col">TBB(in Rs)</th>
             <th scope="col">PAID(in Rs)</th>
-
           </tr>
         </thead>
         <tbody>
@@ -241,6 +232,15 @@
             {% endfor %}
         </tbody>
       </table>
+     <div class="form-group" >
+  <div class="controls col-md-4 ">
+     <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#popupModal"
+                                onclick="$('#submit-form-name').attr('value', 1)">
+     Generate Challan
+     </button>
+  </div>
+</div>
     </div>
     </div>
         </div>
@@ -253,7 +253,26 @@
 </div>
 {% endblock body_content %}
 {% block other_scripts %}
+
+
+{% if r_method == "POST" %}
+    <script>
+        $(".driver-contact").hide();
+        $("#driver-details").val("{{selected_driver_id}}").change();
+
+        $("#vehicle-details").val("{{selected_vehicle_no_id}}").change();
+    </script>
+
+{% else %}
+    $('#id_place_of_delivery').append(`<option value="" selected>---------</option>`);
+{% endif %}
+
 <script>
+{% if result_set|length > 0 %}
+    $('#matched-orders').show();
+{% else %}
+    $('#matched-orders').hide();
+{% endif %}
 $('input').addClass("form-control");
 $(".driver-contact").hide();
 $('select[name=place_of_delivery]').addClass("form-control");

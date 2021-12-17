@@ -58,6 +58,13 @@ class LoadingChallForm(ModelForm):
     class Meta:
         model = LoadingChallanModel
         exclude = ['created_dtm', 'updated_dtm']
+        widgets = {
+            'billing_date': forms.DateInput(
+                attrs={
+                    'type': 'date'
+                }
+            )
+        }
 
 
 class ShippingOrdersForm(ModelForm):

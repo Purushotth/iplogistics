@@ -79,6 +79,18 @@ $('form:not([method=GET])').each(function() {
                 regex: /^[a-zA-Z0-9]+('|-|)[a-zA-Z0-9\s]*$/,
                 exactlength: 15,
             },
+            contact_number: {
+                required: true,
+                exactlength: 10
+            },
+            family_contact: {
+                required: false,
+                exactlength: 10
+            },
+            alternate_contact: {
+                required: true,
+                exactlength: 10
+            },
             no_of_packages: {
                 required: true,
             },
@@ -107,6 +119,10 @@ $('form:not([method=GET])').each(function() {
             total_charges:{
                 required: true
             },
+            place_of_delivery:{
+                required: true,
+                dropdown: true
+            },
         },
         messages: {
             confirm_password:{
@@ -116,6 +132,15 @@ $('form:not([method=GET])').each(function() {
                 required: 'Please enter the gst number.',
                 regex: 'Please enter a valid consignor gst number.',
                 exactlength: "GST Length should be exactly 15"
+            },
+            contact_number: {
+                exactlength: "Invalid Contact"
+            },
+            family_contact: {
+                exactlength: "Invalid Contact"
+            },
+            alternate_contact: {
+                exactlength: "Invalid Contact"
             },
             consignor_gst: {
                 required: 'Please enter the gst number.',

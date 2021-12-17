@@ -54,8 +54,8 @@ def generate_pdf(result_set):
 class LandingPageView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         form = ShippingOrdersForm()
-        consignee_list = ConsigneeModel.objects.all().values('id', 'name')
-        consignor_list = ConsignorModel.objects.all().values('id', 'name')
+        consignee_list = ConsigneeModel.objects.all().values('id', 'name', 'gstin')
+        consignor_list = ConsignorModel.objects.all().values('id', 'name', 'gstin')
         order_list = ShippingOrdersModel.objects.all()
         self.context = {
             'form': form,
@@ -71,10 +71,13 @@ class LandingPageView(LoginRequiredMixin, View):
         form = ShippingOrdersForm(self.post_params)
         order_saved = 0
         if form.is_valid():
-            form.save()
+            try:
+                form.save()
+            except Exception as e:
+                print(e)
             order_saved = 1
-        consignee_list = ConsigneeModel.objects.all().values('id', 'name')
-        consignor_list = ConsignorModel.objects.all().values('id', 'name')
+        consignee_list = ConsigneeModel.objects.all().values('id', 'name', 'gstin')
+        consignor_list = ConsignorModel.objects.all().values('id', 'name', 'gstin')
         order_list = ShippingOrdersModel.objects.all()
         self.context = {
             'form': ShippingOrdersForm(),
@@ -196,8 +199,6 @@ class LoadingChallanView(LoginRequiredMixin, View):
                 consignee_place=form.cleaned_data.get("place_of_delivery"),
                 loading_challan=None
             )
-            if len(result_set) == 0:
-                return HttpResponseRedirect(reverse("application:loadingchallan") + '?no_orders_present=true')
 
             if generate_challan:
                 form.save()
@@ -211,7 +212,16 @@ class LoadingChallanView(LoginRequiredMixin, View):
             truck_list = TruckModel.objects.all().values('id', 'truck_number')
             consignee_list = ConsigneeModel.objects.all().values('id', 'name')
             consignor_list = ConsignorModel.objects.all().values('id', 'name')
+            selected_driver_id = form.cleaned_data.get("driver").id
+            selected_driver_contact = form.cleaned_data.get("driver").contact_number
+            selected_place_of_delivery = form.cleaned_data.get("place_of_delivery")
+            selected_vehicle_no_id = form.cleaned_data.get("vehicle_no").id
             self.context = {
+                'r_method': "POST",
+                "selected_driver_id": selected_driver_id,
+                "selected_driver_contact": selected_driver_contact,
+                "selected_vehicle_no_id": selected_vehicle_no_id,
+                "selected_place_of_delivery": selected_place_of_delivery,
                 'form': form,
                 'driver_list': driver_list,
                 'truck_list': truck_list,

@@ -65,10 +65,11 @@
                            <label for="{{form.consignor.id_for_label}}" class="col-sm-6 col-form-label">Pick a Consignor
                            :</label>
                            <div class="col-sm-6 has-feedback">
-                              <select name="consignor" class="form-control">
+                              <select name="consignor" class="form-control" onchange="$('#id_consignor_gst').val($('select[name=consignor] option:selected').next('.consignor-gst').val())">
                                  <option value="" selected>---------</option>
                                  {% for consignor in consignors %}
                                  <option value="{{consignor.id}}">{{consignor.name}}</option>
+                                 <option class="consignor-gst" value="{{consignor.gstin}}">{{consignor.gstin}}</option>
                                  {% endfor %}
                               </select>
                               <div class="help-block error">
@@ -101,10 +102,11 @@
                            <label for="{{form.consignee.id_for_label}}" class="col-sm-6 col-form-label">Pick a Consignee
                            :</label>
                            <div class="col-sm-6 has-feedback">
-                              <select name="consignee" class="form-control">
+                              <select name="consignee" class="form-control" onchange="$('#id_consignee_gst').val($('select[name=consignee] option:selected').next('.consignee-gst').val())">
                                  <option value="" selected>---------</option>
                                  {% for consignee in consignees %}
                                  <option value="{{consignee.id}}">{{consignee.name}}</option>
+                                 <option class="consignee-gst" value="{{consignee.gstin}}">{{consignor.gstin}}</option>
                                  {% endfor %}
                               </select>
                               <div class="help-block error">
@@ -330,7 +332,7 @@
                   <hr class="rounded">
                   <div class="form-group">
                      <div class="aab controls col-md-4 "></div>
-                     <div class="controls col-md-2 ">
+                     <div class="controls col-md-4 ">
                         <button type="button" class="btn btn-primary" onclick="validateAndShowModal()">
   Create Order
 </button>
@@ -348,7 +350,7 @@
                   <div class="col-md-12">
                      <div class="card">
                         <div class="card-header">
-                           <table class="table table-bordered" id="ordersTable" >
+                           <table class="table table-bordered table-sm stable-striped" id="ordersTable" >
                               <thead>
                                  <tr>
                                     <th scope="col">Order ID</th>
@@ -398,6 +400,11 @@
 {% endblock body_content %}
 {% block other_scripts %}
 <script>
+   $('.consignor-gst').hide();
+   $('.consignee-gst').hide();
+   $('#id_consignee_place').append(`<option value="" selected>---------</option>`);
+   $('#id_consignor_gst').attr("readonly", "readonly");
+   $('#id_consignee_gst').attr("readonly", "readonly");
    $('#paid-amount-div').hide();
    $('input').addClass("form-control");
    $('select[name=payment_status]').addClass("form-control");
