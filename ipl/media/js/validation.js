@@ -84,7 +84,7 @@ $('form:not([method=GET])').each(function() {
             },
             license_document:{
                 required: true,
-//                extension: "pdf|img|png|jpg|jpeg"
+                extension: "pdf|img|png|jpg|jpeg"
             },
             freight_charges:{
                 required: false
@@ -129,7 +129,7 @@ $('form:not([method=GET])').each(function() {
             },
             license_document:{
                 required: "Please upload the License",
-//                extension: "Please upload a valid file"
+                extension: "Please upload a valid file"
             }
         },
         errorClass: 'error help-block',

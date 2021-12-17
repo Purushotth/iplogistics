@@ -16,6 +16,7 @@
    h5{
    margin-bottom: 15px;
    }
+    .big-checkbox {width: 20px; height: 15px;}
 </style>
 {% endblock other_styles %}
 {% block body_content %}
@@ -73,7 +74,16 @@
                               </div>
                            </div>
                         </div>
+                        <div class="form-group row">
+                          <label class="col-sm-6 col-form-label" for="flexCheckDefault">
+                            Is Temporary address same as Permanent?
+                          </label>
+                           <div class="col-sm-6 has-feedback">
+                             <input class="form-control big-checkbox" type="checkbox" value="" id="addressCheck">
+                           </div>
+                        </div>
                      </div>
+
                      <div class="col-6">
                         <div class="form-group row">
                            <label for="{{form.date_of_joining.id_for_label}}" class="col-sm-6 col-form-label">Date of
@@ -144,8 +154,9 @@
                   <div class="form-group">
                      <div class="aab controls col-md-4 "></div>
                      <div class="controls col-md-2 ">
-                        <input type="submit" class="btn btn btn-primary">
-                     </div>
+                        <button type="button" class="btn btn-primary" onclick="validateAndShowModal()">
+  Submit
+</button>                     </div>
                   </div>
                </form>
             </div>
@@ -181,8 +192,7 @@
                                     <td>{{driver.family_contact}}</td>
                                     <td>{{driver.alternate_contact}}</td>
                                     <td>{{driver.license_number}}</td>
-                                    <!--              <td><a href=""></a><span class="license-span">{{driver.license_document}}</span></td>-->
-                                    <td><a href="ipl/{{driver.license_document}}" target="_blank">Click Here</a></td>
+                                    <td><a href="{{driver.license_document.name}}" target="_blank">Click Here</a></td>
                                     <td>{{driver.date_of_joining}}</td>
                                     <td>{{driver.address_permanent}}</td>
                                     <td>{{driver.address_temporary}}</td>
@@ -207,6 +217,22 @@
    $(document).ready(function() {
      $("#driverTable").DataTable();
      $('.dataTables_length').addClass('bs-select');
+   });
+
+     $('#id_address_permanent').on('change', function(){
+      if($('#addressCheck').is(':checked')){
+         $('#id_address_temporary').val($('#id_address_permanent').val());
+      }
+     });
+   $('#addressCheck').on('click', function(){
+      if ($(this).is(':checked')){
+        $('#id_address_temporary').val($('#id_address_permanent').val());
+        $('#id_address_temporary').attr("readonly", "readonly");
+      }
+      else{
+         $('#id_address_temporary').val("");
+         $('#id_address_temporary').attr("readonly", false);
+      }
    });
 </script>
 {% endblock other_scripts %}

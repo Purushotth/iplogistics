@@ -11,5 +11,5 @@ urlpatterns = [
     re_path('landingpage/?$', LandingPageView.as_view(), name='landingpage'),
     re_path('challan/?$', LoadingChallanView.as_view(), name='loadingchallan'),
     re_path('bill-generation/?$', BillGenerationView.as_view(), name='billgeneration'),
-    re_path('to-pay/?$', ToPayView.as_view(), name='to-pay'),
+    re_path('to-pay/?$', ToPayView.as_view(), name='to-pay')
 ]

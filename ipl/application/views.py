@@ -85,6 +85,8 @@ class LandingPageView(LoginRequiredMixin, View):
             'orders': order_list
         }
         return render(request, "landingpage.html", self.context)
+
+
 #         pdf = PDF()
 #         pdf.add_page()
 #
@@ -160,7 +162,7 @@ class LandingPageView(LoginRequiredMixin, View):
 #         )
 #         pdf.output('tuto1.pdf', 'F')
 #         return FileResponse(open('tuto1.pdf', 'rb'))
-        #return HttpResponseRedirect(reverse("application:loadingchallan", kwargs={"id":form.instance.id}))
+# return HttpResponseRedirect(reverse("application:loadingchallan", kwargs={"id":form.instance.id}))
 
 
 class LoadingChallanView(LoginRequiredMixin, View):
@@ -195,7 +197,7 @@ class LoadingChallanView(LoginRequiredMixin, View):
                 loading_challan=None
             )
             if len(result_set) == 0:
-                return HttpResponseRedirect(reverse("application:loadingchallan")+'?no_orders_present=true')
+                return HttpResponseRedirect(reverse("application:loadingchallan") + '?no_orders_present=true')
 
             if generate_challan:
                 form.save()
@@ -248,7 +250,7 @@ class BillGenerationView(LoginRequiredMixin, View):
                 consignor=form.cleaned_data.get("consignor")
             )
             if len(result_set) == 0:
-                return HttpResponseRedirect(reverse("application:billgeneration")+'?no_orders_present=true')
+                return HttpResponseRedirect(reverse("application:billgeneration") + '?no_orders_present=true')
 
             if generate_bill:
                 form.save()
@@ -286,7 +288,7 @@ class ToPayView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
-        order_list = tuple(map(int,''.join(request.POST.getlist("order_list")).split(',')))
+        order_list = tuple(map(int, ''.join(request.POST.getlist("order_list")).split(',')))
         filtered_list = ShippingOrdersModel.objects.filter(id__in=order_list)
         if filtered_list:
             filtered_list.update(payment_status="paid")
@@ -306,6 +308,8 @@ class DriverView(LoginRequiredMixin, View):
             'form': form,
             'drivers': DriverModel.objects.all()
         }
+        for obj in self.context.get("drivers"):
+            obj.license_document.name = obj.license_document.name[10:]
         return render(request, "driver.html", self.context)
 
     def post(self, request, *args, **kwargs):
