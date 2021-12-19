@@ -65,24 +65,6 @@
                               </div>
                            </div>
                         </div>
-                        <div class="form-group row">
-                           <label for="{{form.address_temporary.id_for_label}}" class="col-sm-6 col-form-label">Temporary
-                           Address:</label>
-                           <div class="col-sm-6 has-feedback">
-                              {{form.address_temporary}}
-                              <div class="help-block error">
-                                 <span for="{{ form.address_temporary.html_name }}">{{ form.address_temporary.errors.as_text | cut:"* " }}</span>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-6 col-form-label" for="flexCheckDefault">
-                            Is Temporary address same as Permanent?
-                          </label>
-                           <div class="col-sm-6 has-feedback">
-                             <input class="form-control big-checkbox" type="checkbox" value="" id="addressCheck">
-                           </div>
-                        </div>
                      </div>
 
                      <div class="col-6">
@@ -107,24 +89,49 @@
                               </div>
                            </div>
                         </div>
+
+                     </div>
+                     <!--right side -->
+                  </div>
+                  <hr class="rounded">
+                  <h5><u>Address Details</u></h5>
+                   <div class="row">
+                     <div class="col-12">
                         <div class="form-group row">
                            <label for="{{form.address_permanent.id_for_label}}" class="col-sm-6 col-form-label">Permanent
                            Address
                            :</label>
-                           <div class="col-sm-6 has-feedback">
+                           <div class="col-sm-6 has-feedback text-truncate">
                               {{form.address_permanent}}
                               <div class="help-block error">
                                  <span for="{{ form.address_permanent.html_name }}">{{ form.address_permanent.errors.as_text | cut:"* " }}</span>
                               </div>
                            </div>
                         </div>
+                        <div class="form-group row">
+                          <label class="col-sm-6 col-form-label" for="flexCheckDefault">
+                            Is Temporary address same as Permanent?
+                          </label>
+                           <div class="col-sm-6 has-feedback">
+                             <input class="form-control big-checkbox" type="checkbox" value="" id="addressCheck">
+                           </div>
+                        </div>
+                        <div class="form-group row">
+                           <label for="{{form.address_temporary.id_for_label}}" class="col-sm-6 col-form-label">Temporary
+                           Address:</label>
+                           <div class="col-sm-6 has-feedback">
+                              {{form.address_temporary}}
+                              <div class="help-block error">
+                                 <span for="{{ form.address_temporary.html_name }}">{{ form.address_temporary.errors.as_text | cut:"* " }}</span>
+                              </div>
+                           </div>
+                        </div>
                      </div>
-                     <!--right side -->
-                  </div>
+                   </div>
                   <hr class="rounded">
                   <h5><u>License Details</u></h5>
                   <div class="row">
-                     <div class="col-6">
+                     <div class="col-12">
                         <!--left side -->
                         <div class="form-group row">
                            <label for="{{form.license_number.id_for_label}}" class="col-sm-6 col-form-label">License Number
@@ -136,8 +143,6 @@
                               </div>
                            </div>
                         </div>
-                     </div>
-                     <div class="col-6">
                         <div class="form-group row">
                            <label for="{{form.license_document.id_for_label}}" class="col-sm-6 col-form-label">License Document
                            :</label>
@@ -149,7 +154,6 @@
                            </div>
                         </div>
                      </div>
-                     <!--right side -->
                   </div>
                   <hr class="rounded">
                   <div class="form-group">
@@ -165,13 +169,13 @@
       </div>
       <div class="row">
          <div class="table-wrapper-scroll-y my-custom-scrollbar">
-            <h4 class="mb-4 ">Available Drivers List:</h4>
+            <h5>Available Drivers List:</h5>
             <div class="container mt-100">
                <div class="row">
                   <div class="col-md-12">
                      <div class="card">
                         <div class="card-header">
-                           <table class="table table-bordered" id="driverTable" >
+                           <table class="table table-bordered" id="iplTable" >
                               <thead>
                                  <tr>
                                     <th scope="col">Name</th>
@@ -234,6 +238,7 @@
          $('#id_address_temporary').val("");
          $('#id_address_temporary').attr("readonly", false);
       }
+      $("form").valid();
    });
 </script>
 {% endblock other_scripts %}

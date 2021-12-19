@@ -10,6 +10,9 @@
       <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
       {% block other_styles %}
       {% endblock other_styles %}
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-html2canvas@latest/dist/jspdf-html2canvas.min.js"></script>
    </head>
    <body>
       <div class="wrapper d-flex align-items-stretch">
@@ -109,12 +112,11 @@
       <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
       <script type="text/javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
       <script>
-      function validateAndShowModal(){
-          if($("form").valid()){
-            $('#popupModal').modal('show');
+          function validateAndShowModal(){
+              if($("form").valid()){
+                $('#popupModal').modal('show');
+              }
           }
-      }
-
       </script>
       {% block other_scripts %}
       {% endblock other_scripts %}

@@ -10,7 +10,7 @@ class DriverModel(models.Model):
     name = models.CharField(max_length=45)
     contact_number = models.BigIntegerField(default=None)
     alternate_contact = models.BigIntegerField(default=None)
-    family_contact = models.BigIntegerField(default=None)
+    family_contact = models.BigIntegerField(default=None, null=True, blank=True)
     date_of_joining = models.DateField(default=None)
     license_number = models.CharField(max_length=45)
     license_document = models.FileField(upload_to=user_directory_path)
@@ -26,15 +26,18 @@ class DriverModel(models.Model):
 
 
 class TruckModel(models.Model):
+    class TruckTypes(models.TextChoices):
+        open_type = 'open', ('Open')
+        close_type = 'close', ('Close')
     truck_number = models.CharField(max_length=45)
     no_of_wheels = models.IntegerField(default=None)
-    model = models.IntegerField(default=None)
+    model = models.CharField(max_length=45)
     feet = models.IntegerField(default=None)
-    mileage = models.IntegerField(default=None)
+    mileage = models.IntegerField(default=0, null=True, blank=True)
     manufacture_name = models.CharField(max_length=45)
     manufacture_date = models.DateField(default=None)
-    truck_type = models.CharField(max_length=45)
-    tonnage = models.CharField(max_length=300)
+    truck_type = models.CharField(max_length=45, choices=TruckTypes.choices, default=None)
+    tonnage = models.IntegerField(default=None)
     created_dtm = models.DateTimeField(auto_now_add=True)
     updated_dtm = models.DateTimeField(auto_now=True)
 
@@ -46,7 +49,7 @@ class TruckModel(models.Model):
 
 class ConsigneeModel(models.Model):
     name = models.CharField(max_length=45)
-    contact = models.BigIntegerField()
+    contact_number = models.BigIntegerField()
     gstin = models.CharField(max_length=15)
     address = models.CharField(max_length=300)
     created_dtm = models.DateTimeField(auto_now_add=True)
@@ -59,7 +62,7 @@ class ConsigneeModel(models.Model):
 
 class ConsignorModel(models.Model):
     name = models.CharField(max_length=45)
-    contact = models.BigIntegerField()
+    contact_number = models.BigIntegerField()
     gstin = models.CharField(max_length=15)
     address = models.CharField(max_length=300)
     created_dtm = models.DateTimeField(auto_now_add=True)
@@ -108,9 +111,9 @@ class LoadingChallanModel(models.Model):
 
 class ShippingOrdersModel(models.Model):
     class TaxPayable(models.TextChoices):
-        Male = 'Consignee', ('Consignee')
-        Female = 'Consignor', ('Consignor')
-        Transgender = 'IPL', ('IPL')
+        consignee = 'Consignee', ('Consignee')
+        consignor = 'Consignor', ('Consignor')
+        ipl = 'IPL', ('IPL')
 
     class PaymentStatus(models.TextChoices):
         to_pay = 'to_pay', ('To Pay')
@@ -130,7 +133,7 @@ class ShippingOrdersModel(models.Model):
     consignee_gst = models.CharField(max_length=15)
     consignee_place = models.CharField(max_length=15, choices=ConsigneePlaces.choices, default=None)
     no_of_packages = models.CharField(max_length=15)
-    package_value = models.IntegerField()
+    package_value = models.IntegerField(null=True, default=None, blank=True)
     package_description = models.CharField(max_length=115)
     actual_weight = models.FloatField(default=None, null=True)
     charged_weight = models.FloatField(default=None, null=True)
@@ -143,10 +146,10 @@ class ShippingOrdersModel(models.Model):
     total_charges = models.FloatField()
     paid_amount = models.FloatField(default=None, null=True)
     payment_status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=None)
-    invoice_no = models.IntegerField()
+    invoice_no = models.CharField(max_length=45)
     invoice_date = models.DateField(default=None)
     billing_date = models.DateField(default=None)
-    gs_tax_payable = models.CharField(max_length=20, choices=TaxPayable.choices, default=None)
+    gs_tax_payable = models.CharField(max_length=45, choices=TaxPayable.choices, default=None)
     created_dtm = models.DateTimeField(auto_now_add=True)
     updated_dtm = models.DateTimeField(auto_now=True)
     loading_challan = models.ForeignKey(LoadingChallanModel, on_delete=CASCADE, default=None, null=True)

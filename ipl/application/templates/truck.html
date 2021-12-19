@@ -27,12 +27,16 @@
             {% if upload_status %}
                 <div class="alert alert-success"><i class="fa fa-check"></i>Truck Added Successfully</div>
             {% endif %}
-            <div class="col-sm-12">
+            {% if truck_exists %}
+                <div class="alert alert-danger">Truck number already Exist, Please verify</div>
+            {% endif %}
+            <div class="col-sm-20">
                 <div class="row">
                     <form method="POST" name="order-form" action="" enctype="multipart/form-data">
+                        <h5><u>Add Truck</u></h5>
                         {% csrf_token %}
                         <div class="row">
-                            <div class="col-6"><!--left side -->
+                            <div class="col-10"><!--left side -->
                                 <div class="form-group row">
                                     <label for="{{form.truck_number.id_for_label}}" class="col-sm-6 col-form-label">
                                         Truck No:</label>
@@ -86,7 +90,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-10">
 
 
                                 <div class="form-group row">
@@ -149,7 +153,7 @@
                              <div class="row">
 
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                    <h4 class="mb-4 ">Available Truck List:</h4>
+                    <h5>Available Truck List:</h5>
 <div class="container mt-100">
     <div class="row">
         <div class="col-md-12">
@@ -199,6 +203,9 @@
 {% endblock body_content %}
 {% block other_scripts %}
 <script>
+    $('#id_truck_type').append(`<option value="" selected>---------</option>`);
+    $('#id_no_of_wheels').attr("min", 1);
+    $('#id_no_of_wheels').attr("max", 12);
     $('input').addClass("form-control");
     $('select[name=truck_type]').addClass("form-control");
     $('input[type=date]').attr("required");

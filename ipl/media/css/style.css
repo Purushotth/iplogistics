@@ -8334,3 +8334,10 @@ a[data-toggle="collapse"] {
   .form-control:-moz-placeholder {
     /* Firefox 18- */
     color: rgba(0, 0, 0, 0.3); }
+
+    #ordersTable{
+        font-size:15px;
+    }
+    #iplTable{
+        font-size:15px;
+    }

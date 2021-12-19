@@ -17,6 +17,7 @@
     h5{
         margin-bottom: 15px;
     }
+
 </style>
 {% endblock other_styles %}
 {% block modal-title %}Challan Generation{% endblock modal-title %}
@@ -170,7 +171,8 @@
         <div class="form-group">
             <div class="aab controls col-md-4 "></div>
             <div class="controls col-md-4 ">
-                        <button type="button" class="btn btn-primary" onclick="validateAndShowModal()">
+                        <button type="button" class="btn btn-primary" onclick="$('#submit-form-name').attr('value', 0);validateAndShowModal()">
+
   Fetch Orders
 </button>
             </div>
@@ -180,10 +182,13 @@
         </div>
             </div>
         </div>
+
+
+
                              <div class="row" id="matched-orders">
 
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                    <h4 class="mb-4 ">Orders that match the given criteria:</h4>
+                    <h5>Orders that match the given criteria:</h5>
 <div class="container mt-100">
     <div class="row">
         <div class="col-md-12">
@@ -234,7 +239,8 @@
       </table>
      <div class="form-group" >
   <div class="controls col-md-4 ">
-     <button type="button" class="btn btn-primary" data-toggle="modal"
+
+     <button id="generate-challan" type="button" class="btn btn-primary" data-toggle="modal"
                                 data-target="#popupModal"
                                 onclick="$('#submit-form-name').attr('value', 1)">
      Generate Challan
@@ -253,7 +259,31 @@
 </div>
 {% endblock body_content %}
 {% block other_scripts %}
+<script>
 
+<!--$('.header-section').hide();-->
+<!--let btn = document.getElementById('btn');-->
+<!--let page = $('.header-section');-->
+<!--console.log(1111);-->
+<!--console.log(page);-->
+<!--btn.addEventListener('click', function(){-->
+<!--    printPdf();-->
+<!--});-->
+
+<!--async function printPdf() {-->
+<!--    console.log(2222);-->
+<!--    console.log(page);-->
+<!--  const pdf = await html2PDF(page, {-->
+<!--        jsPDF: {-->
+<!--          format: 'a4',-->
+<!--        },-->
+<!--        imageType: 'image/jpeg',-->
+<!--        output: './pdf/generate.pdf'-->
+<!--      });-->
+<!--  // do something with pdf(jsPdf instance)-->
+<!--}-->
+<!--printPdf();-->
+</script>
 
 {% if r_method == "POST" %}
     <script>
@@ -264,10 +294,14 @@
     </script>
 
 {% else %}
+<script>
     $('#id_place_of_delivery').append(`<option value="" selected>---------</option>`);
+</script>
 {% endif %}
 
 <script>
+
+
 {% if result_set|length > 0 %}
     $('#matched-orders').show();
 {% else %}
@@ -285,4 +319,5 @@ $('select[name=driver]').attr("required");
      $('.dataTables_length').addClass('bs-select');
    });
 </script>
+<script src="js/jsPDF/dist/jspdf.min.js"></script>
 {% endblock other_scripts %}

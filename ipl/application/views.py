@@ -8,47 +8,96 @@ from django.urls import reverse
 from .forms import *
 from .models import *
 
-from fpdf import FPDF, HTMLMixin
-from fpdf.html import HTML2FPDF
+# from fpdf import FPDF, HTMLMixin
+# from fpdf.html import HTML2FPDF
 import html
 
+# def generate_pdf(result_set):
+#     data = []
+#     pdf = PDF()
+#     pdf.add_page()
+#     data.append(("CONSIGNOR", "CONSIGNEE", "G.C. NO", "DATE", "TO", "PKGS", "WEIGHT", "TOPAY",
+#                  "TBB", "PAID"))
+#     for result in result_set:
+#         data.append((result.consignor.name, result.consignee.name, str(result.id), str(result.billing_date),
+#                      result.consignee_place, str(result.no_of_packages), str(result.charged_weight)))
+#         #
+#         # data = (
+#         #     ("First name", "Last name", "Age", "City"),
+#         #     ("Jules", "Smith", "34", "San Juan"),
+#         #     ("Mary", "Ramos", "45", "Orlando"),
+#         #     ("Carlson", "Banks", "19", "Los Angeles"),
+#         #     ("Lucas", "Cimon", "31", "Saint-Mahturin-sur-Loire"),
+#         # )
+#     pdf.write_html(
+#         f"""<table border="1"><thead><tr>
+#                 <th width="4%">{data[0][0]}</th>
+#                 <th width="18%">{data[0][1]}</th>
+#                 <th width="18%">{data[0][2]}</th>
+#                 <th width="10%">{data[0][3]}</th>
+#                 <th width="10%">{data[0][4]}</th>
+#                 <th width="10%">{data[0][5]}</th>
+#                 <th width="10%">{data[0][6]}</th>
+#                 <th width="10%">{data[0][7]}</th>
+#                 <th width="10%">{data[0][8]}</th>
+#                 <th width="10%">{data[0][9]}</th>
+#             </tr></thead><tbody><tr>
+#                 <td>{'</td><td>'.join(data[1])}</td>
+#             </tr>
+#             </tbody></table>"""
+#     )
+#     pdf.output('tuto1.pdf', 'F')
+#     return FileResponse(open('tuto1.pdf', 'rb'))
 
-def generate_pdf(result_set):
-    data = []
-    pdf = PDF()
-    pdf.add_page()
-    data.append(("CONSIGNOR", "CONSIGNEE", "G.C. NO", "DATE", "TO", "PKGS", "WEIGHT", "TOPAY",
-                 "TBB", "PAID"))
-    for result in result_set:
-        data.append((result.consignor.name, result.consignee.name, str(result.id), str(result.billing_date),
-                     result.consignee_place, str(result.no_of_packages), str(result.charged_weight)))
-        #
-        # data = (
-        #     ("First name", "Last name", "Age", "City"),
-        #     ("Jules", "Smith", "34", "San Juan"),
-        #     ("Mary", "Ramos", "45", "Orlando"),
-        #     ("Carlson", "Banks", "19", "Los Angeles"),
-        #     ("Lucas", "Cimon", "31", "Saint-Mahturin-sur-Loire"),
+from fpdf import FPDF
+import xhtml2pdf
+import wkhtmltopdf
+
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
+
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    response = HttpResponse(content_type='application/pdf')
+    pdf_status = pisa.CreatePDF(html, dest=response)
+
+    if pdf_status.err:
+        return HttpResponse('Some errors were encountered <pre>' + html + '</pre>')
+
+    return response
+
+class PDF(FPDF):
+    def lines(self):
+        self.set_line_width(0.0)
+        self.line(5.0,5.0,205.0,5.0) # top one
+        self.line(5.0,292.0,205.0,292.0) # bottom one
+        self.line(5.0,5.0,5.0,292.0) # left one
+        self.line(205.0,5.0,205.0,292.0) # right one
+
+
+class GeneratePDF(View):
+    def get(self, request, *args, **kwargs):
+        # pdf = PDF(orientation='L')
+        # pdf.add_page()
+        # pdf.lines()
+        # pdf.output('test.pdf', 'F')
+        # return FileResponse(open('test.pdf', 'rb'))
+
+        template_name = "sample1.html"
+
+        # var = WKhtmlToPdf(
+        #     url='https://www.cricbuzz.com/',
+        #     output_file='~/Downloads/example.pdf',
         # )
-    pdf.write_html(
-        f"""<table border="1"><thead><tr>
-                <th width="4%">{data[0][0]}</th>
-                <th width="18%">{data[0][1]}</th>
-                <th width="18%">{data[0][2]}</th>
-                <th width="10%">{data[0][3]}</th>
-                <th width="10%">{data[0][4]}</th>
-                <th width="10%">{data[0][5]}</th>
-                <th width="10%">{data[0][6]}</th>
-                <th width="10%">{data[0][7]}</th>
-                <th width="10%">{data[0][8]}</th>
-                <th width="10%">{data[0][9]}</th>
-            </tr></thead><tbody><tr>
-                <td>{'</td><td>'.join(data[1])}</td>
-            </tr>
-            </tbody></table>"""
-    )
-    pdf.output('tuto1.pdf', 'F')
-    return FileResponse(open('tuto1.pdf', 'rb'))
+        # print(1111)
+        # print(var.render())
+        return render_to_pdf(
+            template_name,{}
+        )
+
 
 
 class LandingPageView(LoginRequiredMixin, View):
@@ -71,10 +120,7 @@ class LandingPageView(LoginRequiredMixin, View):
         form = ShippingOrdersForm(self.post_params)
         order_saved = 0
         if form.is_valid():
-            try:
-                form.save()
-            except Exception as e:
-                print(e)
+            form.save()
             order_saved = 1
         consignee_list = ConsigneeModel.objects.all().values('id', 'name', 'gstin')
         consignor_list = ConsignorModel.objects.all().values('id', 'name', 'gstin')
@@ -200,13 +246,13 @@ class LoadingChallanView(LoginRequiredMixin, View):
                 loading_challan=None
             )
 
-            if generate_challan:
-                form.save()
-                for result in result_set:
-                    result.loading_challan = form.instance
-                    result.save()
-
-                return generate_pdf(result_set)
+            # if generate_challan:
+            #     form.save()
+            #     for result in result_set:
+            #         result.loading_challan = form.instance
+            #         result.save()
+            #
+            #     return generate_pdf(result_set)
 
             driver_list = DriverModel.objects.all().values('id', 'name', 'contact_number')
             truck_list = TruckModel.objects.all().values('id', 'truck_number')
@@ -259,13 +305,13 @@ class BillGenerationView(LoginRequiredMixin, View):
             if len(result_set) == 0:
                 return HttpResponseRedirect(reverse("application:billgeneration") + '?no_orders_present=true')
 
-            if generate_bill:
-                form.save()
-                for result in result_set:
-                    result.bill = form.instance
-                    result.save()
-
-                return generate_pdf(result_set)
+            # if generate_bill:
+            #     form.save()
+            #     for result in result_set:
+            #         result.bill = form.instance
+            #         result.save()
+            #
+            #     return generate_pdf(result_set)
 
             consignor_list = ConsignorModel.objects.all().values('id', 'name')
             self.context = {
@@ -277,11 +323,11 @@ class BillGenerationView(LoginRequiredMixin, View):
             return render(request, "bill_generation.html", self.context)
 
 
-class PDF(FPDF, HTMLMixin):
-    def write_html(self, text, image_map=None):
-        h2p = HTML2FPDF(self, image_map)
-        text = html.unescape(text)  # To deal with HTML entities
-        h2p.feed(text)
+# class PDF(FPDF, HTMLMixin):
+#     def write_html(self, text, image_map=None):
+#         h2p = HTML2FPDF(self, image_map)
+#         text = html.unescape(text)  # To deal with HTML entities
+#         h2p.feed(text)
 
 
 class ToPayView(LoginRequiredMixin, View):
@@ -324,12 +370,14 @@ class DriverView(LoginRequiredMixin, View):
         form = DriverForm(self.post_params, request.FILES)
         if form.is_valid():
             form.save()
-        self.context = {
-            'form': DriverForm(),
-            'drivers': DriverModel.objects.all(),
-            "upload_status": 1
-        }
-        return render(request, "driver.html", self.context)
+            self.context = {
+                'form': DriverForm(),
+                'drivers': DriverModel.objects.all(),
+                "upload_status": 1
+            }
+            for obj in self.context.get("drivers"):
+                obj.license_document.name = obj.license_document.name[10:]
+            return render(request, "driver.html", self.context)
 
 
 class TruckView(LoginRequiredMixin, View):
@@ -345,13 +393,25 @@ class TruckView(LoginRequiredMixin, View):
         self.post_params = request.POST.copy()
         form = TruckForm(self.post_params)
         if form.is_valid():
-            form.save()
-        self.context = {
-            'form': TruckForm(),
-            'trucks': TruckModel.objects.all(),
-            "upload_status": 1
-        }
-        return render(request, "truck.html", self.context)
+            truck_no = form.cleaned_data.get("truck_number")
+            if TruckModel.objects.filter(truck_number=truck_no).exists():
+                truck_exists = 1
+                self.context = {
+                    'form': form,
+                    'trucks': TruckModel.objects.all(),
+                    "truck_exists": truck_exists
+                }
+                return render(request, "truck.html", self.context)
+            try:
+                form.save()
+                self.context = {
+                    'form': TruckForm(),
+                    'trucks': TruckModel.objects.all(),
+                    "upload_status": 1
+                }
+                return render(request, "truck.html", self.context)
+            except Exception as e:
+                print(e)
 
 
 class ConsigneeView(LoginRequiredMixin, View):

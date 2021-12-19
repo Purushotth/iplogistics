@@ -17,18 +17,19 @@ $.validator.addMethod('exactlength', function(value, element, param) {
     return this.optional(element) || value.length == param;;
 });
 
+$.validator.addMethod('cannotExceed', function(value, element, param) {
+    return this.optional(element) || value.length < param;;
+});
+
 $.validator.addMethod('dropdown', function(value, element) {
     return !(value === '-Select One-' || value === '-None-' || (value === null));
 });
 
-//$.validator.addMethod('docFormat', function(value, element) {
-//    return this.optional(element) || value.length == param;;
-//});
 
-//$.validator.addMethod('dateField', function(value, element) {
-//    var regEx = new RegExp(/^\d{2}/\d{2}/\d{4}$/);
-//    return this.optional(element) || re.test(value);
-//});
+$.validator.addMethod("lesserThan", function (value, element, param) {
+          var $otherElement = $(param);
+          return value <= $otherElement.val();
+});
 
 var validators = []
 $('form:not([method=GET])').each(function() {
@@ -44,6 +45,18 @@ $('form:not([method=GET])').each(function() {
             this.element(element);
         }),
         rules: {
+            name: {
+                required: true,
+                regex: /^[a-zA-Z\s]+$/,
+            },
+            manufacture_name: {
+                required: true,
+                regex: /^[a-zA-Z0-9\s]+$/,
+            },
+            model: {
+                required: true,
+                regex: /^[a-zA-Z0-9\s]+$/,
+            },
             confirm_password:{
                 required: true,
                 equalTo: '#txtPassword'
@@ -94,6 +107,10 @@ $('form:not([method=GET])').each(function() {
             no_of_packages: {
                 required: true,
             },
+            license_number: {
+                regex: /^[a-zA-Z0-9\s]+$/,
+                cannotExceed: 20,
+            },
             license_document:{
                 required: true,
                 extension: "pdf|img|png|jpg|jpeg"
@@ -123,8 +140,35 @@ $('form:not([method=GET])').each(function() {
                 required: true,
                 dropdown: true
             },
+            mileage: {
+                required: false
+            },
+            truck_number: {
+                regex: /^[a-zA-Z0-9\s]+$/,
+            },
+            truck_type:{
+                required: true
+            },
+            package_value: {
+                required: false
+            },
+            invoice_no: {
+                regex: /^[a-zA-Z0-9\s]+$/,
+            },
+            charged_weight: {
+                lesserThan: '#id_actual_weight'
+            }
         },
         messages: {
+            name: {
+                regex: "Please enter a valid name"
+            },
+            manufacture_name:{
+                regex: "Please enter a valid name"
+            },
+            model:{
+                regex: "Please enter a valid model"
+            },
             confirm_password:{
                 equalTo: "Passwords dont match"
             },
@@ -152,9 +196,22 @@ $('form:not([method=GET])').each(function() {
                 regex: 'Please enter a valid consignor gst number.',
                 exactlength: "GST Length should be exactly 15"
             },
+            license_number:{
+                regex: "Please Enter a Valid License Number",
+                cannotExceed: "License Number cannot exceed 20 characters"
+            },
             license_document:{
                 required: "Please upload the License",
                 extension: "Please upload a valid file"
+            },
+            truck_number: {
+                regex: "Please enter a valid Truck No"
+            },
+            invoice_no: {
+                regex: "Please enter a valid Invoice No"
+            },
+            charged_weight: {
+                lesserThan: "Charged Weight should be lesser than or equal to Actual Weight"
             }
         },
         errorClass: 'error help-block',
