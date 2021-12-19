@@ -12,5 +12,5 @@ urlpatterns = [
     re_path('challan/?$', LoadingChallanView.as_view(), name='loadingchallan'),
     re_path('bill-generation/?$', BillGenerationView.as_view(), name='billgeneration'),
     re_path('to-pay/?$', ToPayView.as_view(), name='to-pay'),
-    re_path('pdd/?$', GeneratePDF.as_view(), name='to-pay')
+    re_path('pdd/?$', GeneratePDF.as_view(), name='pdd')
 ]
