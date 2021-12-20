@@ -11,6 +11,10 @@ from django.utils.timezone import localtime, make_aware
 # -*- Account Section Database Models -*-
 
 
+def get_now():
+    return localtime(timezone.now())
+
+
 class IPLUserManager(BaseUserManager):
     def create_user(self, email, password=None, is_staff=False):
         """
@@ -21,7 +25,7 @@ class IPLUserManager(BaseUserManager):
 
         user = self.model(
                 email=self.normalize_email(email.lower()),
-                created_dtm=localtime(timezone.now()),
+                created_dtm=get_now(),
                 is_staff=is_staff
         )
         user.set_password(password)
@@ -44,9 +48,10 @@ class IPLUser(AbstractBaseUser):
     Our own custom User model.
     """
     email = models.EmailField('Email Address', null=False, max_length=254, unique=True)
-    created_dtm = models.DateTimeField('Created', auto_now_add=True,)
+    created_dtm = models.DateTimeField('Created', default=get_now)
     is_staff = models.BooleanField('Is Staff?', default=False)
     is_superuser = models.BooleanField('Is Superuser?', default=False)
+    is_secondaryUser = models.BooleanField(default=False)
 
     objects = IPLUserManager()
 
@@ -59,6 +64,12 @@ class IPLUser(AbstractBaseUser):
     def get_short_name(self):
         # The user is identified by their email address
         return self.email
+
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
 
     class Meta:
         db_table = 'users'

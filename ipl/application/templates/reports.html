@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load subtract %}
-{%block title %}TO PAY Customers{% endblock title %}
+{%block title %}Reports{% endblock title %}
 {% block other_styles %}
 <style>
    hr.rounded {
@@ -19,32 +19,19 @@
    }
 </style>
 {% endblock other_styles %}
-{% block modal-title %}Payment Status Update{% endblock modal-title %}
 {% block body_content %}
 <div class="main-content">
    <div class="wrapper">
-      <div class="container">
-         <h2 class="mb-4 ">{% block section_heading %}{% endblock section_heading %}</h2>
-         <form method="POST" name="update-payment form" action="" >
-            {% csrf_token %}
-            <div class="form-group row">
-               <div class="col-sm-6 has-feedback">
-                   <input type="hidden" id="to-pay-ids" name="order_list" type="text" value="">
-               </div>
-            </div>
-         </form>
-      </div>
-      {% if update_status %}
-         <h3 class="text-success">Payment Status updated Successfully</h3>
-      {% endif %}
-
       {% if result_set|length == 0 %}
-               <h3 class="text-success">No Orders found with Payment Status - TOPAY</h3>
+               <h3 class="text-danger">No Orders found with Payment Status - {% if payment_status == "to_pay" %}TO PAY{% elif payment_status == "tbb" %}TO BE BILLED{% endif %}</h3>
       {% endif %}
       <div class="row"  id="matched-orders">
          <div class="table-wrapper-scroll-y my-custom-scrollbar">
-
-            <h5>Orders with the status <b><u>TO PAY</u></b></h5>
+            {% if payment_status == "to_pay" %}
+            <h5 style="text-align:center">Orders with the status <b>TO PAY</b>:</h5>
+            {% elif payment_status == "tbb" %}
+            <h5 style="text-align:center">Orders with the status <b>TO BE BILLED</b>:</h5>
+            {% endif %}
             <div class="container mt-100">
                <div class="row">
                   <div class="col-md-12">
@@ -55,9 +42,17 @@
                                  <tr>
                                     <th scope="col">G.R.NO</th>
                                     <th scope="col">DATE</th>
+                                    <th scope="col">CONSIGNOR</th>
+                                    <th scope="col">CONSIGNEE</th>
                                     <th scope="col">FROM</th>
                                     <th scope="col">TO</th>
+                                    {% if payment_status == "tbb" %}
+                                    <th scope="col">TOTAL AMOUNT</th>
+                                    <th scope="col">PAID AMOUNT</th>
+                                    <th scope="col">BALANCE AMOUNT</th>
+                                    {% else %}
                                     <th scope="col">AMOUNT</th>
+                                    {% endif %}
                                  </tr>
                               </thead>
                               <tbody>
@@ -65,20 +60,21 @@
                                  <tr>
                                     <td>{{result.id}}</td>
                                     <td>{{result.created_dtm|date:"d.m.y"}}</td>
+                                    <td>CONSIGNOR</td>
+                                    <td>CONSIGNEE</td>
                                     <td>{{result.consignor_place}}</td>
                                     <td>{{result.consignee_place}}</td>
+                                    {% if payment_status == "tbb" %}
                                     <td>{{result.total_charges}}</td>
+                                    <td>{{result.paid_amount}}</td>
+                                    <td>{{result.total_charges|do_subtract:result.paid_amount}}</td>
+                                    {% else %}
+                                    <td>{{result.total_charges}}</td>
+                                    {% endif %}
                                  </tr>
                                  {% endfor %}
                               </tbody>
                            </table>
-                           <div class="form-group" >
-                              <div class="controls col-md-4 ">
-                                 <button id="update-as-paid" type="button" class="btn btn-primary">
-                                 Update as Paid
-                                 </button>
-                              </div>
-                           </div>
                         </div>
                      </div>
                   </div>
@@ -96,35 +92,11 @@
 {% else %}
     $('#matched-orders').hide();
 {% endif %}
-   $('input').addClass("form-control");
-   $(".driver-contact").hide();
-   $('select[name=place_of_delivery]').addClass("form-control");
-   $('select[name=driver]').addClass("form-control");
-   $('input[type=date]').attr("required");
-   $('select[name=driver]').attr("required");
-      $(document).ready(function() {
-        $("#ordersTable").DataTable();
-        $('.dataTables_length').addClass('bs-select');
 
-       $("#update-as-paid").hide();
-       $('#ordersTable tbody').on( 'click', 'tr', function () {
-            $(this).toggleClass('selected');
-            if ($('.selected').length > 0){
-               $("#update-as-paid").show();
-            }
-            else{
-               $("#update-as-paid").hide();
-            }
-        });
-      });
-    $('#update-as-paid').click( function () {
-         var order_list = []
-         $('.selected').each(function(){
-           order_list.push($(this).children('td:first').html());
-         });
-         $('#to-pay-ids').val(""+order_list);
-         validateAndShowModal();
-    });
+$(document).ready(function() {
+  $("#ordersTable").DataTable();
+  $('.dataTables_length').addClass('bs-select');
+});
 </script>
 
 {% endblock other_scripts %}

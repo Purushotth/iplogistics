@@ -8,6 +8,7 @@ from django.urls import reverse
 from .forms import *
 from .models import *
 
+import logging
 # from fpdf import FPDF, HTMLMixin
 # from fpdf.html import HTML2FPDF
 import html
@@ -67,6 +68,8 @@ from django.template.loader import get_template
 #         return HttpResponse('Some errors were encountered <pre>' + html + '</pre>')
 #
 #     return response
+
+logger = logging.getLogger(__name__)
 
 class PDF(FPDF):
     def lines(self):
@@ -329,6 +332,18 @@ class BillGenerationView(LoginRequiredMixin, View):
 #         h2p.feed(text)
 
 
+class ReportsView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        self.post_params = request.GET.copy()
+        print(self.post_params)
+        payment_status = self.post_params.get("payment_status", None)
+        result_set = ShippingOrdersModel.objects.filter(payment_status=payment_status)
+        self.context = {
+            "payment_status":payment_status,
+            "result_set": result_set
+        }
+        return render(request, "reports.html", self.context)
+
 class ToPayView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         result_set = ShippingOrdersModel.objects.filter(payment_status="to_pay")
@@ -362,6 +377,7 @@ class DriverView(LoginRequiredMixin, View):
         }
         for obj in self.context.get("drivers"):
             obj.license_document.name = obj.license_document.name[10:]
+        logger.info("[DRIVER] - GET REQUEST | USER - {}".format(request.user.email))
         return render(request, "driver.html", self.context)
 
     def post(self, request, *args, **kwargs):

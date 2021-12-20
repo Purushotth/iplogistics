@@ -43,7 +43,7 @@ class LoginView(View):
             request.session.update({
                 'account_login': True
             })
-            if email in SECONDARY_USERS:
+            if request.user.is_secondaryUser:
                 return HttpResponseRedirect(reverse('application:to-pay'))
             return HttpResponseRedirect(reverse('application:landingpage'))
         else:

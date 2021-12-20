@@ -1,5 +1,4 @@
-from django.urls import include, path, re_path
-from django.views.generic import TemplateView
+from django.urls import re_path
 
 from .views import *
 
@@ -12,5 +11,6 @@ urlpatterns = [
     re_path('challan/?$', LoadingChallanView.as_view(), name='loadingchallan'),
     re_path('bill-generation/?$', BillGenerationView.as_view(), name='billgeneration'),
     re_path('to-pay/?$', ToPayView.as_view(), name='to-pay'),
+    re_path('reports/?$', ReportsView.as_view(), name='reports'),
     re_path('pdd/?$', GeneratePDF.as_view(), name='pdd')
 ]

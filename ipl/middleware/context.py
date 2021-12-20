@@ -1,12 +1,7 @@
 from django.urls import reverse
-from config.ipl_config import SECONDARY_USERS
+
 
 def extra_context(request):
-    secondary_user = False
-    if getattr(request.user, "email", None):
-        if request.user.email.lower() in (SECONDARY_USERS):
-            secondary_user = True
-
     context = {
         "driver_url":reverse('application:driver'),
         "truck_url": reverse('application:truck'),
@@ -15,8 +10,10 @@ def extra_context(request):
         "landingpage_url": reverse('application:landingpage'),
         "loading_challan_url": reverse('application:loadingchallan'),
         "generate_bill_url": reverse('application:billgeneration'),
+        "tbb_url": reverse('application:reports')+"?payment_status=tbb",
+        "to_pay_url": reverse('application:reports')+"?payment_status=to_pay",
         "logout_url": reverse('account:logout'),
-        "secondary_user": secondary_user
+        "secondary_user": True if getattr(request.user, "is_secondaryUser", False) else False
     }
 
     return context
