@@ -28,7 +28,7 @@ $.validator.addMethod('dropdown', function(value, element) {
 
 $.validator.addMethod("lesserThan", function (value, element, param) {
           var $otherElement = $(param);
-          return value <= $otherElement.val();
+          return value < $otherElement.val();
 });
 
 var validators = []
@@ -157,6 +157,9 @@ $('form:not([method=GET])').each(function() {
             },
             charged_weight: {
                 lesserThan: '#id_actual_weight'
+            },
+            no_of_wheels: {
+                required: false
             }
         },
         messages: {

@@ -80,26 +80,25 @@ class PDF(FPDF):
         self.line(205.0,5.0,205.0,292.0) # right one
 
 
-class GeneratePDF(View):
-    def get(self, request, *args, **kwargs):
-        # pdf = PDF(orientation='L')
-        # pdf.add_page()
-        # pdf.lines()
-        # pdf.output('test.pdf', 'F')
-        # return FileResponse(open('test.pdf', 'rb'))
-
-        template_name = "sample1.html"
-
-        # var = WKhtmlToPdf(
-        #     url='https://www.cricbuzz.com/',
-        #     output_file='~/Downloads/example.pdf',
-        # )
-        # print(1111)
-        # print(var.render())
-        return render_to_pdf(
-            template_name,{}
-        )
-
+# class GeneratePDF(View):
+#     def get(self, request, *args, **kwargs):
+#         # pdf = PDF(orientation='L')
+#         # pdf.add_page()
+#         # pdf.lines()
+#         # pdf.output('test.pdf', 'F')
+#         # return FileResponse(open('test.pdf', 'rb'))
+#
+#         template_name = "sample1.html"
+#
+#         # var = WKhtmlToPdf(
+#         #     url='https://www.cricbuzz.com/',
+#         #     output_file='~/Downloads/example.pdf',
+#         # )
+#         # print(1111)
+#         # print(var.render())
+#         return render_to_pdf(
+#             template_name,{}
+#         )
 
 
 class LandingPageView(LoginRequiredMixin, View):
@@ -115,14 +114,18 @@ class LandingPageView(LoginRequiredMixin, View):
             'orders': order_list,
             'order_saved': 0
         }
+        logger.info("[LANDINGPAGE] - GET REQUEST | USER - {}".format(request.user.email))
         return render(request, "landingpage.html", self.context)
 
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
+        logger.info("[LANDINGPAGE] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
         form = ShippingOrdersForm(self.post_params)
         order_saved = 0
         if form.is_valid():
+            logger.info("[LANDINGPAGE] - FORM VALIDATED | USER - {}".format(request.user.email))
             form.save()
+            logger.info("[LANDINGPAGE] - ORDER SAVED | USER - {}".format(request.user.email))
             order_saved = 1
         consignee_list = ConsigneeModel.objects.all().values('id', 'name', 'gstin')
         consignor_list = ConsignorModel.objects.all().values('id', 'name', 'gstin')
@@ -234,13 +237,16 @@ class LoadingChallanView(LoginRequiredMixin, View):
             'consignors': consignor_list,
             "no_orders_present": True if request.GET.copy().get("no_orders_present", None) else False
         }
+        logger.info("[LOADING CHALLAN] - GET REQUEST | USER - {}".format(request.user.email))
         return render(request, "loading_challan.html", self.context)
 
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
+        logger.info("[LOADING CHALLAN] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
         generate_challan = int(self.post_params.get("challan", 0))
         form = LoadingChallForm(self.post_params)
         if form.is_valid():
+            logger.info("[DRIVER] - FORM VALIDATED | USER - {}".format(request.user.email))
             result_set = ShippingOrdersModel.objects.filter(
                 created_dtm__lt=form.cleaned_data.get("billing_date"),
                 consignor_place=form.cleaned_data.get("place_of_receipt"),
@@ -293,13 +299,17 @@ class BillGenerationView(LoginRequiredMixin, View):
             'consignors': consignor_list,
             "no_orders_present": True if request.GET.copy().get("no_orders_present", None) else False
         }
+        logger.info("[BILL GENERATION] - GET REQUEST | USER - {}".format(request.user.email))
         return render(request, "bill_generation.html", self.context)
 
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
+        logger.info("[BILL GENERATION] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
+
         generate_bill = int(self.post_params.get("bill", 0))
         form = BillForm(self.post_params)
         if form.is_valid():
+            logger.info("[BILL GENERATION] - FORM VALIDATED | USER - {}".format(request.user.email))
             result_set = ShippingOrdersModel.objects.exclude(loading_challan=None).filter(
                 bill=None,
                 consignor=form.cleaned_data.get("consignor")
@@ -344,6 +354,7 @@ class ReportsView(LoginRequiredMixin, View):
         }
         return render(request, "reports.html", self.context)
 
+
 class ToPayView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         result_set = ShippingOrdersModel.objects.filter(payment_status="to_pay")
@@ -382,9 +393,12 @@ class DriverView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
+        logger.info("[DRIVER] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
         form = DriverForm(self.post_params, request.FILES)
         if form.is_valid():
+            logger.info("[DRIVER] - FORM VALIDATED | USER - {}".format(request.user.email))
             form.save()
+            logger.info("[DRIVER] - DRIVER SAVED | USER - {}".format(request.user.email))
             self.context = {
                 'form': DriverForm(),
                 'drivers': DriverModel.objects.all(),
@@ -402,14 +416,18 @@ class TruckView(LoginRequiredMixin, View):
             'form': form,
             'trucks': TruckModel.objects.all()
         }
+        logger.info("[TRUCK] - GET REQUEST | USER - {}".format(request.user.email))
         return render(request, "truck.html", self.context)
 
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
+        logger.info("[TRUCK] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
         form = TruckForm(self.post_params)
         if form.is_valid():
+            logger.info("[TRUCK] - FORM VALIDATED | USER - {}".format(request.user.email))
             truck_no = form.cleaned_data.get("truck_number")
             if TruckModel.objects.filter(truck_number=truck_no).exists():
+                logger.info("[TRUCK] - TRUCK ALREADY EXISTS | USER - {}".format(request.user.email))
                 truck_exists = 1
                 self.context = {
                     'form': form,
@@ -417,16 +435,14 @@ class TruckView(LoginRequiredMixin, View):
                     "truck_exists": truck_exists
                 }
                 return render(request, "truck.html", self.context)
-            try:
-                form.save()
-                self.context = {
-                    'form': TruckForm(),
-                    'trucks': TruckModel.objects.all(),
-                    "upload_status": 1
-                }
-                return render(request, "truck.html", self.context)
-            except Exception as e:
-                print(e)
+            form.save()
+            logger.info("[TRUCK] - TRUCK SAVED | USER - {}".format(request.user.email))
+            self.context = {
+                'form': TruckForm(),
+                'trucks': TruckModel.objects.all(),
+                "upload_status": 1
+            }
+            return render(request, "truck.html", self.context)
 
 
 class ConsigneeView(LoginRequiredMixin, View):
@@ -436,13 +452,17 @@ class ConsigneeView(LoginRequiredMixin, View):
             'form': form,
             'consignees': ConsigneeModel.objects.all()
         }
+        logger.info("[CONSIGNEE] - GET REQUEST | USER - {}".format(request.user.email))
         return render(request, "consignee.html", self.context)
 
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
+        logger.info("[CONSIGNEE] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
         form = ConsigneeForm(self.post_params, request.FILES)
         if form.is_valid():
+            logger.info("[CONSIGNEE] - FORM VALIDATED | USER - {}".format(request.user.email))
             form.save()
+            logger.info("[CONSIGNEE] - CONSIGNEE SAVED | USER - {}".format(request.user.email))
         self.context = {
             'form': ConsigneeForm(),
             'consignees': ConsigneeModel.objects.all(),
@@ -458,13 +478,17 @@ class ConsignorView(LoginRequiredMixin, View):
             'form': form,
             'consignors': ConsignorModel.objects.all()
         }
+        logger.info("[CONSIGNOR] - GET REQUEST | USER - {}".format(request.user.email))
         return render(request, "consignor.html", self.context)
 
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
+        logger.info("[CONSIGNOR] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
         form = ConsignorForm(self.post_params, request.FILES)
         if form.is_valid():
+            logger.info("[CONSIGNOR] - FORM VALIDATED | USER - {}".format(request.user.email))
             form.save()
+            logger.info("[CONSIGNOR] - CONSIGNOR SAVED | USER - {}".format(request.user.email))
         self.context = {
             'form': ConsignorForm(),
             'consignors': ConsignorModel.objects.all(),
@@ -481,3 +505,4 @@ class CashReceiptView(LoginRequiredMixin, View):
             'consignors': ConsignorModel.objects.all()
         }
         return render(request, "consignor.html", self.context)
+
