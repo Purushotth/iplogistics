@@ -26,6 +26,9 @@
             {% if upload_status %}
                 <div class="alert alert-success"><i class="fa fa-check"></i>Consignee Added Successfully</div>
             {% endif %}
+            {% if consignee_exists %}
+                <div class="alert alert-danger">Consignee already Exist, Please verify</div>
+            {% endif %}
             <div class="col-sm-20">
                 <div class="row">
                     <form method="POST" name="order-form" action="" enctype="multipart/form-data">

@@ -263,6 +263,17 @@ class DriverView(LoginRequiredMixin, View):
         form = DriverForm(self.post_params, request.FILES)
         if form.is_valid():
             logger.info("[DRIVER] - FORM VALIDATED | USER - {}".format(request.user.email))
+            if DriverModel.objects.filter(name=form.cleaned_data.get("name"), contact_number=form.cleaned_data.get("contact_number")).exists():
+                logger.info("[DRIVER] - DRIVER ALREADY EXISTS | USER - {}".format(request.user.email))
+                self.context = {
+                    'form': form,
+                    'drivers': DriverModel.objects.all(),
+                    'driver_exists': 1
+                }
+                for obj in self.context.get("drivers"):
+                    obj.license_document.name = obj.license_document.name[10:]
+                return render(request, "driver.html", self.context)
+
             form.save()
             logger.info("[DRIVER] - DRIVER SAVED | USER - {}".format(request.user.email))
             self.context = {
@@ -327,6 +338,15 @@ class ConsigneeView(LoginRequiredMixin, View):
         form = ConsigneeForm(self.post_params, request.FILES)
         if form.is_valid():
             logger.info("[CONSIGNEE] - FORM VALIDATED | USER - {}".format(request.user.email))
+            if ConsigneeModel.objects.filter(name=form.cleaned_data.get("name"), gstin=form.cleaned_data.get("gstin")).exists():
+                logger.info("[CONSIGNEE] - CONSIGNEE ALREADY EXISTS | USER - {}".format(request.user.email))
+                self.context = {
+                    'form': form,
+                    'consignees': ConsigneeModel.objects.all(),
+                    'consignee_exists': 1
+                }
+                return render(request, "consignee.html", self.context)
+
             form.save()
             logger.info("[CONSIGNEE] - CONSIGNEE SAVED | USER - {}".format(request.user.email))
         self.context = {
@@ -353,6 +373,14 @@ class ConsignorView(LoginRequiredMixin, View):
         form = ConsignorForm(self.post_params, request.FILES)
         if form.is_valid():
             logger.info("[CONSIGNOR] - FORM VALIDATED | USER - {}".format(request.user.email))
+            if ConsignorModel.objects.filter(name=form.cleaned_data.get("name"), gstin=form.cleaned_data.get("gstin")).exists():
+                logger.info("[CONSIGNEE] - CONSIGNEE ALREADY EXISTS | USER - {}".format(request.user.email))
+                self.context = {
+                    'form': form,
+                    'consignors': ConsignorModel.objects.all(),
+                    'consignor_exists': 1
+                }
+                return render(request, "consignor.html", self.context)
             form.save()
             logger.info("[CONSIGNOR] - CONSIGNOR SAVED | USER - {}".format(request.user.email))
         self.context = {
