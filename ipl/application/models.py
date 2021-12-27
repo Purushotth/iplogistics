@@ -134,7 +134,7 @@ class ShippingOrdersModel(models.Model):
     consignee_place = models.CharField(max_length=15, choices=ConsigneePlaces.choices, default=None)
     no_of_packages = models.CharField(max_length=15)
     package_value = models.IntegerField(null=True, default=None, blank=True)
-    package_description = models.CharField(max_length=115)
+    package_description = models.CharField(max_length=1000)
     actual_weight = models.FloatField(default=None, null=True)
     charged_weight = models.FloatField(default=None, null=True)
     freight_charges = models.FloatField(default=None, null=True, blank=True)
@@ -158,3 +158,12 @@ class ShippingOrdersModel(models.Model):
     class Meta:
         db_table = 'Orders'
         get_latest_by = 'created_dtm'
+
+
+class PaymentNotificationModel(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    sent = models.DateTimeField(default=False)
+
+    class Meta:
+        db_table = 'payment_notification'
+        get_latest_by = 'date'

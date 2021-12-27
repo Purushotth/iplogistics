@@ -6,7 +6,7 @@ Personify Account Section/Borrower Portal Models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.db import models
 from django.utils import timezone
-from django.utils.timezone import localtime, make_aware
+from django.utils.timezone import localtime
 
 # -*- Account Section Database Models -*-
 

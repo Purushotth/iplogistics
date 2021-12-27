@@ -125,8 +125,14 @@ class ForgotPassword(View):
                 password_reset_link = EMAIL_DOMAIN + reverse("account:set_password", kwargs={'reset_key': reset_key})
                 from_email, to = 'purushcs70@gmail.com', 'purushcs70@gmail.com'
                 text_content = 'Click on link to finish registration'
-                html_content = render_to_string("password_reset_template.html", {'password_reset_link':password_reset_link})
-                msg = EmailMultiAlternatives('IPL: Reset your Password', text_content, from_email, [to])
-                msg.attach_alternative(html_content, "text/html")
-                msg.send()
+                from django.core.mail import send_mail
+                send_mail(
+                    'IPL: Reset your Password',
+                    'ddd',
+                    from_email,
+                    [to],
+                    fail_silently=False,
+                    html_message=render_to_string('password_reset_template.html', {'password_reset_link':password_reset_link})
+                    ## So you specify the html_message parameter here.
+                )
                 return render(request, "static_content.html", {"mail_sent":1})

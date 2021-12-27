@@ -9,100 +9,16 @@ from .forms import *
 from .models import *
 
 import logging
-# from fpdf import FPDF, HTMLMixin
-# from fpdf.html import HTML2FPDF
-import html
-
-# def generate_pdf(result_set):
-#     data = []
-#     pdf = PDF()
-#     pdf.add_page()
-#     data.append(("CONSIGNOR", "CONSIGNEE", "G.C. NO", "DATE", "TO", "PKGS", "WEIGHT", "TOPAY",
-#                  "TBB", "PAID"))
-#     for result in result_set:
-#         data.append((result.consignor.name, result.consignee.name, str(result.id), str(result.billing_date),
-#                      result.consignee_place, str(result.no_of_packages), str(result.charged_weight)))
-#         #
-#         # data = (
-#         #     ("First name", "Last name", "Age", "City"),
-#         #     ("Jules", "Smith", "34", "San Juan"),
-#         #     ("Mary", "Ramos", "45", "Orlando"),
-#         #     ("Carlson", "Banks", "19", "Los Angeles"),
-#         #     ("Lucas", "Cimon", "31", "Saint-Mahturin-sur-Loire"),
-#         # )
-#     pdf.write_html(
-#         f"""<table border="1"><thead><tr>
-#                 <th width="4%">{data[0][0]}</th>
-#                 <th width="18%">{data[0][1]}</th>
-#                 <th width="18%">{data[0][2]}</th>
-#                 <th width="10%">{data[0][3]}</th>
-#                 <th width="10%">{data[0][4]}</th>
-#                 <th width="10%">{data[0][5]}</th>
-#                 <th width="10%">{data[0][6]}</th>
-#                 <th width="10%">{data[0][7]}</th>
-#                 <th width="10%">{data[0][8]}</th>
-#                 <th width="10%">{data[0][9]}</th>
-#             </tr></thead><tbody><tr>
-#                 <td>{'</td><td>'.join(data[1])}</td>
-#             </tr>
-#             </tbody></table>"""
-#     )
-#     pdf.output('tuto1.pdf', 'F')
-#     return FileResponse(open('tuto1.pdf', 'rb'))
-
-from fpdf import FPDF
-
-
-from django.http import HttpResponse
-from django.template.loader import get_template
-# from xhtml2pdf import pisa
-#
-#
-# def render_to_pdf(template_src, context_dict={}):
-#     template = get_template(template_src)
-#     html = template.render(context_dict)
-#     response = HttpResponse(content_type='application/pdf')
-#     pdf_status = pisa.CreatePDF(html, dest=response)
-#
-#     if pdf_status.err:
-#         return HttpResponse('Some errors were encountered <pre>' + html + '</pre>')
-#
-#     return response
+import os
+import base64
 
 logger = logging.getLogger(__name__)
-
-class PDF(FPDF):
-    def lines(self):
-        self.set_line_width(0.0)
-        self.line(5.0,5.0,205.0,5.0) # top one
-        self.line(5.0,292.0,205.0,292.0) # bottom one
-        self.line(5.0,5.0,5.0,292.0) # left one
-        self.line(205.0,5.0,205.0,292.0) # right one
-
-
-# class GeneratePDF(View):
-#     def get(self, request, *args, **kwargs):
-#         # pdf = PDF(orientation='L')
-#         # pdf.add_page()
-#         # pdf.lines()
-#         # pdf.output('test.pdf', 'F')
-#         # return FileResponse(open('test.pdf', 'rb'))
-#
-#         template_name = "sample1.html"
-#
-#         # var = WKhtmlToPdf(
-#         #     url='https://www.cricbuzz.com/',
-#         #     output_file='~/Downloads/example.pdf',
-#         # )
-#         # print(1111)
-#         # print(var.render())
-#         return render_to_pdf(
-#             template_name,{}
-#         )
 
 
 class LandingPageView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
+        self.get_params = request.GET.copy()
+        order_saved = self.get_params.get("order_saved", 0)
         form = ShippingOrdersForm()
         consignee_list = ConsigneeModel.objects.all().values('id', 'name', 'gstin')
         consignor_list = ConsignorModel.objects.all().values('id', 'name', 'gstin')
@@ -112,111 +28,48 @@ class LandingPageView(LoginRequiredMixin, View):
             'consignees': consignee_list,
             'consignors': consignor_list,
             'orders': order_list,
-            'order_saved': 0
+            'order_saved': order_saved or kwargs.get("order_saved")
         }
         logger.info("[LANDINGPAGE] - GET REQUEST | USER - {}".format(request.user.email))
-        return render(request, "landingpage.html", self.context)
+        response = render(request, "landingpage.html", self.context)
+        logger.info("[LANDINGPAGE] - SETTING COOKIE as 1 | USER - {}".format(request.user.email))
+        response.set_cookie("landing", 1, 5*60*60)
+        return response
 
     def post(self, request, *args, **kwargs):
+        is_cookie_present = request.COOKIES.get("landing", 0)
+        if not is_cookie_present:
+            logger.info("[LANDINGPAGE] - DUPLICATE CALL | ORDER ALREADY SAVED | USER - {}".format(request.user.email))
+            logger.info("[LANDINGPAGE] - REDIRECTING TO GET PAGE | USER - {}".format(request.user.email))
+            kwargs["order_saved"] =1
+            return self.get(request, *args, **kwargs)
         self.post_params = request.POST.copy()
         logger.info("[LANDINGPAGE] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
         form = ShippingOrdersForm(self.post_params)
-        order_saved = 0
         if form.is_valid():
             logger.info("[LANDINGPAGE] - FORM VALIDATED | USER - {}".format(request.user.email))
             form.save()
             logger.info("[LANDINGPAGE] - ORDER SAVED | USER - {}".format(request.user.email))
-            order_saved = 1
-        consignee_list = ConsigneeModel.objects.all().values('id', 'name', 'gstin')
-        consignor_list = ConsignorModel.objects.all().values('id', 'name', 'gstin')
-        order_list = ShippingOrdersModel.objects.all()
-        self.context = {
-            'form': ShippingOrdersForm(),
-            'consignees': consignee_list,
-            'consignors': consignor_list,
-            'order_saved': order_saved,
-            'order_posted': 1,
-            'orders': order_list
-        }
-        return render(request, "landingpage.html", self.context)
+            self.context = {
+                "order": ShippingOrdersModel.objects.get(id=form.instance.id)
+            }
+            response = render(request, "order_copy.html", self.context)
+            logger.info("[LANDINGPAGE] - DELETING COOKIE | USER - {}".format(request.user.email))
+            response.delete_cookie("landing")
+            return response
 
-
-#         pdf = PDF()
-#         pdf.add_page()
-#
-#         # creating a new image file with light blue color with A4 size dimensions using PIL
-#         img = Image.new('RGB', (210, 297), "lightyellow")
-#         img.save('blue_colored.png')
-#
-#         # adding image to pdf page that e created using fpdf
-#         pdf.image('blue_colored.png', x=0, y=0, w=210, h=297, type='', link='')
-#         # pdf.rect(20,20,20,20)
-#         # pdf.set_font('Arial', 'B', 16)
-#         # pdf.cell(40, 10, 'Hello World!')
-#         data = (
-#             ("First name", "Last name", "Age", "City"),
-#             ("Jules", "Smith", "34", "San Juan"),
-#             ("Mary", "Ramos", "45", "Orlando"),
-#             ("Carlson", "Banks", "19", "Los Angeles"),
-#             ("Lucas", "Cimon", "31", "Saint-Mahturin-sur-Loire"),
-#         )
-#         # pdf.write_html(
-#         #     f"""<table border="1"><thead><tr>
-#         #     <th width="25%">{data[0][0]}</th>
-#         #     <th width="25%">{data[0][1]}</th>
-#         #     <th width="15%">{data[0][2]}</th>
-#         #     <th width="35%">{data[0][3]}</th>
-#         # </tr></thead><tbody><tr>
-#         #     <td>{'</td><td>'.join(data[1])}</td>
-#         # </tr><tr>
-#         #     <td>{'</td><td>'.join(data[2])}</td>
-#         # </tr><tr>
-#         #     <td>{'</td><td>'.join(data[3])}</td>
-#         # </tr><tr>
-#         #     <td>{'</td><td>'.join(data[4])}</td>
-#         # </tr></tbody></table>"""
-#         # )
-#
-#         str1 = """
-# <H1 align="center">html2fpdf</H1>
-# <h2>Basic usage</h2>
-# <p>You can now easily print text mixing different
-# styles : <B>bold</B>, <I>italic</I>, <U>underlined</U>, or
-# <B><I><U>all at once</U></I></B>!<BR>You can also insert links
-# on text, such as <A HREF="http://www.fpdf.org">www.fpdf.org</A>,
-# or on an image: click on the logo.<br>
-# <center>
-# </center>
-# <h3>Sample List</h3>
-# <ul><li>option 1</li>
-# <ol><li>option 2</li></ol>
-# <li>option 3</li></ul>
-#
-# <table border="0" align="center" width="50%">
-# <thead>
-#     <tr>
-#         <th width="40%">Header 1</th>
-#         <th width="40%">header 2</th>
-#     </tr>
-# </thead>
-# <tbody>
-#     <tr>
-#         <td>cell 1</td>
-#         <td>cell 2</td>
-#     </tr>
-#     <tr>
-#         <td>cell 2</td>
-#         <td>cell 3</td>
-#     </tr>
-# </tbody>
-# </table>
-#         """
-#         pdf.write_html(
-#             str1
-#         )
-#         pdf.output('tuto1.pdf', 'F')
-#         return FileResponse(open('tuto1.pdf', 'rb'))
-# return HttpResponseRedirect(reverse("application:loadingchallan", kwargs={"id":form.instance.id}))
+        # consignee_list = ConsigneeModel.objects.all().values('id', 'name', 'gstin')
+        # consignor_list = ConsignorModel.objects.all().values('id', 'name', 'gstin')
+        # order_list = ShippingOrdersModel.objects.all()
+        # self.context = {
+        #     'form': ShippingOrdersForm(),
+        #     'consignees': consignee_list,
+        #     'consignors': consignor_list,
+        #     'order_saved': order_saved,
+        #     'order_posted': 1,
+        #     'orders': order_list
+        # }
+        # return render(request, "landingpage.html", self.context)
 
 
 class LoadingChallanView(LoginRequiredMixin, View):
@@ -335,17 +188,10 @@ class BillGenerationView(LoginRequiredMixin, View):
             return render(request, "bill_generation.html", self.context)
 
 
-# class PDF(FPDF, HTMLMixin):
-#     def write_html(self, text, image_map=None):
-#         h2p = HTML2FPDF(self, image_map)
-#         text = html.unescape(text)  # To deal with HTML entities
-#         h2p.feed(text)
-
 
 class ReportsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         self.post_params = request.GET.copy()
-        print(self.post_params)
         payment_status = self.post_params.get("payment_status", None)
         result_set = ShippingOrdersModel.objects.filter(payment_status=payment_status)
         self.context = {
@@ -353,6 +199,26 @@ class ReportsView(LoginRequiredMixin, View):
             "result_set": result_set
         }
         return render(request, "reports.html", self.context)
+
+
+class DownloadsView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        self.context = {
+            "order": ShippingOrdersModel.objects.get(id=self.request.GET.get('orders'))
+        }
+        return render(request, "order_copy.html", self.context)
+
+    def post(self, request, *args, **kwargs):
+        self.get_params = request.GET.copy()
+        order_copy_type = self.get_params.get('order_copy_type')
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        filename = "{}_{}.pdf".format(request.POST.get("id"), order_copy_type)
+        print(filename)
+        file = os.path.join(BASE_DIR, 'media','documents', 'orders', filename)
+        print(file)
+        with open(file, 'wb') as destination:
+            destination.write(base64.b64decode(request.POST.get("pdf_data")))
+        return HttpResponse("")
 
 
 class ToPayView(LoginRequiredMixin, View):
@@ -499,10 +365,5 @@ class ConsignorView(LoginRequiredMixin, View):
 
 class CashReceiptView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        form = ConsignorForm()
-        self.context = {
-            'form': form,
-            'consignors': ConsignorModel.objects.all()
-        }
-        return render(request, "consignor.html", self.context)
+        return render(request, "cash_receipt.html", {})
 

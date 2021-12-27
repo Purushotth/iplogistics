@@ -12,7 +12,9 @@ def extra_context(request):
         "generate_bill_url": reverse('application:billgeneration'),
         "tbb_url": reverse('application:reports')+"?payment_status=tbb",
         "to_pay_url": reverse('application:reports')+"?payment_status=to_pay",
+        "paid_url": reverse('application:reports') + "?payment_status=paid",
         "logout_url": reverse('account:logout'),
+        "cashreceipt_url": reverse('application:cash_receipt'),
         "secondary_user": True if getattr(request.user, "is_secondaryUser", False) else False
     }
 

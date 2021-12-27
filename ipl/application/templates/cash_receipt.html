@@ -1,0 +1,225 @@
+{%load static%}
+<!DOCTYPE html>
+<head>
+<style type="text/css">
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, 'Arial Narrow', Helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #333266;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+table {
+    table-layout: fixed;
+}
+table td {
+    word-break: break-word;
+}
+table, th, td {
+    border-collapse: collapse;
+}
+.table-bordered {
+    border: 1px solid #909090;
+}
+.table-bordered th, .table-bordered td {
+    border-right: 1px solid #909090;
+    border-bottom: 1px solid #909090;
+}
+.table-bordered tbody tr td:last-child {
+    border-right: none;
+}
+.table-pad th, .table-pad td {
+    padding: 5px 0 10px;
+}
+.t-p-0 td {
+    padding: 0;
+}
+.t-py-0 td {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.bt-1 {
+    border-top: 1px solid #909090 !important;
+}
+.br-0 {
+    border-right: 0 !important;
+}
+.p-0 {
+    padding: 0 !important;
+}
+.p-5 {
+    padding: 5px;
+}
+.p-10 {
+    padding: 10px;
+}
+.pt-5 {
+    padding-top: 5px;
+}
+.px-10 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.f-24 {
+    font-size: 24px;
+    line-height: 28px;
+}
+.f-30 {
+    font-size: 30px;
+    line-height: 40px;
+}
+.dotted {
+    display: inline-block;
+    border-bottom: 2px dotted #333266;
+}
+.text-grey {
+    color: #404040;
+}
+.d-block {
+    display: block;
+}
+.border-box {
+    background-color: #dddae1;
+    padding: 5px 10px;
+    border: 1px solid #333266;
+    border-radius: 8px;
+}
+</style>
+<script src="/js/jquery.min.js"></script>
+<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-html2canvas@latest/dist/jspdf-html2canvas.min.js"></script>
+</head>
+<html>
+<body>
+<div id="download-section">
+    <table width="800" border="0" cellspacing="0" cellpadding="0" style="margin:0 auto;">
+        <tr>
+            <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="110"><img src="{% static 'images/logo.jpg' %}" width="90"></td>
+                    <td><table border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="center">
+                                <div class="f-30">Indore Proffesional Logistics <strong>Royal</strong></div>
+                                <div>No. 313/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaa Nagar,<br>
+                                    Near IOC Petrol Bunk, Coimbatore - 641 004<br>
+                                    Phone : 0422-3254626 | 94433 53836 | 99949 80771,73,74
+                                </div>
+                                <div>GSTIN: 33GJPS5589P1Z2</div>
+                            </td>
+                        </tr>
+                    </table></td>
+                </tr>
+            </table></td>
+        </tr>
+        <tr>
+            <td height="15" style="line-height: 1px;"></td>
+        </tr>
+        <tr>
+            <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="20%">S. No. <input type="text" style="border:0;border-bottom: 2px dotted;" size="4"></td>
+                    <td align="center">
+                        <span class="border-box">CASH RECEIPT</span>
+                    </td>
+                    <td width="40%">Date :<input type="text" style="border:0;border-bottom: 2px dotted;" size="20"></td>
+                </tr>
+            </table></td>
+        </tr>
+        <tr>
+            <td height="15" style="line-height: 1px;"></td>
+        </tr>
+        <tr>
+            <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="table-pad">
+                <tr>
+                    <td>Received with thanks from <input type="text" style="border:0;border-bottom: 2px dotted;" size="50"> in respect of TBB/Delivery</td>
+
+                </tr>
+                <tr>
+                    <td>GC No. <input type="text" style="border:0;border-bottom: 2px dotted;" size="14"> Date <input type="text" style="border:0;border-bottom: 2px dotted;" size="20"></td>
+                </tr>
+                <tr>
+                    <td>Booked from <input type="text" style="border:0;border-bottom: 2px dotted;" size="45"> to <input type="text" style="border:0;border-bottom: 2px dotted;" size="45"></td>
+                </tr>
+            </table></td>
+        </tr>
+        <tr>
+            <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="table-pad">
+                <tr>
+                    <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td>Pkgs <input type="text" style="border:0;border-bottom: 2px dotted;" size="35    "></td>
+                        </tr>
+                        <tr>
+                            <td>Freight <input type="text" style="border:0;border-bottom: 2px dotted;"> Rs <input type="text" style="border:0;border-bottom: 2px dotted;"></td>
+                        </tr>
+                        <tr>
+                            <td>LR.Charge <input type="text" style="border:0;border-bottom: 2px dotted;"> Rs <input type="text" style="border:0;border-bottom: 2px dotted;"></td>
+                        </tr>
+                        <tr>
+                            <td>Labour <input type="text" style="border:0;border-bottom: 2px dotted;"> Rs <input type="text" style="border:0;border-bottom: 2px dotted;"></td>
+                        </tr>
+                        <tr>
+                            <td>Total <input type="text" style="border:0;border-bottom: 2px dotted;"> Rs <input type="text" style="border:0;border-bottom: 2px dotted;"></td>
+                        </tr>
+                    </table></td>
+                    <td width="45%" valign="top" align="center"><img src="images/logo.jpg" width="140"></td>
+                </tr>
+            </table></td>
+        </tr>
+        <tr>
+            <td valign="top">Rupees in Words <input type="text" style="border:0;border-bottom: 2px dotted;" size="100"></td>
+        </tr>
+        <tr>
+            <td height="25" style="line-height: 1px;"></td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="50%"><i>Sign of Consignee</i></td>
+                        <td align="right">For Indore Proffesional Logistics Royal</td>
+                    </tr>
+
+                </table>
+                <br>
+                <table id="submit-table" width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                       <input type="submit" id="submit-button">
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+$(document).ready(function() {
+    $("#submit-button").on("click", function(){
+        $("#submit-button").hide();
+        let page = $("#download-section");
+        async function printPdf() {
+          const pdf = html2PDF(page, {
+                jsPDF: {
+                    format: "a4",
+                    orientation: "p"
+                },
+                image: {type: 'jpeg', quality: 1},
+                output: "cash_receipt.pdf"
+              });
+              return pdf;
+        }
+       printPdf().then(pdf=>$("#submit-button").show());
+
+    })
+
+})
+</script>
+</body>
+</html>

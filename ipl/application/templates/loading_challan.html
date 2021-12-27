@@ -270,19 +270,18 @@
 <!--    printPdf();-->
 <!--});-->
 
-<!--async function printPdf() {-->
-<!--    console.log(2222);-->
-<!--    console.log(page);-->
-<!--  const pdf = await html2PDF(page, {-->
-<!--        jsPDF: {-->
-<!--          format: 'a4',-->
-<!--        },-->
-<!--        imageType: 'image/jpeg',-->
-<!--        output: './pdf/generate.pdf'-->
-<!--      });-->
-<!--  // do something with pdf(jsPdf instance)-->
-<!--}-->
-<!--printPdf();-->
+
+let page = $('.main-content');
+function printPdf() {
+  const pdf = html2PDF(page, {
+        jsPDF: {
+          format: 'a4',
+        },
+        imageType: 'image/jpeg',
+        output: './pdf/generate.pdf'
+      });
+}
+printPdf();
 </script>
 
 {% if r_method == "POST" %}
@@ -300,8 +299,6 @@
 {% endif %}
 
 <script>
-
-
 {% if result_set|length > 0 %}
     $('#matched-orders').show();
 {% else %}
@@ -314,10 +311,10 @@ $('select[name=driver]').addClass("form-control");
 $('input[type=date]').attr("required");
 $('select[name=driver]').attr("required");
 
-   $(document).ready(function() {
-     $("#ordersTable").DataTable();
-     $('.dataTables_length').addClass('bs-select');
-   });
+$(document).ready(function() {
+    $("#ordersTable").DataTable();
+    $('.dataTables_length').addClass('bs-select');
+});
 </script>
-<script src="js/jsPDF/dist/jspdf.min.js"></script>
+<!--<script src="js/jsPDF/dist/jspdf.min.js"></script>-->
 {% endblock other_scripts %}

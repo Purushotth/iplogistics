@@ -13,6 +13,9 @@ build/
 develop-eggs/
 dist/
 downloads/
+documents/
+migrations/
+admin/
 eggs/
 .eggs/
 lib/

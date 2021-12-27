@@ -5,21 +5,33 @@
  <div class="wrapper">
   <div class="container">
       <div class="row">
-          <div class="col-sm-12">
+          <div class="col-sm-8">
               <form class="" name="accountLoginForm" id="accountLoginForm" action="" method="POST">
                   {% csrf_token %}
+
                 <div class="form-group">
-                    <label for="{{form.email.id_for_label}}" class="col-sm-6 col-form-label">Email:
+                        {% if error %}
+                        <div class="col-sm-6 alert alert-danger" role="alert">
+                            <i class="fa fa-exclamation-circle"></i>&nbsp;{{ error_msg|linebreaksbr  }}
+                        </div>
+                       {% endif %}
+                    <label for="{{form.email.id_for_label}}" class="col-sm-4 col-form-label">Email:
                         :</label>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 has-feedback">
                         {{ form.email }}
+                        <div class="help-block error">
+                           <span for="{{ form.email.html_name }}">{{ form.email.errors.as_text | cut:"* " }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="{{form.password.id_for_label}}" class="col-sm-6 col-form-label">Password:
+                    <label for="{{form.password.id_for_label}}" class="col-sm-4 col-form-label">Password:
                         :</label>
                     <div class="col-sm-6">
                         {{ form.password }}
+                        <div class="help-block error">
+                           <span for="{{ form.password.html_name }}">{{ form.password.errors.as_text | cut:"* " }}</span>
+                        </div>
                     </div>
                 </div>
                       <div class="form-group">

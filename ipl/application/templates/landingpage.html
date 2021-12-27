@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load subtract %}
 {%block title %}Create Order{% endblock title %}
 {% block other_styles %}
 <style>
@@ -16,10 +17,14 @@
    h5{
    margin-bottom: 15px;
    }
+
+
 </style>
 {% endblock other_styles %}
 {% block modal-title %}Save Order{% endblock modal-title %}
 {% block body_content %}
+
+
 <div class="main-content">
    <div class="wrapper">
       <div class="container">
@@ -365,6 +370,8 @@
                                     <th scope="col">Charged Weight</th>
                                     <th scope="col">Total Charges</th>
                                     <th scope="col">Payment Status</th>
+                                    <th scope="col">Pending Amount</th>
+                                    <th scope="col">Order Copy</th>
                                     <th scope="col">Loading Challan</th>
                                     <th scope="col">Bill</th>
                                  </tr>
@@ -389,8 +396,10 @@
                                     {% elif order.payment_status == "paid" %}
                                         <td>PAID</td>
                                     {% endif %}
-                                    <td><a href="ipl/{{driver.license_document}}" target="_blank">Click Here</a></td>
-                                    <td><a href="ipl/{{driver.license_document}}" target="_blank">Click Here</a></td>
+                                    <td>{% if order.payment_status == "tbb" %}{{order.total_charges|do_subtract:order.paid_amount}}{% endif %}</td>
+                                    <td><a href="documents/orders/{{order.id}}_driver.pdf" target="_blank">Click Here</a></td>
+                                    <td><a href="documents/orders/{{order.id}}.pdf" target="_blank">Click Here</a></td>
+                                    <td><a href="documents/orders/{{order.id}}.pdf" target="_blank">Click Here</a></td>
                                  </tr>
                                  {% endfor %}
                               </tbody>
@@ -446,8 +455,11 @@
        showHidePaidAmount($(this));
    });
    $(document).ready(function() {
-     $("#ordersTable").DataTable();
+     $("#ordersTable").DataTable( {
+        "order": [[ 0, "desc" ]]
+    } );
      $('.dataTables_length').addClass('bs-select');
    });
+
 </script>
 {% endblock other_scripts %}

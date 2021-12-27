@@ -28,7 +28,7 @@ $.validator.addMethod('dropdown', function(value, element) {
 
 $.validator.addMethod("lesserThan", function (value, element, param) {
           var $otherElement = $(param);
-          return value < $otherElement.val();
+          return value >= $otherElement.val();
 });
 
 var validators = []
@@ -214,7 +214,7 @@ $('form:not([method=GET])').each(function() {
                 regex: "Please enter a valid Invoice No"
             },
             charged_weight: {
-                lesserThan: "Charged Weight should be lesser than or equal to Actual Weight"
+                lesserThan: "Charged Weight should be greater than or equal to Actual Weight"
             }
         },
         errorClass: 'error help-block',
