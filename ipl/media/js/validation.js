@@ -28,7 +28,7 @@ $.validator.addMethod('dropdown', function(value, element) {
 
 $.validator.addMethod("lesserThan", function (value, element, param) {
           var $otherElement = $(param);
-          return value >= $otherElement.val();
+          return parseFloat(parseFloat(value).toFixed(2)) >= parseFloat(parseFloat($otherElement.val()).toFixed(2));
 });
 
 var validators = []
