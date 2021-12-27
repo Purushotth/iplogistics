@@ -31,6 +31,8 @@
             <h5 style="text-align:center">Orders with the status <b>TO PAY</b>:</h5>
             {% elif payment_status == "tbb" %}
             <h5 style="text-align:center">Orders with the status <b>TO BE BILLED</b>:</h5>
+            {% elif payment_status == "paid" %}
+            <h5 style="text-align:center">Orders with the status <b>PAID</b>:</h5>
             {% endif %}
             <div class="container mt-100">
                <div class="row">
