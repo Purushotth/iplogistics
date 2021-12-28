@@ -130,12 +130,12 @@
 <body>
 <div id="download-section">
     <br><br><br><br>
-                <table width="1000" border="0" cellspacing="0" cellpadding="0" style="margin:0 auto;">
+                <table width="1000" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td id="order-type" style="color:red" align="right">Consignee Copy</td>
             </tr>
         </table>
-    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="margin:0 auto;">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="margin:20px;">
 
         <tr>
             <td valign="top" class="py-10">
@@ -361,6 +361,7 @@
 <script>
 
 $(document).ready(function() {
+     $("html").css("zoom", "1.7");
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {

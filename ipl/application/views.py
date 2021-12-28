@@ -204,7 +204,7 @@ class ReportsView(LoginRequiredMixin, View):
 class DownloadsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         self.context = {
-            "order": ShippingOrdersModel.objects.get(id=self.request.GET.get('orders'))
+            "order": ShippingOrdersModel.objects.get(id=self.request.GET.get('order'))
         }
         return render(request, "order_copy.html", self.context)
 
@@ -213,9 +213,7 @@ class DownloadsView(LoginRequiredMixin, View):
         order_copy_type = self.get_params.get('order_copy_type')
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         filename = "{}_{}.pdf".format(request.POST.get("id"), order_copy_type)
-        print(filename)
         file = os.path.join(BASE_DIR, 'media','documents', 'orders', filename)
-        print(file)
         with open(file, 'wb') as destination:
             destination.write(base64.b64decode(request.POST.get("pdf_data")))
         return HttpResponse("")
