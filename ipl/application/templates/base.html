@@ -78,8 +78,24 @@
                         </li>
                      </ul>
                   </li>
-                  <li>
-                     <a href="{{cashreceipt_url}}" target="_blank">Cash Receipts</a>
+                  <li class="active">
+                     <a href="#DownloadsMenu" data-toggle="collapse" aria-expanded="false"
+                        class="dropdown-toggle">Downloads
+                     </a>
+                     <ul class="collapse list-unstyled" id="DownloadsMenu">
+                        <li>
+                           <a href="{{order_download_url}}">Order</a>
+                        </li>
+                        <li>
+                           <a href="">Loading Challan</a>
+                        </li>
+                        <li>
+                           <a href="">Bill</a>
+                        </li>
+                        <li>
+                           <a href="{{cashreceipt_url}}">Cash Receipts</a>
+                        </li>
+                     </ul>
                   </li>
                    {% endif %}
                   <li>

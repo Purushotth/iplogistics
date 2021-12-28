@@ -15,6 +15,7 @@ def extra_context(request):
         "paid_url": reverse('application:reports') + "?payment_status=paid",
         "logout_url": reverse('account:logout'),
         "cashreceipt_url": reverse('application:cash_receipt'),
+        "order_download_url": reverse('application:order_download')+'?order=1',
         "secondary_user": True if getattr(request.user, "is_secondaryUser", False) else False
     }
 
