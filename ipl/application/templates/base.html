@@ -8,6 +8,19 @@
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" href="/css/style.css" />
       <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+       <style>
+
+           #sidebar ul li{
+            font-size:12px;
+           }
+           #sidebarCollapse{
+                       font-size:12px;
+
+           }
+body{ font-size: 12px; }
+th { font-size: 12px;}
+td { font-size: 11px;}
+       </style>
       {% block other_styles %}
       {% endblock other_styles %}
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
@@ -23,9 +36,9 @@
                <span class="sr-only">Toggle Menu</span>
                </button>
             </div>
-            <div class="p-4 pt-5">
+            <div class="p-4 pt-5 side-bar">
                <h1><a href="" class="logo">IPL</a></h1>
-               <ul class="list-unstyled components mb-5">
+               <ul class="list-unstyled components mb-5 side-bar-ul">
                    {% if not secondary_user %}
                   <li class="active">
                      <a href="#insertMenu" data-toggle="collapse" aria-expanded="false"
@@ -152,6 +165,8 @@
                 $('#popupModal').modal('show');
               }
           }
+$("input").css("font-size", "11px");
+$("select").css("font-size", "11px");
       </script>
       {% block other_scripts %}
       {% endblock other_scripts %}
