@@ -248,10 +248,11 @@ table, th, td {
                         <td align="right" colspan="2" class="bt-1">
                             <strong>Grand Total Rs: </strong>
                         </td>
-                        <td align="right" class="bt-1">
-                            <strong>{{total_amount}}</strong>
+                        {% for value in total_amount|decimal_split %}
+                        <td align="center" class="bt-1">
+                            <strong>{{value}}</strong>
                         </td>
-                        <td class="bt-1">&nbsp;</td>
+                        {% endfor %}
                     </tr>
                 </tbody>
             </table></td>
