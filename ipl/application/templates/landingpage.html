@@ -400,9 +400,9 @@
                                     {% endif %}
                                     <td>{% if order.payment_status == "tbb" %}{{order.total_charges|do_subtract:order.paid_amount}}{% endif %}</td>
                                     <td><a href="documents/orders/{{order.id}}_driver.pdf" target="_blank">Click Here</a></td>
-                                    <td><a href="documents/orders/{{order.id}}_driver.pdf" target="_blank">Click Here</a></td>
-                                    <td><a href="documents/orders/{{order.id}}_driver.pdf" target="_blank">Click Here</a></td>
-                                    <td><a href="documents/orders/{{order.id}}_driver.pdf" target="_blank">Click Here</a></td>
+                                    <td><a href="documents/orders/{{order.id}}_truck.pdf" target="_blank">Click Here</a></td>
+                                    <td><a href="documents/orders/{{order.id}}_consignor.pdf" target="_blank">Click Here</a></td>
+                                    <td><a href="documents/orders/{{order.id}}_consignee.pdf" target="_blank">Click Here</a></td>
 
                                     <td>{% if order.payment_status != "to_pay" %}<a href="documents/lc/{{order.loading_challan.lc_no}}_lc.pdf" target="_blank">Click Here</a>{%endif%}</td>
                                     <td>{% if order.payment_status != "to_pay" %}<a href="documents/bill/{{order.bill.id}}_bill.pdf" target="_blank">Click Here</a>{%endif%}</td>
