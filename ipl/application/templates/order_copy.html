@@ -149,7 +149,7 @@
                                         <div class="heading">Indian Professional Logistics Royal<span class="sup">&#174;</span></div>
                                         <div>Loading Transporters for: Telangana, Madhya Pradesh, Maharastra, Chhatishghar<br>
                                         Site No.:311/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaanagar, Peelamedu, Coimbatore - 4.<br>
-                                            <strong>PHONE</strong>: 9443353836,7339000885, 99949807771,773,774, 0422-3254626 | <strong>EMAIL ID :</strong> iplroyal2017@gmail.com
+                                        <strong>PHONE</strong>: 9443353836,7339000885, 99949807771,773,774, 0422-3254626 | <strong>EMAIL ID :</strong> iplroyal2017@gmail.com
                                         </div>
                                     </td>
                                 </tr>
@@ -361,7 +361,7 @@
 <script>
 
 $(document).ready(function() {
-     $("html").css("zoom", "1.7");
+<!--     $("html").css("zoom", "1.7");-->
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -397,7 +397,7 @@ $(document).ready(function() {
     function saveFile(pdf, copy_type, copy_list){
         $.ajax({
             type: "POST",
-            url: '/downloads?order_copy_type='+copy_type,
+            url: '/downloads?download_type=order&order_copy_type='+copy_type,
             headers: {'X-CSRFToken': csrftoken},
             data: {
                 'id': {{order.id}},

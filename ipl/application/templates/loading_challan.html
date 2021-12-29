@@ -259,30 +259,6 @@
 </div>
 {% endblock body_content %}
 {% block other_scripts %}
-<script>
-
-<!--$('.header-section').hide();-->
-<!--let btn = document.getElementById('btn');-->
-<!--let page = $('.header-section');-->
-<!--console.log(1111);-->
-<!--console.log(page);-->
-<!--btn.addEventListener('click', function(){-->
-<!--    printPdf();-->
-<!--});-->
-
-
-let page = $('.main-content');
-function printPdf() {
-  const pdf = html2PDF(page, {
-        jsPDF: {
-          format: 'a4',
-        },
-        imageType: 'image/jpeg',
-        output: './pdf/generate.pdf'
-      });
-}
-printPdf();
-</script>
 
 {% if r_method == "POST" %}
     <script>
@@ -316,5 +292,4 @@ $(document).ready(function() {
     $('.dataTables_length').addClass('bs-select');
 });
 </script>
-<!--<script src="js/jsPDF/dist/jspdf.min.js"></script>-->
 {% endblock other_scripts %}

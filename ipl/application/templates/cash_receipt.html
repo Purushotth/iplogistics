@@ -214,7 +214,7 @@
          $(document).ready(function() {
              $("#submit-button").on("click", function(){
                  $("#submit-button").hide();
-                 $("html").css("zoom", "1.6");
+<!--                 $("html").css("zoom", "1.6");-->
                  let page = $("#download-section");
                  async function printPdf() {
                    const pdf = html2PDF(page, {
@@ -232,7 +232,7 @@
              })
             function postDownload(){
                $("#submit-button").show();
-               $("html").css("zoom", "1");
+<!--               $("html").css("zoom", "1");-->
             }
          })
       </script>

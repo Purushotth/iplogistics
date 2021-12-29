@@ -33,7 +33,7 @@ class LandingPageView(LoginRequiredMixin, View):
         logger.info("[LANDINGPAGE] - GET REQUEST | USER - {}".format(request.user.email))
         response = render(request, "landingpage.html", self.context)
         logger.info("[LANDINGPAGE] - SETTING COOKIE as 1 | USER - {}".format(request.user.email))
-        response.set_cookie("landing", 1, 5*60*60)
+        response.set_cookie("landing", 1, 5 * 60 * 60)
         return response
 
     def post(self, request, *args, **kwargs):
@@ -41,10 +41,11 @@ class LandingPageView(LoginRequiredMixin, View):
         if not is_cookie_present:
             logger.info("[LANDINGPAGE] - DUPLICATE CALL | ORDER ALREADY SAVED | USER - {}".format(request.user.email))
             logger.info("[LANDINGPAGE] - REDIRECTING TO GET PAGE | USER - {}".format(request.user.email))
-            kwargs["order_saved"] =1
+            kwargs["order_saved"] = 1
             return self.get(request, *args, **kwargs)
         self.post_params = request.POST.copy()
-        logger.info("[LANDINGPAGE] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
+        logger.info(
+            "[LANDINGPAGE] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
         form = ShippingOrdersForm(self.post_params)
         if form.is_valid():
             logger.info("[LANDINGPAGE] - FORM VALIDATED | USER - {}".format(request.user.email))
@@ -95,7 +96,8 @@ class LoadingChallanView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
-        logger.info("[LOADING CHALLAN] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
+        logger.info(
+            "[LOADING CHALLAN] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
         generate_challan = int(self.post_params.get("challan", 0))
         form = LoadingChallForm(self.post_params)
         if form.is_valid():
@@ -107,13 +109,16 @@ class LoadingChallanView(LoginRequiredMixin, View):
                 loading_challan=None
             )
 
-            # if generate_challan:
-            #     form.save()
-            #     for result in result_set:
-            #         result.loading_challan = form.instance
-            #         result.save()
-            #
-            #     return generate_pdf(result_set)
+            if generate_challan and result_set:
+                form.save()
+                for result in result_set:
+                    result.loading_challan = form.instance
+                    result.save()
+                self.context = {
+                    "result_set": result_set,
+                    "lc": form.instance
+                }
+                return render(request, "lc_copy.html", self.context)
 
             driver_list = DriverModel.objects.all().values('id', 'name', 'contact_number')
             truck_list = TruckModel.objects.all().values('id', 'truck_number')
@@ -142,7 +147,11 @@ class LoadingChallanView(LoginRequiredMixin, View):
 class BillGenerationView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         form = BillForm()
-        result_set = ShippingOrdersModel.objects.exclude(loading_challan=None).filter(bill=None)
+        # for result in ShippingOrdersModel.objects.all():
+        #     result.bill = None
+        #     result.loading_challan = None
+        #     result.save()
+        result_set = ShippingOrdersModel.objects.filter(bill=None)
         if len(result_set) == 0:
             return render(request, "app_static_content.html")
 
@@ -157,36 +166,44 @@ class BillGenerationView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
-        logger.info("[BILL GENERATION] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
+        logger.info(
+            "[BILL GENERATION] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
 
         generate_bill = int(self.post_params.get("bill", 0))
         form = BillForm(self.post_params)
         if form.is_valid():
             logger.info("[BILL GENERATION] - FORM VALIDATED | USER - {}".format(request.user.email))
-            result_set = ShippingOrdersModel.objects.exclude(loading_challan=None).filter(
+            result_set = ShippingOrdersModel.objects.filter(
                 bill=None,
                 consignor=form.cleaned_data.get("consignor")
             )
             if len(result_set) == 0:
                 return HttpResponseRedirect(reverse("application:billgeneration") + '?no_orders_present=true')
 
-            # if generate_bill:
-            #     form.save()
-            #     for result in result_set:
-            #         result.bill = form.instance
-            #         result.save()
-            #
-            #     return generate_pdf(result_set)
+            if generate_bill and result_set:
+                form.save()
+                total_amount = 0
+                for result in result_set:
+                    result.bill = form.instance
+                    result.save()
+                    total_amount += result.total_charges
+
+                self.context = {
+                    "result_set": result_set,
+                    "bill": form.instance,
+                    "total_amount": total_amount
+                }
+                return render(request, "bill_copy.html", self.context)
 
             consignor_list = ConsignorModel.objects.all().values('id', 'name')
             self.context = {
                 'form': form,
                 'consignors': consignor_list,
                 'result_set': result_set,
-                "no_orders_present": True if request.GET.copy().get("no_orders_present", None) else False
+                "no_orders_present": True if request.GET.copy().get("no_orders_present", None) else False,
+                "selected_consignee": form.cleaned_data.get("consignor").id
             }
             return render(request, "bill_generation.html", self.context)
-
 
 
 class ReportsView(LoginRequiredMixin, View):
@@ -194,9 +211,13 @@ class ReportsView(LoginRequiredMixin, View):
         self.post_params = request.GET.copy()
         payment_status = self.post_params.get("payment_status", None)
         result_set = ShippingOrdersModel.objects.filter(payment_status=payment_status)
+        total_amount = 0
+        for obj in result_set:
+            total_amount += obj.total_charges
         self.context = {
-            "payment_status":payment_status,
-            "result_set": result_set
+            "payment_status": payment_status,
+            "result_set": result_set,
+            "total_amount": total_amount
         }
         return render(request, "reports.html", self.context)
 
@@ -206,14 +227,23 @@ class DownloadsView(LoginRequiredMixin, View):
         self.context = {
             "order": ShippingOrdersModel.objects.get(id=self.request.GET.get('order'))
         }
-        return render(request, "order_copy.html", self.context)
+        return render(request, "bill_copy.html", self.context)
 
     def post(self, request, *args, **kwargs):
         self.get_params = request.GET.copy()
-        order_copy_type = self.get_params.get('order_copy_type')
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        filename = "{}_{}.pdf".format(request.POST.get("id"), order_copy_type)
-        file = os.path.join(BASE_DIR, 'media','documents', 'orders', filename)
+        download_type = self.get_params.get('download_type')
+        if download_type == "lc":
+            filename = "{}_lc.pdf".format(request.POST.get("id"))
+            folder_name = "lc"
+        elif download_type == "order":
+            order_copy_type = self.get_params.get('order_copy_type')
+            filename = "{}_{}.pdf".format(request.POST.get("id"), order_copy_type)
+            folder_name = "orders"
+        elif download_type == "bill":
+            filename = "{}_bill.pdf".format(request.POST.get("id"))
+            folder_name = "bill"
+        file = os.path.join(BASE_DIR, 'media', 'documents', folder_name, filename)
         with open(file, 'wb') as destination:
             destination.write(base64.b64decode(request.POST.get("pdf_data")))
         return HttpResponse("")
@@ -261,7 +291,8 @@ class DriverView(LoginRequiredMixin, View):
         form = DriverForm(self.post_params, request.FILES)
         if form.is_valid():
             logger.info("[DRIVER] - FORM VALIDATED | USER - {}".format(request.user.email))
-            if DriverModel.objects.filter(name=form.cleaned_data.get("name"), contact_number=form.cleaned_data.get("contact_number")).exists():
+            if DriverModel.objects.filter(name=form.cleaned_data.get("name"),
+                                          contact_number=form.cleaned_data.get("contact_number")).exists():
                 logger.info("[DRIVER] - DRIVER ALREADY EXISTS | USER - {}".format(request.user.email))
                 self.context = {
                     'form': form,
@@ -336,7 +367,8 @@ class ConsigneeView(LoginRequiredMixin, View):
         form = ConsigneeForm(self.post_params, request.FILES)
         if form.is_valid():
             logger.info("[CONSIGNEE] - FORM VALIDATED | USER - {}".format(request.user.email))
-            if ConsigneeModel.objects.filter(name=form.cleaned_data.get("name"), gstin=form.cleaned_data.get("gstin")).exists():
+            if ConsigneeModel.objects.filter(name=form.cleaned_data.get("name"),
+                                             gstin=form.cleaned_data.get("gstin")).exists():
                 logger.info("[CONSIGNEE] - CONSIGNEE ALREADY EXISTS | USER - {}".format(request.user.email))
                 self.context = {
                     'form': form,
@@ -371,7 +403,8 @@ class ConsignorView(LoginRequiredMixin, View):
         form = ConsignorForm(self.post_params, request.FILES)
         if form.is_valid():
             logger.info("[CONSIGNOR] - FORM VALIDATED | USER - {}".format(request.user.email))
-            if ConsignorModel.objects.filter(name=form.cleaned_data.get("name"), gstin=form.cleaned_data.get("gstin")).exists():
+            if ConsignorModel.objects.filter(name=form.cleaned_data.get("name"),
+                                             gstin=form.cleaned_data.get("gstin")).exists():
                 logger.info("[CONSIGNEE] - CONSIGNEE ALREADY EXISTS | USER - {}".format(request.user.email))
                 self.context = {
                     'form': form,
@@ -392,4 +425,3 @@ class ConsignorView(LoginRequiredMixin, View):
 class CashReceiptView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, "cash_receipt.html", {})
-

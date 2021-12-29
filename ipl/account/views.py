@@ -14,7 +14,7 @@ from config.ipl_config import *
 import uuid
 
 
-EMAIL_DOMAIN = "0.0.0.0:8000"
+EMAIL_DOMAIN = "http://localhost"
 
 
 def does_user_exist(email):

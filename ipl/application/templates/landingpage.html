@@ -358,22 +358,27 @@
                         <div class="card-header">
                            <table class="table table-bordered table-sm stable-striped" id="ordersTable" >
                               <thead>
+                              <tr>
+                                 <th rowspan="2">Order ID</th>
+                                    <th rowspan="2">Billing Date</th>
+                                    <th rowspan="2">Consignor</th>
+                                    <th rowspan="2">Consignee</th>
+                                    <th rowspan="2">From</th>
+                                    <th rowspan="2">To</th>
+
+                                    <th rowspan="2">Grand Total</th>
+                                    <th rowspan="2">Payment Status</th>
+                                    <th rowspan="2">Pending Amount</th>
+                                    <th colspan="4" style="text-align:center;">Order Copy</th>
+                                    <th rowspan="2">Loading Challan</th>
+                                    <th rowspan="2">Bill</th>
+                              </tr>
                                  <tr>
-                                    <th scope="col">Order ID</th>
-                                    <th scope="col">Billing Date</th>
-                                    <th scope="col">Invoice Date</th>
+                                    <th scope="col">Driver</th>
+                                    <th scope="col">Truck</th>
                                     <th scope="col">Consignor</th>
                                     <th scope="col">Consignee</th>
-                                    <th scope="col">From</th>
-                                    <th scope="col">To</th>
-                                    <th scope="col">Actual Weight</th>
-                                    <th scope="col">Charged Weight</th>
-                                    <th scope="col">Grand Total</th>
-                                    <th scope="col">Payment Status</th>
-                                    <th scope="col">Pending Amount</th>
-                                    <th scope="col">Order Copy</th>
-                                    <th scope="col">Loading Challan</th>
-                                    <th scope="col">Bill</th>
+
                                  </tr>
                               </thead>
                               <tbody>
@@ -381,13 +386,10 @@
                                  <tr>
                                     <td>{{order.id}}</td>
                                     <td>{{order.billing_date}}</td>
-                                    <td>{{order.invoice_date}}</td>
                                     <td>{{order.consignor.name}}</td>
                                     <td>{{order.consignee.name}}</td>
                                     <td>{{order.consignor_place}}</td>
                                     <td>{{order.consignee_place}}</td>
-                                    <td>{{order.actual_weight}}</td>
-                                    <td>{{order.charged_weight}}</td>
                                     <td>{{order.total_charges}}</td>
                                     {% if order.payment_status == "to_pay" %}
                                         <td>TO PAY</td>
@@ -398,8 +400,12 @@
                                     {% endif %}
                                     <td>{% if order.payment_status == "tbb" %}{{order.total_charges|do_subtract:order.paid_amount}}{% endif %}</td>
                                     <td><a href="documents/orders/{{order.id}}_driver.pdf" target="_blank">Click Here</a></td>
-                                    <td><a href="documents/orders/{{order.id}}.pdf" target="_blank">Click Here</a></td>
-                                    <td><a href="documents/orders/{{order.id}}.pdf" target="_blank">Click Here</a></td>
+                                    <td><a href="documents/orders/{{order.id}}_driver.pdf" target="_blank">Click Here</a></td>
+                                    <td><a href="documents/orders/{{order.id}}_driver.pdf" target="_blank">Click Here</a></td>
+                                    <td><a href="documents/orders/{{order.id}}_driver.pdf" target="_blank">Click Here</a></td>
+
+                                    <td>{% if order.payment_status != "to_pay" %}<a href="documents/lc/{{order.loading_challan.lc_no}}_lc.pdf" target="_blank">Click Here</a>{%endif%}</td>
+                                    <td>{% if order.payment_status != "to_pay" %}<a href="documents/bill/{{order.bill.id}}_bill.pdf" target="_blank">Click Here</a>{%endif%}</td>
                                  </tr>
                                  {% endfor %}
                               </tbody>

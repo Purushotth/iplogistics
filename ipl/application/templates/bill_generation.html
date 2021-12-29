@@ -34,7 +34,7 @@
                     <label for="{{form.consignor.id_for_label}}" class="col-sm-6 col-form-label">Select consignor
                         :</label>
                     <div class="col-sm-6 has-feedback">
-                        <select name="consignor" class="form-control">
+                        <select name="consignor" id="id_consignor" class="form-control">
                             <option value="" selected>---------</option>
                              {% for consignor in consignors %}
                                 <option value="{{consignor.id}}">{{consignor.name}}</option>
@@ -104,7 +104,7 @@
 
                         <button type="button" class="btn btn-primary" data-toggle="modal"
                                 data-target="#popupModal"
-                                onclick="$('#submit-form-name').attr('value', 1)">
+                                onclick="$('#submit-form-name').attr('value', 1);">
   Generate Bill
                         </button></div>
         </div>
@@ -120,6 +120,11 @@
 </div>
 {% endblock body_content %}
 {% block other_scripts %}
+{% if selected_consignee %}
+<script>
+    $( "#id_consignor option:selected" ).val({{selected_consignee}});
+</script>
+{% endif %}
 <script>
 {% if result_set|length > 0 %}
     $('#matched-orders').show();
