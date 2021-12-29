@@ -18,7 +18,9 @@
    margin-bottom: 15px;
    }
 
-
+body{ font-size: 12px; }
+th { font-size: 12px;}
+td { font-size: 11px;}
 </style>
 {% endblock other_styles %}
 {% block modal-title %}Save Order{% endblock modal-title %}
@@ -28,8 +30,8 @@
 <div class="main-content">
    <div class="wrapper">
       <div class="container">
-         <h2 class="mb-4 ">{% block section_heading %}Create Shipping Order{% endblock section_heading %}</h2>
-         <div class="col-sm-12">
+         <h4>{% block section_heading %}Create Shipping Order{% endblock section_heading %}</h4>
+         <div class="col-sm-8">
             <div class="row">
                <form method="POST" name="order-form" action="/landingpage">
                   {% csrf_token %}
@@ -353,13 +355,13 @@
             <h5>Order List:</h5>
             <div class="container mt-100">
                <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-14">
                      <div class="card">
                         <div class="card-header">
-                           <table class="table table-bordered table-sm stable-striped" id="ordersTable" >
+                           <table width="40%" class="table table-bordered table-sm stable-striped" id="ordersTable" >
                               <thead>
                               <tr>
-                                 <th rowspan="2">Order ID</th>
+                                 <th rowspan="2">ID</th>
                                     <th rowspan="2">Billing Date</th>
                                     <th rowspan="2">Consignor</th>
                                     <th rowspan="2">Consignee</th>
