@@ -107,7 +107,7 @@ class LoadingChallanView(LoginRequiredMixin, View):
                 consignor_place=form.cleaned_data.get("place_of_receipt"),
                 consignee_place=form.cleaned_data.get("place_of_delivery"),
                 loading_challan=None
-            )
+            ).exclude(payment_status="to_pay")
 
             if generate_challan and result_set:
                 form.save()
@@ -175,7 +175,8 @@ class BillGenerationView(LoginRequiredMixin, View):
             logger.info("[BILL GENERATION] - FORM VALIDATED | USER - {}".format(request.user.email))
             result_set = ShippingOrdersModel.objects.filter(
                 bill=None,
-                consignor=form.cleaned_data.get("consignor")
+                consignor=form.cleaned_data.get("consignor"),
+                payment_status="tbb"
             )
             if len(result_set) == 0:
                 return HttpResponseRedirect(reverse("application:billgeneration") + '?no_orders_present=true')
