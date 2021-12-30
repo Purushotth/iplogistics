@@ -101,7 +101,7 @@ class LoadingChallanView(LoginRequiredMixin, View):
         generate_challan = int(self.post_params.get("challan", 0))
         form = LoadingChallForm(self.post_params)
         if form.is_valid():
-            logger.info("[DRIVER] - FORM VALIDATED | USER - {}".format(request.user.email))
+            logger.info("[LOADING CHALLAN] - FORM VALIDATED | USER - {}".format(request.user.email))
             result_set = ShippingOrdersModel.objects.filter(
                 created_dtm__lt=form.cleaned_data.get("billing_date"),
                 consignor_place=form.cleaned_data.get("place_of_receipt"),
@@ -110,6 +110,7 @@ class LoadingChallanView(LoginRequiredMixin, View):
             ).exclude(payment_status="to_pay")
 
             if generate_challan and result_set:
+                logger.info("[LOADING CHALLAN] - GENERATING CHALLAN | USER - {}".format(request.user.email))
                 form.save()
                 for result in result_set:
                     result.loading_challan = form.instance
@@ -182,6 +183,7 @@ class BillGenerationView(LoginRequiredMixin, View):
                 return HttpResponseRedirect(reverse("application:billgeneration") + '?no_orders_present=true')
 
             if generate_bill and result_set:
+                logger.info("[BILL GENERATION] - GENERATING BILL | USER - {}".format(request.user.email))
                 form.save()
                 total_amount = 0
                 for result in result_set:
