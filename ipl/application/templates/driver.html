@@ -19,7 +19,7 @@
     .big-checkbox {width: 20px; height: 15px;}
 </style>
 {% endblock other_styles %}
-{% block modal-title %}Save Driver{% endblock modal-title %}
+{% block modal-title %}Driver Update{% endblock modal-title %}
 {% block body_content %}
 <div class="main-content">
    <div class="wrapper">
@@ -30,8 +30,19 @@
             {% if driver_exists %}
                 <div class="alert alert-danger">Driver already Exist, Please verify</div>
             {% endif %}
+            {% if deleted %}
+                <div class="alert alert-danger">Driver(s) deleted successfully</div>
+            {% endif %}
          <div class="col-sm-12">
             <div class="row">
+                    <form method="POST" name="delete-form" action="" enctype="multipart/form-data">
+                                {% csrf_token %}
+                        <div class="form-group row">
+                            <div class="col-sm-6 has-feedback">
+                              <input type="hidden" id="delete-ids" name="delete_list"  value="">
+                            </div>
+                        </div>
+                    </form>
                <form method="POST" name="order-form" action="" enctype="multipart/form-data">
                   {% csrf_token %}
                   <h5><u>Personal Details</u></h5>
@@ -181,6 +192,7 @@
                            <table class="table table-bordered" id="iplTable" >
                               <thead>
                                  <tr>
+                                   <th scope="col" style="display:none;">Id</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Contact Number</th>
                                     <th scope="col">Family Contact Number</th>
@@ -195,6 +207,7 @@
                               <tbody>
                                  {% for driver in drivers%}
                                  <tr>
+                                    <td style="display:none;">{{driver.id}}</td>
                                     <td>{{driver.name}}</td>
                                     <td>{{driver.contact_number}}</td>
                                     <td>{{driver.family_contact}}</td>
@@ -208,6 +221,13 @@
                                  {% endfor %}
                               </tbody>
                            </table>
+                           <div class="form-group" >
+                              <div class="controls col-md-8 ">
+                                 <button id="delete-button" type="button" class="btn btn-primary">
+                                 Delete
+                                 </button>
+                              </div>
+                           </div>
                         </div>
                      </div>
                   </div>
@@ -222,9 +242,41 @@
 <script>
    $('input').addClass("form-control");
    $('input[type=date]').attr("required");
+
+    $("#delete-form-submit").hide();
+    $("#form-submit").show();
+    function toggleSubmitButtons(){
+        if($("#delete-form-submit").is(":visible")){
+            $("#delete-form-submit").hide();
+            $("#form-submit").show();
+        }
+        else{
+            $("#delete-form-submit").show();
+            $("#form-submit").hide();
+        }
+    }
    $(document).ready(function() {
-     $("#driverTable").DataTable();
+      $("#delete-button").hide();
+     $("#iplTable").DataTable();
      $('.dataTables_length').addClass('bs-select');
+       $('#iplTable tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('selected');
+            if ($('.selected').length > 0){
+               $("#delete-button").show();
+            }
+            else{
+               $("#delete-button").hide();
+            }
+        });
+    $('#delete-button').click( function () {
+         var delete_list = []
+         $('.selected').each(function(){
+           delete_list.push($(this).children('td:first').html());
+         });
+         $('#delete-ids').val(""+delete_list);
+            toggleSubmitButtons();
+         $('#popupModal').modal('show');
+    });
    });
 
      $('#id_address_permanent').on('change', function(){

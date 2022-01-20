@@ -112,13 +112,34 @@ class LoadingChallanView(LoginRequiredMixin, View):
             if generate_challan and result_set:
                 logger.info("[LOADING CHALLAN] - GENERATING CHALLAN | USER - {}".format(request.user.email))
                 form.save()
+                pkgs_total = 0
+                weight_total= 0
+                tbb_total = 0
+                topay_total = 0
+                paid_total = 0
                 for result in result_set:
                     result.loading_challan = form.instance
+                    pkgs_total += float(result.no_of_packages)
+                    weight_total += float(result.charged_weight)
+                    if result.payment_status == "to_pay":
+                        topay_total += float(result.total_charges)
+                    elif result.payment_status == "tbb":
+                        tbb_total += float(result.total_charges)
+                    elif result.payment_status == "paid":
+                        paid_total += float(result.total_charges)
+
                     result.save()
+
                 self.context = {
                     "result_set": result_set,
-                    "lc": form.instance
+                    "lc": form.instance,
+                    "paid_total": paid_total,
+                    "topay_total": topay_total,
+                    "tbb_total": tbb_total,
+                    "weight_total": weight_total,
+                    "pkgs_total": pkgs_total
                 }
+
                 return render(request, "lc_copy.html", self.context)
 
             driver_list = DriverModel.objects.all().values('id', 'name', 'contact_number')
@@ -180,7 +201,14 @@ class BillGenerationView(LoginRequiredMixin, View):
                 payment_status="tbb"
             )
             if len(result_set) == 0:
-                return HttpResponseRedirect(reverse("application:billgeneration") + '?no_orders_present=true')
+                consignor_list = ConsignorModel.objects.all().values('id', 'name')
+                self.context = {
+                    'form': form,
+                    'consignors': consignor_list,
+                    'r_method': "POST",
+                    'result_set': result_set
+                }
+                return render(request, "bill_generation.html", self.context)
 
             if generate_bill and result_set:
                 logger.info("[BILL GENERATION] - GENERATING BILL | USER - {}".format(request.user.email))
@@ -192,6 +220,7 @@ class BillGenerationView(LoginRequiredMixin, View):
                     total_amount += result.total_charges
 
                 self.context = {
+                    'r_method': "POST",
                     "result_set": result_set,
                     "bill": form.instance,
                     "total_amount": total_amount
@@ -200,6 +229,7 @@ class BillGenerationView(LoginRequiredMixin, View):
 
             consignor_list = ConsignorModel.objects.all().values('id', 'name')
             self.context = {
+                'r_method': "POST",
                 'form': form,
                 'consignors': consignor_list,
                 'result_set': result_set,
@@ -230,7 +260,7 @@ class DownloadsView(LoginRequiredMixin, View):
         self.context = {
             "order": ShippingOrdersModel.objects.get(id=self.request.GET.get('order'))
         }
-        return render(request, "bill_copy.html", self.context)
+        return render(request, "lc_copy.html", self.context)
 
     def post(self, request, *args, **kwargs):
         self.get_params = request.GET.copy()
@@ -291,6 +321,19 @@ class DriverView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
         logger.info("[DRIVER] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
+
+        if "delete_list" in self.post_params:
+            delete_list = tuple(map(int, ''.join(request.POST.getlist("delete_list")).split(',')))
+            DriverModel.objects.filter(id__in=delete_list).delete()
+            self.context = {
+                'form': DriverForm(),
+                'drivers': DriverModel.objects.all(),
+                'deleted': True
+            }
+            for obj in self.context.get("drivers"):
+                obj.license_document.name = obj.license_document.name[10:]
+            return render(request, "driver.html", self.context)
+
         form = DriverForm(self.post_params, request.FILES)
         if form.is_valid():
             logger.info("[DRIVER] - FORM VALIDATED | USER - {}".format(request.user.email))
@@ -331,6 +374,15 @@ class TruckView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
         logger.info("[TRUCK] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
+        if "delete_list" in self.post_params:
+            delete_list = tuple(map(int, ''.join(request.POST.getlist("delete_list")).split(',')))
+            TruckModel.objects.filter(id__in=delete_list).delete()
+            self.context = {
+                'form': TruckForm(),
+                'trucks': TruckModel.objects.all(),
+                'deleted': True
+            }
+            return render(request, "truck.html", self.context)
         form = TruckForm(self.post_params)
         if form.is_valid():
             logger.info("[TRUCK] - FORM VALIDATED | USER - {}".format(request.user.email))
@@ -367,6 +419,16 @@ class ConsigneeView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
         logger.info("[CONSIGNEE] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
+        if "delete_list" in self.post_params:
+            delete_list = tuple(map(int, ''.join(request.POST.getlist("delete_list")).split(',')))
+            ConsigneeModel.objects.filter(id__in=delete_list).delete()
+            self.context = {
+                'form': ConsigneeForm(),
+                'consignees': ConsigneeModel.objects.all(),
+                'deleted': True
+            }
+            return render(request, "consignee.html", self.context)
+
         form = ConsigneeForm(self.post_params, request.FILES)
         if form.is_valid():
             logger.info("[CONSIGNEE] - FORM VALIDATED | USER - {}".format(request.user.email))
@@ -403,6 +465,16 @@ class ConsignorView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         self.post_params = request.POST.copy()
         logger.info("[CONSIGNOR] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
+        if "delete_list" in self.post_params:
+            delete_list = tuple(map(int, ''.join(request.POST.getlist("delete_list")).split(',')))
+            ConsignorModel.objects.filter(id__in=delete_list).delete()
+            self.context = {
+                'form': ConsignorForm(),
+                'consignors': ConsignorModel.objects.all(),
+                'deleted': True
+            }
+            return render(request, "consignor.html", self.context)
+
         form = ConsignorForm(self.post_params, request.FILES)
         if form.is_valid():
             logger.info("[CONSIGNOR] - FORM VALIDATED | USER - {}".format(request.user.email))

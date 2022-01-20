@@ -41,25 +41,6 @@ td { font-size: 11px;}
                <ul class="list-unstyled components mb-5 side-bar-ul">
                    {% if not secondary_user %}
                   <li class="active">
-                     <a href="#insertMenu" data-toggle="collapse" aria-expanded="false"
-                        class="dropdown-toggle">Insert Modules
-                     </a>
-                     <ul class="collapse list-unstyled" id="insertMenu">
-                        <li>
-                           <a href="{{driver_url}}">Driver</a>
-                        </li>
-                        <li>
-                           <a href="{{truck_url}}">Truck</a>
-                        </li>
-                        <li>
-                           <a href="{{consignee_url}}">Consignee</a>
-                        </li>
-                        <li>
-                           <a href="{{consignor_url}}">Consignor</a>
-                        </li>
-                     </ul>
-                  </li>
-                  <li class="active">
                      <a href="#ordersMenu" data-toggle="collapse" aria-expanded="false"
                         class="dropdown-toggle">Orders
                      </a>
@@ -110,6 +91,25 @@ td { font-size: 11px;}
                         </li>
                      </ul>
                   </li>
+                  <li class="active">
+                     <a href="#insertMenu" data-toggle="collapse" aria-expanded="false"
+                        class="dropdown-toggle">Insert Modules
+                     </a>
+                     <ul class="collapse list-unstyled" id="insertMenu">
+                        <li>
+                           <a href="{{consignee_url}}">Consignee</a>
+                        </li>
+                        <li>
+                           <a href="{{consignor_url}}">Consignor</a>
+                        </li>
+                        <li>
+                           <a href="{{driver_url}}">Driver</a>
+                        </li>
+                        <li>
+                           <a href="{{truck_url}}">Truck</a>
+                        </li>
+                     </ul>
+                  </li>
                    {% endif %}
                   <li>
                      <a href="{{logout_url}}">Logout</a>
@@ -146,7 +146,8 @@ td { font-size: 11px;}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="$('form')[0].submit()">Proceed</button>
+        <button id="form-submit" type="button" class="btn btn-primary" onclick="$('form[name!=delete-form]')[0].submit()">Proceed</button>
+        <button id="delete-form-submit"  type="button" class="btn btn-primary" onclick="$('form[name=delete-form]')[0].submit()">Proceed</button>
       </div>
     </div>
   </div>
@@ -160,14 +161,17 @@ td { font-size: 11px;}
       <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
       <script type="text/javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
       <script>
+      $(document).ready(function() {
+        $("#delete-form-submit").hide();
+      });
           function validateAndShowModal(){
-              if($("form").valid()){
+              if($("form[name!=delete-form]").valid()){
                 $('#popupModal').modal('show');
               }
           }
-$("input").css("font-size", "11px");
-$("select").css("font-size", "11px");
-$("button").css("font-size", "12px");
+        $("input").css("font-size", "11px");
+        $("select").css("font-size", "11px");
+        $("button").css("font-size", "12px");
       </script>
       {% block other_scripts %}
       {% endblock other_scripts %}

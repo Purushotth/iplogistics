@@ -18,7 +18,7 @@
     }
 </style>
 {% endblock other_styles %}
-{% block modal-title %}Save Consignee{% endblock modal-title %}
+{% block modal-title %}Consignee Update{% endblock modal-title %}
 {% block body_content %}
 <div class="main-content">
      <div class="wrapper">
@@ -29,8 +29,19 @@
             {% if consignee_exists %}
                 <div class="alert alert-danger">Consignee already Exist, Please verify</div>
             {% endif %}
+            {% if deleted %}
+                <div class="alert alert-danger">Consignee(s) deleted successfully</div>
+            {% endif %}
             <div class="col-sm-20">
                 <div class="row">
+                    <form method="POST" name="delete-form" action="" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                        <div class="form-group row">
+                            <div class="col-sm-6 has-feedback">
+                              <input type="hidden" id="delete-ids" name="delete_list"  value="">
+                            </div>
+                        </div>
+                    </form>
                     <form method="POST" name="order-form" action="" enctype="multipart/form-data">
                         {% csrf_token %}
                         <h5><u>Add a Consignee</u></h5>
@@ -87,9 +98,10 @@
                         <div class="form-group">
                             <div class="aab controls col-md-4 "></div>
                             <div class="controls col-md-2 ">
-<button type="button" class="btn btn-primary" onclick="validateAndShowModal()">
-  Submit
-</button>                                 </div>
+                                <button type="button" class="btn btn-primary" onclick="validateAndShowModal()">
+                                  Submit
+                                </button>
+                            </div>
                         </div>
                      </form>
                 </div>
@@ -111,6 +123,7 @@
       <table class="table table-bordered" id="iplTable" >
         <thead>
           <tr>
+            <th scope="col" style="display:none;">Id</th>
             <th scope="col">Name</th>
             <th scope="col">Contact Number</th>
             <th scope="col">GST</th>
@@ -121,6 +134,7 @@
         <tbody>
             {% for consignee in consignees %}
           <tr>
+            <td style="display:none;">{{consignee.id}}</td>
             <td>{{consignee.name}}</td>
             <td>{{consignee.contact_number}}</td>
             <td>{{consignee.gstin}}</td>
@@ -129,6 +143,13 @@
             {% endfor %}
         </tbody>
       </table>
+                           <div class="form-group" >
+                              <div class="controls col-md-8 ">
+                                 <button id="delete-button" type="button" class="btn btn-primary">
+                                 Delete
+                                 </button>
+                              </div>
+                           </div>
                 </div>
             </div>        </div>
     </div>
@@ -142,9 +163,40 @@
 {% block other_scripts %}
 <script>
     $('input').addClass("form-control");
+    $("#delete-form-submit").hide();
+    $("#form-submit").show();
+    function toggleSubmitButtons(){
+        if($("#delete-form-submit").is(":visible")){
+            $("#delete-form-submit").hide();
+            $("#form-submit").show();
+        }
+        else{
+            $("#delete-form-submit").show();
+            $("#form-submit").hide();
+        }
+    }
     $(document).ready(function() {
+      $("#delete-button").hide();
       $("#iplTable").DataTable();
       $('.dataTables_length').addClass('bs-select');
+       $('#iplTable tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('selected');
+            if ($('.selected').length > 0){
+               $("#delete-button").show();
+            }
+            else{
+               $("#delete-button").hide();
+            }
+        });
+    $('#delete-button').click( function () {
+         var delete_list = []
+         $('.selected').each(function(){
+           delete_list.push($(this).children('td:first').html());
+         });
+         $('#delete-ids').val(""+delete_list);
+            toggleSubmitButtons();
+         $('#popupModal').modal('show');
+    });
     });
 </script>
 {% endblock other_scripts %}

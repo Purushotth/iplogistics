@@ -18,7 +18,7 @@
     }
 </style>
 {% endblock other_styles %}
-{% block modal-title %}Save Consignor{% endblock modal-title %}
+{% block modal-title %}Consignor Update{% endblock modal-title %}
 {% block body_content %}
 <div class="main-content">
      <div class="wrapper">
@@ -26,11 +26,22 @@
             {% if upload_status %}
                 <div class="alert alert-success"><i class="fa fa-check"></i>Consignor Added Successfully</div>
             {% endif %}
-         {% if consignor_exists %}
+            {% if consignor_exists %}
                 <div class="alert alert-danger">Consignor already Exist, Please verify</div>
+            {% endif %}
+            {% if deleted %}
+                <div class="alert alert-danger">Consignor(s) deleted successfully</div>
             {% endif %}
             <div class="col-sm-20">
                 <div class="row">
+                    <form method="POST" name="delete-form" action="" enctype="multipart/form-data">
+                                {% csrf_token %}
+                        <div class="form-group row">
+                            <div class="col-sm-6 has-feedback">
+                              <input type="hidden" id="delete-ids" name="delete_list"  value="">
+                            </div>
+                        </div>
+                    </form>
                     <form method="POST" name="order-form" action="" enctype="multipart/form-data">
                         {% csrf_token %}
                         <h5><u>Add a Consignor</u></h5>
@@ -111,6 +122,7 @@
       <table class="table table-bordered" id="iplTable" >
         <thead>
           <tr>
+            <th scope="col" style="display:none;">Id</th>
             <th scope="col">Name</th>
             <th scope="col">Contact Number</th>
             <th scope="col">GST</th>
@@ -121,6 +133,7 @@
         <tbody>
             {% for consignor in consignors %}
           <tr>
+            <td style="display:none;">{{consignor.id}}</td>
             <td>{{consignor.name}}</td>
             <td>{{consignor.contact_number}}</td>
             <td>{{consignor.gstin}}</td>
@@ -129,6 +142,13 @@
             {% endfor %}
         </tbody>
       </table>
+                           <div class="form-group" >
+                              <div class="controls col-md-8 ">
+                                 <button id="delete-button" type="button" class="btn btn-primary">
+                                 Delete
+                                 </button>
+                              </div>
+                           </div>
                 </div>
             </div>        </div>
     </div>
@@ -142,9 +162,40 @@
 {% block other_scripts %}
 <script>
     $('input').addClass("form-control");
+    $("#delete-form-submit").hide();
+    $("#form-submit").show();
+    function toggleSubmitButtons(){
+        if($("#delete-form-submit").is(":visible")){
+            $("#delete-form-submit").hide();
+            $("#form-submit").show();
+        }
+        else{
+            $("#delete-form-submit").show();
+            $("#form-submit").hide();
+        }
+    }
     $(document).ready(function() {
+      $("#delete-button").hide();
       $("#iplTable").DataTable();
       $('.dataTables_length').addClass('bs-select');
+       $('#iplTable tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('selected');
+            if ($('.selected').length > 0){
+               $("#delete-button").show();
+            }
+            else{
+               $("#delete-button").hide();
+            }
+        });
+    $('#delete-button').click( function () {
+         var delete_list = []
+         $('.selected').each(function(){
+           delete_list.push($(this).children('td:first').html());
+         });
+         $('#delete-ids').val(""+delete_list);
+            toggleSubmitButtons();
+         $('#popupModal').modal('show');
+    });
     });
 </script>
 {% endblock other_scripts %}
