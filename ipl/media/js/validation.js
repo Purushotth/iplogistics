@@ -116,7 +116,7 @@ $('form:not([method=GET])').each(function() {
                 extension: "pdf|img|png|jpg|jpeg"
             },
             freight_charges:{
-                required: false
+                required: true
             },
             lr_charges:{
                 required: false

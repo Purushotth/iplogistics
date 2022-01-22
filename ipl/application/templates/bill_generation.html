@@ -51,12 +51,11 @@
         <div class="form-group">
             <div class="aab controls col-md-4 "></div>
             <div class="controls col-md-4 ">
-                        <button type="button" class="btn btn-primary" onclick="validateAndShowModal()">
+                        <button type="button" class="btn btn-primary" onclick="$('#submit-form-name').attr('value', 0);validateAndShowModal()">
   Fetch Orders
 </button>
             </div>
         </div>
-
             <input id="submit-form-name" type="hidden" name="bill" value=0>
             </form>
         </div>
@@ -92,7 +91,7 @@
             <td>{{result.actual_weight }}</td>
             <td>{{result.consignee_place}}</td>
             <td>{{result.no_of_packages}}</td>
-            <td>{{result.lr_charges}}</td>
+            <td>{{result.amount_per_kg}}</td>
             <td>{{result.freight_charges}}</td>
 
           </tr>

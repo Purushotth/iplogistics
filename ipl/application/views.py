@@ -81,19 +81,6 @@ class LandingPageView(LoginRequiredMixin, View):
             response.delete_cookie("landing")
             return response
 
-        # consignee_list = ConsigneeModel.objects.all().values('id', 'name', 'gstin')
-        # consignor_list = ConsignorModel.objects.all().values('id', 'name', 'gstin')
-        # order_list = ShippingOrdersModel.objects.all()
-        # self.context = {
-        #     'form': ShippingOrdersForm(),
-        #     'consignees': consignee_list,
-        #     'consignors': consignor_list,
-        #     'order_saved': order_saved,
-        #     'order_posted': 1,
-        #     'orders': order_list
-        # }
-        # return render(request, "landingpage.html", self.context)
-
 
 class LoadingChallanView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
@@ -142,7 +129,7 @@ class LoadingChallanView(LoginRequiredMixin, View):
                 paid_total = 0
                 for result in result_set:
                     result.loading_challan = form.instance
-                    pkgs_total += float(result.no_of_packages)
+                    pkgs_total += int(result.no_of_packages)
                     weight_total += float(result.charged_weight)
                     if result.payment_status == "to_pay":
                         topay_total += float(result.total_charges)
@@ -192,10 +179,6 @@ class LoadingChallanView(LoginRequiredMixin, View):
 class BillGenerationView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         form = BillForm()
-        # for result in ShippingOrdersModel.objects.all():
-        #     result.bill = None
-        #     result.loading_challan = None
-        #     result.save()
         result_set = ShippingOrdersModel.objects.filter(bill=None)
         if len(result_set) == 0:
             return render(request, "app_static_content.html")
@@ -241,6 +224,8 @@ class BillGenerationView(LoginRequiredMixin, View):
                 total_amount = 0
                 for result in result_set:
                     result.bill = form.instance
+                    result.payment_status = "paid"
+                    result.paid_amount = result.total_charges
                     result.save()
                     total_amount += result.total_charges
 
@@ -248,8 +233,11 @@ class BillGenerationView(LoginRequiredMixin, View):
                     'r_method': "POST",
                     "result_set": result_set,
                     "bill": form.instance,
-                    "total_amount": total_amount
+                    "total_amount": total_amount,
+                    "total_amount_in_words": convert_numbers_to_words(str(total_amount))
+
                 }
+
                 return render(request, "bill_copy.html", self.context)
 
             consignor_list = ConsignorModel.objects.all().values('id', 'name')
@@ -322,8 +310,7 @@ class DownloadsView(LoginRequiredMixin, View):
             filename = "{}_lc.pdf".format(request.POST.get("id"))
             folder_name = "lc"
         elif download_type == "order":
-            order_copy_type = self.get_params.get('order_copy_type')
-            filename = "{}_{}.pdf".format(request.POST.get("id"), order_copy_type)
+            filename = "{}.pdf".format(request.POST.get("id"))
             folder_name = "orders"
         elif download_type == "bill":
             filename = "{}_bill.pdf".format(request.POST.get("id"))
@@ -565,13 +552,18 @@ class CashReceiptView(LoginRequiredMixin, View):
 
 def convert_numbers_to_words(total_amount):
     if "." in total_amount:
-        amount_in_words = ' Rupess and '.join(
-            [str(num2words.num2words(amount, lang='en_IN')).replace("-", " ")
-             for amount in total_amount.split(".")]
-        ) + " Paise Only"
+        data = set(total_amount.split(".")[-1])
+        if "0" in data and len(data) == 1:
+            amount_in_words = str(num2words.num2words(total_amount, lang='en_IN')).replace("-",
+                                                                                           " ").capitalize() + " Rupees Only"
+        else:
+            amount_in_words = ' Rupees and '.join(
+                [str(num2words.num2words(amount, lang='en_IN')).replace("-", " ")
+                 for amount in total_amount.split(".")]
+            ) + " Paise Only"
     else:
         amount_in_words = str(num2words.num2words(total_amount, lang='en_IN')).replace("-",
-                                                                                       " ").capitalize() + " Rupess Only"
+                                                                                       " ").capitalize() + " Rupees Only"
     amount_in_words = ' '.join(list(map(lambda x: x.capitalize(), amount_in_words.split())))
     return amount_in_words
 

@@ -148,6 +148,8 @@ SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 15 * 1024 * 1024 # 5mb
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

@@ -214,12 +214,12 @@ td { font-size: 11px;}
                            </div>
                         </div>
                         <div class="form-group row">
-                           <label for="{{form.gs_tax_payable.id_for_label}}" class="col-sm-6 col-form-label">GS Tax Payable
+                           <label for="{{form.amount_per_kg.id_for_label}}" class="col-sm-6 col-form-label">Amount per KG
                            :</label>
                            <div class="col-sm-6 has-feedback">
-                              {{form.gs_tax_payable}}
+                              {{form.amount_per_kg}}
                               <div class="help-block error">
-                                 <span for="{{ form.gs_tax_payable.html_name }}">{{ form.gs_tax_payable.errors.as_text | cut:"* " }}</span>
+                                 <span for="{{ form.amount_per_kg.html_name }}">{{ form.amount_per_kg.errors.as_text | cut:"* " }}</span>
                               </div>
                            </div>
                         </div>
@@ -242,6 +242,16 @@ td { font-size: 11px;}
                               <input name="invoice_date" type="date" id="invoice_date" required>
                               <div class="help-block error">
                                  <span for="{{ form.invoice_date.html_name }}">{{ form.invoice_date.errors.as_text | cut:"* " }}</span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="form-group row">
+                           <label for="{{form.gs_tax_payable.id_for_label}}" class="col-sm-6 col-form-label">GS Tax Payable
+                           :</label>
+                           <div class="col-sm-6 has-feedback">
+                              {{form.gs_tax_payable}}
+                              <div class="help-block error">
+                                 <span for="{{ form.gs_tax_payable.html_name }}">{{ form.gs_tax_payable.errors.as_text | cut:"* " }}</span>
                               </div>
                            </div>
                         </div>
@@ -374,27 +384,21 @@ td { font-size: 11px;}
                            <table width="40%" class="table table-bordered table-sm stable-striped" id="ordersTable" >
                               <thead>
                               <tr>
-                                 <th rowspan="2">ID</th>
-                                    <th rowspan="2">Billing Date</th>
-                                    <th rowspan="2">Consignor</th>
-                                    <th rowspan="2">Consignee</th>
-                                    <th rowspan="2">From</th>
-                                    <th rowspan="2">To</th>
+                                 <th>ID</th>
+                                    <th>Billing Date</th>
+                                    <th>Consignor</th>
+                                    <th>Consignee</th>
+                                    <th>From</th>
+                                    <th>To</th>
 
-                                    <th rowspan="2">Grand Total</th>
-                                    <th rowspan="2">Payment Status</th>
-                                    <th rowspan="2">Paid Amount</th>
-                                    <th rowspan="2">Pending Amount</th>
-                                    <th colspan="4" style="text-align:center;">Order Copy</th>
-                                    <th rowspan="2">Loading Challan</th>
-                                    <th rowspan="2">Bill</th>
+                                    <th>Grand Total</th>
+                                    <th>Payment Status</th>
+                                    <th>Paid Amount</th>
+                                    <th>Pending Amount</th>
+                                    <th>Order Copy</th>
+                                    <th>Loading Challan</th>
+                                    <th>Bill</th>
                               </tr>
-                                 <tr>
-                                    <th scope="col">Driver</th>
-                                    <th scope="col">IPL</th>
-                                    <th scope="col">Consignor</th>
-                                    <th scope="col">Consignee</th>
-                                 </tr>
                               </thead>
                               <tbody>
                                  {% for order in orders%}
@@ -419,10 +423,7 @@ td { font-size: 11px;}
                                     <td>{{order.paid_amount}}</td>
                                     {% endif %}
                                     <td>{% if order.payment_status == "tbb" %}{{order.total_charges|do_subtract:order.paid_amount}}{% endif %}</td>
-                                    <td><a href="documents/orders/{{order.id}}_driver.pdf" target="_blank">Click Here</a></td>
-                                    <td><a href="documents/orders/{{order.id}}_ipl.pdf" target="_blank">Click Here</a></td>
-                                    <td><a href="documents/orders/{{order.id}}_consignor.pdf" target="_blank">Click Here</a></td>
-                                    <td><a href="documents/orders/{{order.id}}_consignee.pdf" target="_blank">Click Here</a></td>
+                                    <td><a href="documents/orders/{{order.id}}.pdf" target="_blank">Click Here</a></td>
 
                                     <td>{% if order.loading_challan != None %}<a href="documents/lc/{{order.loading_challan.lc_no}}_lc.pdf" target="_blank">Click Here</a>{%endif%}</td>
                                     <td>{% if order.bill != None %}<a href="documents/bill/{{order.bill.id}}_bill.pdf" target="_blank">Click Here</a>{%endif%}</td>
@@ -464,7 +465,9 @@ td { font-size: 11px;}
        $('#package-description').attr("rows", $('#package-count').val());
    });
    $('#id_total_charges').attr("readonly", "readonly");
-   $('.charges').on('change', function(){
+   $('#id_freight_charges').attr("readonly", "readonly");
+
+   $('.charges').on('input', function(){
        var totalCharges =0;
        $('.charges').each(function(i, obj) {
            totalCharges += Number(obj.value);
@@ -488,11 +491,17 @@ td { font-size: 11px;}
        showHidePaidAmount($(this));
    });
 
+   $(".freight-calculation").on("input", function(){
+      $("#id_freight_charges").val(($("#id_charged_weight").val() * $("#id_amount_per_kg").val()).toFixed(2));
+      $('.charges').trigger("input");
+   });
+
    $(document).ready(function() {
      $("#ordersTable").DataTable( {
         "order": [[ 0, "desc" ]]
      });
      $('.dataTables_length').addClass('bs-select');
+
    });
 
 $(document).mouseup(function(e){
@@ -549,8 +558,8 @@ $(document).mouseup(function(e){
     }
 
 $('#modify-paid-amount-button').click( function () {
-            toggleSubmitButtons();
-         $('#popupModal').modal('show');
+   toggleSubmitButtons();
+   $('#popupModal').modal('show');
 })
 
 </script>

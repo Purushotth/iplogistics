@@ -106,7 +106,18 @@ class ShippingOrdersForm(ModelForm):
                 attrs={
                     'class': 'form-control total-charges'
                 }
+            ),
+            'charged_weight': forms.NumberInput(
+                attrs={
+                    'class': 'form-control freight-calculation'
+                }
+            ),
+            'amount_per_kg': forms.NumberInput(
+                attrs={
+                    'class': 'form-control freight-calculation'
+                }
             )
         }
+
     def clean(self):
         return self.cleaned_data

@@ -210,7 +210,7 @@
       <script>
          $(document).ready(function() {
          $("#submit-button").hide();
-         $(".required_field").on("change", function(){
+         $(".required_field").on("input", function(){
             var showSubmit = true;
             $(".required_field").each(function(i, obj) {
                if ($(obj).val() === "" || $(obj).val() === "NaN"){
@@ -225,7 +225,7 @@
             }
          })
 
-               $(".charges").on("change", function(){
+               $(".charges").on("input", function(){
                   var totalAmount = 0;
                   $(".charges").each(function(i, obj){
                      if ($(obj).val() != ""){

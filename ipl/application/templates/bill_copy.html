@@ -222,7 +222,7 @@ table, th, td {
                             <strong class="f-15 text-red">{{order.consignee_place|title}}</strong>
                         </td>
 
-                        <td align="center">{%if order.hamali_charges%}{{order.hamali_charges}}{%else%}____{%endif%}</td>
+                        <td align="center">{{order.amount_per_kg }}</td>
                             {%if order.freight_charges%}
                                 {% for value in order.freight_charges|decimal_split %}
                                     <td align="center">{{value}}</td>
@@ -241,7 +241,7 @@ table, th, td {
                                     <strong>Amount in Words:</strong>
                                 </td>
                                 <td>
-                                    <strong>{{total_amount_in_words}} Only.</strong>
+                                    <strong>{{total_amount_in_words}}</strong>
                                 </td>
                             </tr>
                         </table></td>
@@ -262,7 +262,7 @@ table, th, td {
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td valign="top" width="40%" class="p-0">
-                        <strong>&nbsp&nbsp&nbspGS Tax payable by consignor</strong>
+                        <strong>&nbsp&nbsp&nbspGS Tax payable by Consignor</strong>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
                                 <td valign="bottom" height="90">

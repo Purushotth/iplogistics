@@ -137,6 +137,7 @@ class ShippingOrdersModel(models.Model):
     package_description = models.CharField(max_length=1000)
     actual_weight = models.FloatField(default=None, null=True)
     charged_weight = models.FloatField(default=None, null=True)
+    amount_per_kg = models.FloatField(default=None, null=True)
     freight_charges = models.FloatField(default=None, null=True, blank=True)
     lr_charges = models.FloatField(default=None, null=True, blank=True)
     hamali_charges = models.FloatField(default=None, null=True, blank=True)
