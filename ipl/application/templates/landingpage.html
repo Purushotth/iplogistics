@@ -23,7 +23,7 @@ th { font-size: 12px;}
 td { font-size: 11px;}
 </style>
 {% endblock other_styles %}
-{% block modal-title %}Save Order{% endblock modal-title %}
+{% block modal-title %}Order Update{% endblock modal-title %}
 {% block body_content %}
 
 
@@ -33,6 +33,15 @@ td { font-size: 11px;}
          <h4>{% block section_heading %}Create Shipping Order{% endblock section_heading %}</h4>
          <div class="col-sm-8">
             <div class="row">
+                    <form method="POST" name="delete-form" action="" enctype="multipart/form-data">
+                                {% csrf_token %}
+                        <div class="form-group row">
+                            <div class="col-sm-6 has-feedback">
+                              <input type="hidden" id="modify-paid-amount-order" name="modify-paid-amount-order" value="">
+                              <input type="hidden" id="modify-paid-amount-value" name="modify-paid-amount-value" value="">
+                            </div>
+                        </div>
+                    </form>
                <form method="POST" name="order-form" action="/landingpage">
                   {% csrf_token %}
                   {% if order_posted %}
@@ -42,6 +51,9 @@ td { font-size: 11px;}
                         <h3 class="text-danger">Order not Saved, Something Went Wrong</h3>
                      {% endif %}
                   {% endif %}
+            {% if paid_amount_modified %}
+                <div class="alert alert-success">Paid Amount Updated successfully</div>
+            {% endif %}
                   <div class="form-group row">
                      <label for="{{form.billing_date.id_for_label}}" class="col-sm-6 col-form-label">Billing Date
                      :</label>
@@ -177,6 +189,66 @@ td { font-size: 11px;}
                      <!--right side -->
                   </div>
                   <hr class="rounded">
+                  <h5><u>Other Details</u></h5>
+                  <div class="row">
+                     <div class="col-6">
+                        <!--left side -->
+                        <div class="form-group row">
+                           <label for="{{form.actual_weight.id_for_label}}" class="col-sm-6 col-form-label">Actual Weight
+                           :</label>
+                           <div class="col-sm-6 has-feedback">
+                              {{form.actual_weight}}
+                              <div class="help-block error">
+                                 <span for="{{ form.actual_weight.html_name }}">{{ form.actual_weight.errors.as_text | cut:"* " }}</span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="form-group row">
+                           <label for="{{form.charged_weight.id_for_label}}" class="col-sm-6 col-form-label">Charged Weight
+                           :</label>
+                           <div class="col-sm-6 has-feedback">
+                              {{form.charged_weight}}
+                              <div class="help-block error">
+                                 <span for="{{ form.charged_weight.html_name }}">{{ form.charged_weight.errors.as_text | cut:"* " }}</span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="form-group row">
+                           <label for="{{form.gs_tax_payable.id_for_label}}" class="col-sm-6 col-form-label">GS Tax Payable
+                           :</label>
+                           <div class="col-sm-6 has-feedback">
+                              {{form.gs_tax_payable}}
+                              <div class="help-block error">
+                                 <span for="{{ form.gs_tax_payable.html_name }}">{{ form.gs_tax_payable.errors.as_text | cut:"* " }}</span>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-6">
+                        <div class="form-group row">
+                           <label for="{{form.invoice_no.id_for_label}}" class="col-sm-6 col-form-label">Invoice Number
+                           :</label>
+                           <div class="col-sm-6 has-feedback">
+                              {{form.invoice_no}}
+                              <div class="help-block error">
+                                 <span for="{{ form.invoice_no.html_name }}">{{ form.invoice_no.errors.as_text | cut:"* " }}</span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="form-group row">
+                           <label for="{{form.invoice_date.id_for_label}}" class="col-sm-6 col-form-label">Invoice Date
+                           :</label>
+                           <div class='col-sm-6'>
+                              <input name="invoice_date" type="date" id="invoice_date" required>
+                              <div class="help-block error">
+                                 <span for="{{ form.invoice_date.html_name }}">{{ form.invoice_date.errors.as_text | cut:"* " }}</span>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <!--right side -->
+                  </div>
+                  <hr class="rounded">/
                   <h5><u>Charges</u></h5>
                   <div class="row">
                      <div class="col-6">
@@ -277,66 +349,7 @@ td { font-size: 11px;}
                      <!--right side -->
                   </div>
                   <hr class="rounded">
-                  <h5><u>Other Details</u></h5>
-                  <div class="row">
-                     <div class="col-6">
-                        <!--left side -->
-                        <div class="form-group row">
-                           <label for="{{form.actual_weight.id_for_label}}" class="col-sm-6 col-form-label">Actual Weight
-                           :</label>
-                           <div class="col-sm-6 has-feedback">
-                              {{form.actual_weight}}
-                              <div class="help-block error">
-                                 <span for="{{ form.actual_weight.html_name }}">{{ form.actual_weight.errors.as_text | cut:"* " }}</span>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="form-group row">
-                           <label for="{{form.charged_weight.id_for_label}}" class="col-sm-6 col-form-label">Charged Weight
-                           :</label>
-                           <div class="col-sm-6 has-feedback">
-                              {{form.charged_weight}}
-                              <div class="help-block error">
-                                 <span for="{{ form.charged_weight.html_name }}">{{ form.charged_weight.errors.as_text | cut:"* " }}</span>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="form-group row">
-                           <label for="{{form.gs_tax_payable.id_for_label}}" class="col-sm-6 col-form-label">GS Tax Payable
-                           :</label>
-                           <div class="col-sm-6 has-feedback">
-                              {{form.gs_tax_payable}}
-                              <div class="help-block error">
-                                 <span for="{{ form.gs_tax_payable.html_name }}">{{ form.gs_tax_payable.errors.as_text | cut:"* " }}</span>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="col-6">
-                        <div class="form-group row">
-                           <label for="{{form.invoice_no.id_for_label}}" class="col-sm-6 col-form-label">Invoice Number
-                           :</label>
-                           <div class="col-sm-6 has-feedback">
-                              {{form.invoice_no}}
-                              <div class="help-block error">
-                                 <span for="{{ form.invoice_no.html_name }}">{{ form.invoice_no.errors.as_text | cut:"* " }}</span>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="form-group row">
-                           <label for="{{form.invoice_date.id_for_label}}" class="col-sm-6 col-form-label">Invoice Date
-                           :</label>
-                           <div class='col-sm-6'>
-                              <input name="invoice_date" type="date" id="invoice_date" required>
-                              <div class="help-block error">
-                                 <span for="{{ form.invoice_date.html_name }}">{{ form.invoice_date.errors.as_text | cut:"* " }}</span>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <!--right side -->
-                  </div>
-                  <hr class="rounded">
+
                   <div class="form-group">
                      <div class="aab controls col-md-4 "></div>
                      <div class="controls col-md-4 ">
@@ -370,6 +383,7 @@ td { font-size: 11px;}
 
                                     <th rowspan="2">Grand Total</th>
                                     <th rowspan="2">Payment Status</th>
+                                    <th rowspan="2">Paid Amount</th>
                                     <th rowspan="2">Pending Amount</th>
                                     <th colspan="4" style="text-align:center;">Order Copy</th>
                                     <th rowspan="2">Loading Challan</th>
@@ -377,10 +391,9 @@ td { font-size: 11px;}
                               </tr>
                                  <tr>
                                     <th scope="col">Driver</th>
-                                    <th scope="col">Truck</th>
+                                    <th scope="col">IPL</th>
                                     <th scope="col">Consignor</th>
                                     <th scope="col">Consignee</th>
-
                                  </tr>
                               </thead>
                               <tbody>
@@ -400,9 +413,14 @@ td { font-size: 11px;}
                                     {% elif order.payment_status == "paid" %}
                                         <td>PAID</td>
                                     {% endif %}
+                                    {% if order.payment_status == "tbb" %}
+                                    <td class="td-paid-amount" onclick="updatePaidAmount($(this), {{order.id}} )">{{order.paid_amount}}</td>
+                                    {% else %}
+                                    <td>{{order.paid_amount}}</td>
+                                    {% endif %}
                                     <td>{% if order.payment_status == "tbb" %}{{order.total_charges|do_subtract:order.paid_amount}}{% endif %}</td>
                                     <td><a href="documents/orders/{{order.id}}_driver.pdf" target="_blank">Click Here</a></td>
-                                    <td><a href="documents/orders/{{order.id}}_truck.pdf" target="_blank">Click Here</a></td>
+                                    <td><a href="documents/orders/{{order.id}}_ipl.pdf" target="_blank">Click Here</a></td>
                                     <td><a href="documents/orders/{{order.id}}_consignor.pdf" target="_blank">Click Here</a></td>
                                     <td><a href="documents/orders/{{order.id}}_consignee.pdf" target="_blank">Click Here</a></td>
 
@@ -412,6 +430,13 @@ td { font-size: 11px;}
                                  {% endfor %}
                               </tbody>
                            </table>
+                           <div class="form-group" >
+                              <div class="controls col-md-8 ">
+                                 <button id="modify-paid-amount-button" type="button" class="btn btn-primary td-paid-amount">
+                                 Modify Payment
+                                 </button>
+                              </div>
+                           </div>
                         </div>
                      </div>
                   </div>
@@ -462,12 +487,71 @@ td { font-size: 11px;}
    $('#id_payment_status').on('change' ,function(){
        showHidePaidAmount($(this));
    });
+
    $(document).ready(function() {
      $("#ordersTable").DataTable( {
         "order": [[ 0, "desc" ]]
-    } );
+     });
      $('.dataTables_length').addClass('bs-select');
    });
+
+$(document).mouseup(function(e){
+   if (!(e.target.className.includes("td-paid-amount"))){
+      $("#modify-paid-amount-button").hide();
+       clicked_obj.html(clicked_amount);
+       clicked_obj = null;
+       clicked_amount = null;
+   }
+   else{
+      $("#modify-paid-amount-button").show();
+   }
+});
+   $("#modify-paid-amount-button").hide();
+    function updateInput(value){
+      $("#modify-paid-amount-value").attr("value",value);
+    }
+   var clicked_obj = null;
+   var clicked_amount = null;
+    function updatePaidAmount(obj, orderId){
+        if(clicked_obj === null){
+            if (!(obj.html().includes("<input"))){
+                clicked_obj = obj;
+                clicked_amount = obj.html();
+                obj.html("<input type='number' class='td-paid-amount' id='update-paid-amount' onchange='updateInput(this.value)' value="+obj.html()+">");
+                $("#modify-paid-amount-value").attr("value",clicked_amount);
+                $("#modify-paid-amount-order").attr("value", orderId);
+                $("#modify-paid-amount-button").show();
+            }
+        }
+        else{
+            if(obj.html().includes("<input")){
+                return;
+            }
+            else{
+                clicked_obj.html(clicked_amount);
+                clicked_obj = null;
+                clicked_amount = null;
+                $("#modify-paid-amount-button").hide();
+            }
+        }
+    }
+    $("#delete-form-submit").hide();
+    $("#form-submit").show();
+    function toggleSubmitButtons(){
+        if($("#delete-form-submit").is(":visible")){
+            $("#delete-form-submit").hide();
+            $("#form-submit").show();
+        }
+        else{
+            $("#delete-form-submit").show();
+            $("#form-submit").hide();
+        }
+    }
+
+$('#modify-paid-amount-button').click( function () {
+            toggleSubmitButtons();
+         $('#popupModal').modal('show');
+})
 
 </script>
 {% endblock other_scripts %}

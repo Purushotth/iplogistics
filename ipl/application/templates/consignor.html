@@ -187,15 +187,15 @@
                $("#delete-button").hide();
             }
         });
-    $('#delete-button').click( function () {
-         var delete_list = []
-         $('.selected').each(function(){
-           delete_list.push($(this).children('td:first').html());
-         });
-         $('#delete-ids').val(""+delete_list);
-            toggleSubmitButtons();
-         $('#popupModal').modal('show');
-    });
+        $('#delete-button').click( function () {
+             var delete_list = []
+             $('.selected').each(function(){
+               delete_list.push($(this).children('td:first').html());
+             });
+             $('#delete-ids').val(""+delete_list);
+             toggleSubmitButtons();
+             $('#popupModal').modal('show');
+        });
     });
 </script>
 {% endblock other_scripts %}

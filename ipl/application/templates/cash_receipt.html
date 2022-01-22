@@ -127,11 +127,11 @@
                <td valign="top">
                   <table width="100%" border="0" cellspacing="0" cellpadding="0">
                      <tr>
-                        <td width="20%">S. No. <input type="text" style="border:0;border-bottom: 2px dotted;" size="4"></td>
+                        <td width="20%">S. No. <input id="s_no" type="text" style="border:0;border-bottom: 2px dotted;" size="4" readonly></td>
                         <td align="center">
                            <span class="border-box">CASH RECEIPT</span>
                         </td>
-                        <td width="40%">Date :<input type="text" style="border:0;border-bottom: 2px dotted;" size="20"></td>
+                        <td width="40%">Date :<input class="required_field" id="receipt_date" name= "receipt_date" type="date" style="border:0;border-bottom: 2px dotted;" size="5"></td>
                      </tr>
                   </table>
                </td>
@@ -143,13 +143,13 @@
                <td valign="top">
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table-pad">
                      <tr>
-                        <td>Received with thanks from <input type="text" style="border:0;border-bottom: 2px dotted;" size="50"> in respect of TBB/Delivery</td>
+                        <td>Received with thanks from <input class="required_field" id="received_from" name= "received_from" type="text" style="border:0;border-bottom: 2px dotted;" size="50"> in respect of TBB/Delivery</td>
                      </tr>
                      <tr>
-                        <td>GC No. <input type="text" style="border:0;border-bottom: 2px dotted;" size="14"> Date <input type="text" style="border:0;border-bottom: 2px dotted;" size="20"></td>
+                        <td>GC No. <input class="required_field" id="gc_no" name= "gc_no" type="text" style="border:0;border-bottom: 2px dotted;" size="14"> Date <input class="required_field" type="date" style="border:0;border-bottom: 2px dotted;" size="20"></td>
                      </tr>
                      <tr>
-                        <td>Booked from <input type="text" style="border:0;border-bottom: 2px dotted;" size="45"> to <input type="text" style="border:0;border-bottom: 2px dotted;" size="45"></td>
+                        <td>Booked from <input class="required_field" id="booked_from" name= "booked_from" type="text" style="border:0;border-bottom: 2px dotted;" size="45"> to <input class="required_field" id="booked_to" name= "booked_to" type="text" style="border:0;border-bottom: 2px dotted;" size="45"></td>
                      </tr>
                   </table>
                </td>
@@ -161,19 +161,19 @@
                         <td valign="top">
                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
                               <tr>
-                                 <td>Pkgs <input type="text" style="border:0;border-bottom: 2px dotted;" size="35    "></td>
+                                 <td>Pkgs <input class="required_field" type="number" style="border:0;border-bottom: 2px dotted;" size="35"></td>
                               </tr>
                               <tr>
-                                 <td>Freight. Rs <input type="text" style="border:0;border-bottom: 2px dotted;"></td>
+                                 <td>Freight. Rs <input class="required_field charges" type="number" style="border:0;border-bottom: 2px dotted;"></td>
                               </tr>
                               <tr>
-                                 <td>LR.Charge. Rs <input type="text" style="border:0;border-bottom: 2px dotted;"></td>
+                                 <td>LR.Charge. Rs <input class="required_field charges" type="number" style="border:0;border-bottom: 2px dotted;"></td>
                               </tr>
                               <tr>
-                                 <td>Labour. Rs <input type="text" style="border:0;border-bottom: 2px dotted;"></td>
+                                 <td>Labour. Rs <input class="required_field charges" type="number" style="border:0;border-bottom: 2px dotted;"></td>
                               </tr>
                               <tr>
-                                 <td>Total. Rs <input type="text" style="border:0;border-bottom: 2px dotted;"></td>
+                                 <td>Total. Rs <input class="required_field" id="total_amount" name= "total_amount" type="number" style="border:0;border-bottom: 2px dotted;" readonly></td>
                               </tr>
                            </table>
                         </td>
@@ -183,46 +183,108 @@
                </td>
             </tr>
             <tr>
-               <td valign="top">Rupees in Words <input type="text" style="border:0;border-bottom: 2px dotted;" size="100"></td>
+               <td valign="top">Rupees in Words <input id="amount_in_words" type="text" style="border:0;border-bottom: 2px dotted;" size="100" readonly></td>
             </tr>
             <tr>
                <td height="25" style="line-height: 1px;"></td>
             </tr>
             <tr>
+
                <td valign="top">
-                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                 <br> <br> <br>  <table width="100%" border="0" cellspacing="0" cellpadding="0">
                      <tr>
                         <td width="50%"><i>Sign of Consignee</i></td>
                         <td align="right">For Indore Proffesional Logistics Royal</td>
                      </tr>
                   </table><br>
 
-
                </td>
             </tr>
          </table>
+         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
          <input type="submit" id="submit-button">
       </div>
       <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
       <script>
          $(document).ready(function() {
-             $("#submit-button").on("click", function(){
-                 $("#submit-button").hide();
-                 $("html").css("zoom", "1.2");
-                 let page = $("#download-section");
-                 async function printPdf() {
-                   const pdf = html2PDF(page, {
-                         jsPDF: {
-                             format: "a4",
-                             orientation: "p",
-                         },
-                         image: {type: 'jpeg', quality: 1},
-                         output: "cash_receipt.pdf"
-                       });
-                       return pdf;
-                 }
-                printPdf().then(pdf=>postDownload());
+         $("#submit-button").hide();
+         $(".required_field").on("change", function(){
+            var showSubmit = true;
+            $(".required_field").each(function(i, obj) {
+               if ($(obj).val() === "" || $(obj).val() === "NaN"){
+                  showSubmit = false;
+               }
+            });
+            if(showSubmit === true){
+               $("#submit-button").show();
+            }
+            else{
+               $("#submit-button").hide();
+            }
+         })
 
+               $(".charges").on("change", function(){
+                  var totalAmount = 0;
+                  $(".charges").each(function(i, obj){
+                     if ($(obj).val() != ""){
+                        totalAmount = parseFloat(totalAmount) + parseFloat($(obj).val());
+                     }
+                  });
+                  $("#total_amount").val(totalAmount.toFixed(2));
+               })
+             function getCookie(name) {
+                 let cookieValue = null;
+                 if (document.cookie && document.cookie !== '') {
+                     const cookies = document.cookie.split(';');
+                     for (let i = 0; i < cookies.length; i++) {
+                         const cookie = cookies[i].trim();
+                         // Does this cookie string begin with the name we want?
+                         if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                             cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                             break;
+                         }
+                     }
+                 }
+                 return cookieValue;
+             }
+
+             const csrftoken = getCookie('csrftoken');
+             $("#submit-button").on("click", function(){
+
+               data = {
+                   'gc_no': $("#gc_no").val(),
+                   'received_from': $("#received_from").val(),
+                   'receipt_date': $("#receipt_date").val(),
+                   'booked_from': $("#booked_from").val(),
+                   'booked_to': $("#booked_to").val(),
+                   'total_amount': $("#total_amount").val(),
+               };
+                 $.ajax({
+                     type: "POST",
+                     url: '/cashreceipt',
+                     headers: {'X-CSRFToken': csrftoken},
+                     data: data
+                 }).done(function (result) {
+                     $("#amount_in_words").val(result.amount_in_words);
+                     $("#s_no").val(result.id);
+                     $("#submit-button").hide();
+                     $("html").css("zoom", "1.2");
+                     let page = $("#download-section");
+                     async function printPdf() {
+                        const pdf = html2PDF(page, {
+                           jsPDF: {
+                              format: "a4",
+                              orientation: "p",
+                           },
+                           image: {type: 'jpeg', quality: 1},
+                           output: "cash_receipt.pdf"
+                        });
+                        return pdf;
+                     }
+                     printPdf().then(pdf=>postDownload());
+                     });
              })
             function postDownload(){
                $("#submit-button").show();

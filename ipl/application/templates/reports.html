@@ -25,8 +25,9 @@
       {% if result_set|length == 0 %}
                <h3 class="text-danger">No Orders found with Payment Status - {% if payment_status == "to_pay" %}TO PAY{% elif payment_status == "tbb" %}TO BE BILLED{% endif %}</h3>
       {% endif %}
-      <div class="row"  id="matched-orders">
+      <div class="row" id="matched-orders">
          <div class="table-wrapper-scroll-y my-custom-scrollbar">
+            <br><br><br><br><br><br>
             {% if payment_status == "to_pay" %}
             <h5 style="text-align:center">Orders with the status <b>TO PAY</b>:</h5>
             {% elif payment_status == "tbb" %}
@@ -39,45 +40,53 @@
                   <div class="col-md-12">
                      <div class="card">
                         <div class="card-header">
-                           <table class="table table-bordered" id="ordersTable" >
-                              <thead>
-                                 <tr>
-                                    <th scope="col">G.R.NO</th>
-                                    <th scope="col">DATE</th>
-                                    <th scope="col">CONSIGNOR</th>
-                                    <th scope="col">CONSIGNEE</th>
-                                    <th scope="col">FROM</th>
-                                    <th scope="col">TO</th>
-                                    {% if payment_status == "tbb" %}
-                                    <th scope="col">TOTAL AMOUNT</th>
-                                    <th scope="col">PAID AMOUNT</th>
-                                    <th scope="col">BALANCE AMOUNT</th>
-                                    {% else %}
-                                    <th scope="col">AMOUNT</th>
-                                    {% endif %}
-                                 </tr>
-                              </thead>
-                              <tbody>
-                                 {% for result in result_set %}
-                                 <tr>
-                                    <td>{{result.id}}</td>
-                                    <td>{{result.created_dtm|date:"d.m.y"}}</td>
-                                    <td>CONSIGNOR</td>
-                                    <td>CONSIGNEE</td>
-                                    <td>{{result.consignor_place}}</td>
-                                    <td>{{result.consignee_place}}</td>
-                                    {% if payment_status == "tbb" %}
-                                    <td>{{result.total_charges}}</td>
-                                    <td>{{result.paid_amount}}</td>
-                                    <td>{{result.total_charges|do_subtract:result.paid_amount}}</td>
-                                    {% else %}
-                                    <td>{{result.total_charges}}</td>
-                                    {% endif %}
-                                 </tr>
-                                 {% endfor %}
-                              </tbody>
-                           </table>
-                           <h5 style="text-align:center">Grand Total: <b>{{total_amount}}</b></h5>
+                              <table class="table table-bordered" id="ordersTable" >
+                                 <thead>
+                                    <tr>
+                                       <th scope="col">G.R.NO</th>
+                                       <th scope="col">DATE</th>
+                                       <th scope="col">CONSIGNOR</th>
+                                       <th scope="col">CONSIGNEE</th>
+                                       <th scope="col">FROM</th>
+                                       <th scope="col">TO</th>
+                                       {% if payment_status == "tbb" %}
+                                       <th scope="col">TOTAL AMOUNT</th>
+                                       <th scope="col">PAID AMOUNT</th>
+                                       <th scope="col">BALANCE AMOUNT</th>
+                                       {% else %}
+                                       <th scope="col">AMOUNT</th>
+                                       {% endif %}
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    {% for result in result_set %}
+                                    <tr>
+                                       <td>{{result.id}}</td>
+                                       <td>{{result.created_dtm|date:"d.m.y"}}</td>
+                                       <td>CONSIGNOR</td>
+                                       <td>CONSIGNEE</td>
+                                       <td>{{result.consignor_place}}</td>
+                                       <td>{{result.consignee_place}}</td>
+                                       {% if payment_status == "tbb" %}
+                                       <td>{{result.total_charges}}</td>
+                                       <td>{{result.paid_amount}}</td>
+                                       <td>{{result.total_charges|do_subtract:result.paid_amount}}</td>
+                                       {% else %}
+                                       <td>{{result.total_charges}}</td>
+                                       {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                 </tbody>
+                              </table>
+                           <h5 style="text-align:center">Grand Total: <b>Rs {{total_amount}}</b></h5>
+
+                           <div class="form-group" >
+                              <div class="controls col-md-8 ">
+                                 <button id="download-button" type="button" class="btn btn-primary">
+                                 Download Report
+                                 </button>
+                              </div>
+                           </div>
                         </div>
                      </div>
                   </div>
@@ -97,9 +106,70 @@
 {% endif %}
 
 $(document).ready(function() {
-  $("#ordersTable").DataTable();
-  $('.dataTables_length').addClass('bs-select');
+
+   function sleep(ms) {
+     return new Promise(resolve => setTimeout(resolve, ms));
+   }
+
+   var isNavBarVisible = true;
+   function toggleNavBar(){
+      if (isNavBarVisible === true){
+         isNavBarVisible = false;
+      }
+      else{
+         isNavBarVisible = true;
+
+      }
+   }
+   function postDownload(){
+      $("#sidebarCollapse").show();
+      $("#sidebarCollapse").click();
+      $("#download-button").show();
+      $(".paginate_button").show();
+      $(".dataTables_length").show();
+      $("#ordersTable_filter").show();
+      $("#ordersTable_info").show();
+   }
+   $("#sidebarCollapse").on("click", function(){
+      toggleNavBar();
+   });
+
+   $("#ordersTable").DataTable();
+   $('.dataTables_length').addClass('bs-select');
+   $("#download-button").on("click", function(){
+      let page = $("#matched-orders");
+      async function printPdf() {
+         const pdf = html2PDF(page, {
+            jsPDF: {
+               format: "a4",
+               orientation: "p",
+            },
+            image: {
+               type: 'jpeg',
+               quality: 1
+            },
+            output: "{{payment_status}}.pdf"
+            });
+         return pdf;
+      }
+      async function sleepThenAct(){
+         $("#download-button").hide();
+         if(isNavBarVisible == true){
+            $("#sidebarCollapse").click();
+         }
+         $("#sidebarCollapse").hide();
+         $(".paginate_button").hide();
+         $(".dataTables_length").hide();
+         $("#ordersTable_info").hide();
+         $("#ordersTable_filter").hide();
+         await sleep(750);
+         printPdf().then(pdf=>postDownload());
+      }
+      sleepThenAct();
+      });
 });
 </script>
-
+<!--<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/jspdf-html2canvas@latest/dist/jspdf-html2canvas.min.js"></script>-->
 {% endblock other_scripts %}

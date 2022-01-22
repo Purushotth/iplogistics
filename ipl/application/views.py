@@ -1,9 +1,8 @@
 from django.shortcuts import render
 
 from django.views.generic import View
-from django.http import FileResponse, HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
 
 from .forms import *
 from .models import *
@@ -11,6 +10,7 @@ from .models import *
 import logging
 import os
 import base64
+import num2words
 
 logger = logging.getLogger(__name__)
 
@@ -37,13 +37,35 @@ class LandingPageView(LoginRequiredMixin, View):
         return response
 
     def post(self, request, *args, **kwargs):
+        self.post_params = request.POST.copy()
+        modify_order_id = self.post_params.get("modify-paid-amount-order", "")
+        if modify_order_id:
+            logger.info(
+                "[LANDINGPAGE] - UPDATE PAID AMOUNT | POST REQUEST| PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
+            new_paid_amount = self.post_params.get("modify-paid-amount-value", "")
+            obj = ShippingOrdersModel.objects.get(id=modify_order_id)
+            obj.paid_amount = new_paid_amount
+            if round(float(obj.total_charges),2) == round(float(new_paid_amount), 2):
+                obj.payment_status = "paid"
+            obj.save()
+            form = ShippingOrdersForm()
+            consignee_list = ConsigneeModel.objects.all().values('id', 'name', 'gstin')
+            consignor_list = ConsignorModel.objects.all().values('id', 'name', 'gstin')
+            order_list = ShippingOrdersModel.objects.all()
+            self.context = {
+                'form': form,
+                'consignees': consignee_list,
+                'consignors': consignor_list,
+                'orders': order_list,
+                "paid_amount_modified": 1
+            }
+            return render(request, "landingpage.html", self.context)
         is_cookie_present = request.COOKIES.get("landing", 0)
         if not is_cookie_present:
             logger.info("[LANDINGPAGE] - DUPLICATE CALL | ORDER ALREADY SAVED | USER - {}".format(request.user.email))
             logger.info("[LANDINGPAGE] - REDIRECTING TO GET PAGE | USER - {}".format(request.user.email))
             kwargs["order_saved"] = 1
             return self.get(request, *args, **kwargs)
-        self.post_params = request.POST.copy()
         logger.info(
             "[LANDINGPAGE] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
         form = ShippingOrdersForm(self.post_params)
@@ -103,14 +125,15 @@ class LoadingChallanView(LoginRequiredMixin, View):
         if form.is_valid():
             logger.info("[LOADING CHALLAN] - FORM VALIDATED | USER - {}".format(request.user.email))
             result_set = ShippingOrdersModel.objects.filter(
-                created_dtm__lt=form.cleaned_data.get("billing_date"),
+                billing_date__lt=form.cleaned_data.get("billing_date"),
                 consignor_place=form.cleaned_data.get("place_of_receipt"),
                 consignee_place=form.cleaned_data.get("place_of_delivery"),
                 loading_challan=None
             ).exclude(payment_status="to_pay")
-
             if generate_challan and result_set:
                 logger.info("[LOADING CHALLAN] - GENERATING CHALLAN | USER - {}".format(request.user.email))
+                order_list = tuple(map(int, ''.join(request.POST.getlist("order_list")).split(',')))
+                result_set = ShippingOrdersModel.objects.filter(id__in=order_list)
                 form.save()
                 pkgs_total = 0
                 weight_total= 0
@@ -212,6 +235,8 @@ class BillGenerationView(LoginRequiredMixin, View):
 
             if generate_bill and result_set:
                 logger.info("[BILL GENERATION] - GENERATING BILL | USER - {}".format(request.user.email))
+                order_list = tuple(map(int, ''.join(request.POST.getlist("order_list")).split(',')))
+                result_set = ShippingOrdersModel.objects.filter(id__in=order_list)
                 form.save()
                 total_amount = 0
                 for result in result_set:
@@ -255,15 +280,42 @@ class ReportsView(LoginRequiredMixin, View):
         return render(request, "reports.html", self.context)
 
 
+class CashReceiptReportsView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        self.post_params = request.GET.copy()
+        result_set = CashReceiptsModel.objects.filter(payment_status="")
+        self.context = {
+            "result_set": result_set,
+        }
+        return render(request, "cashreceipt_report.html", self.context)
+
+    def post(self, request, *args, **kwargs):
+        self.post_params = request.POST.copy()
+        logger.info("[CASH RECEIPTS REPORT] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
+        order_list = tuple(map(int, ''.join(request.POST.getlist("order_list")).split(',')))
+        filtered_list = CashReceiptsModel.objects.filter(id__in=order_list)
+        if filtered_list:
+            filtered_list.update(payment_status="paid")
+        result_set = CashReceiptsModel.objects.filter(payment_status="")
+        self.context = {
+            "result_set": result_set,
+            "update_status": 1
+        }
+        return render(request, "cashreceipt_report.html", self.context)
+
+
 class DownloadsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         self.context = {
             "order": ShippingOrdersModel.objects.get(id=self.request.GET.get('order'))
         }
-        return render(request, "lc_copy.html", self.context)
+        return render(request, "order_copy.html", self.context)
 
     def post(self, request, *args, **kwargs):
         self.get_params = request.GET.copy()
+        self.post_params = request.POST.copy()
+        logger.info("[DOWNLOADS] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
+        logger.info("[DOWNLOADS] - GET REQUEST | PARAMS - {} |USER - {}".format(self.get_params, request.user.email))
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         download_type = self.get_params.get('download_type')
         if download_type == "lc":
@@ -500,3 +552,26 @@ class ConsignorView(LoginRequiredMixin, View):
 class CashReceiptView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, "cash_receipt.html", {})
+
+    def post(self, request, *args, **kwargs):
+        self.post_params = request.POST.copy()
+        logger.info("[CASHRECEIPT] - POST REQUEST | PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
+        obj = CashReceiptsModel.objects.create(**dict({k: v[0] if len(v) == 1 else v for k, v in self.post_params.lists()}))
+        total_amount = str(self.post_params.get("total_amount"))
+        amount_in_words = convert_numbers_to_words(total_amount)
+        print(obj.id)
+        return JsonResponse({"status": "success", "amount_in_words": amount_in_words, "id": obj.id})
+
+
+def convert_numbers_to_words(total_amount):
+    if "." in total_amount:
+        amount_in_words = ' Rupess and '.join(
+            [str(num2words.num2words(amount, lang='en_IN')).replace("-", " ")
+             for amount in total_amount.split(".")]
+        ) + " Paise Only"
+    else:
+        amount_in_words = str(num2words.num2words(total_amount, lang='en_IN')).replace("-",
+                                                                                       " ").capitalize() + " Rupess Only"
+    amount_in_words = ' '.join(list(map(lambda x: x.capitalize(), amount_in_words.split())))
+    return amount_in_words
+

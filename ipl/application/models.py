@@ -167,3 +167,17 @@ class PaymentNotificationModel(models.Model):
     class Meta:
         db_table = 'payment_notification'
         get_latest_by = 'date'
+
+
+class CashReceiptsModel(models.Model):
+    gc_no = models.CharField(max_length=45)
+    received_from = models.CharField(max_length=125)
+    receipt_date = models.DateField(default=None)
+    booked_from = models.CharField(max_length=125)
+    booked_to = models.CharField(max_length=125)
+    total_amount = models.FloatField()
+    payment_status = models.CharField(max_length=45, default="")
+    created_dtm = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'cash_receipts'

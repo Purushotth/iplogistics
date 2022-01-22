@@ -13,6 +13,7 @@ def extra_context(request):
         "tbb_url": reverse('application:reports')+"?payment_status=tbb",
         "to_pay_url": reverse('application:reports')+"?payment_status=to_pay",
         "paid_url": reverse('application:reports') + "?payment_status=paid",
+        "cash_receipt_report_url": reverse('application:cash_receipt_report'),
         "logout_url": reverse('account:logout'),
         "cashreceipt_url": reverse('application:cash_receipt'),
         "order_download_url": reverse('application:order_download')+'?order=1',

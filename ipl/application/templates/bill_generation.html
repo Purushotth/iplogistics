@@ -25,11 +25,12 @@
      <div class="wrapper">
         <div class="container">
              <h2 class="mb-4 ">{% block section_heading %}Bill Generation{% endblock section_heading %}</h2>
-                    {% if no_orders_present %}
+                    {% if result_set|length == 0 and r_method == "POST" %}
                         <h3 class="text-danger">No Orders Found for the given criteria</h3>
                     {% endif %}
         <form method="POST" name="order-form" action="">
             {% csrf_token %}
+                              <input type="hidden" id="order-ids" name="order_list"  value="">
                 <div class="form-group row">
                     <label for="{{form.consignor.id_for_label}}" class="col-sm-6 col-form-label">Select consignor
                         :</label>
@@ -102,7 +103,7 @@
                             <div class="form-group">
             <div class="controls col-md-4 ">
 
-                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                        <button id="generate-bill" type="button" class="btn btn-primary" data-toggle="modal"
                                 data-target="#popupModal"
                                 onclick="$('#submit-form-name').attr('value', 1);">
   Generate Bill
@@ -140,6 +141,24 @@ $('select[name=driver]').attr("required");
    $(document).ready(function() {
      $("#ordersTable").DataTable();
      $('.dataTables_length').addClass('bs-select');
+    $("#generate-bill").hide();
+   $('#ordersTable tbody').on( 'click', 'tr', function () {
+        $(this).toggleClass('selected');
+        if ($('.selected').length > 0){
+           $("#generate-bill").show();
+        }
+        else{
+           $("#generate-bill").hide();
+        }
+    });
+        $('#generate-bill').click( function () {
+             var order_list = []
+             $('.selected').each(function(){
+               order_list.push($(this).children('td:first').html());
+             });
+             $('#order-ids').val(""+order_list);
+             $('#popupModal').modal('show');
+        });
    });
 </script>
 {% endblock other_scripts %}

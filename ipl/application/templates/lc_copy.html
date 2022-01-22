@@ -165,7 +165,7 @@ table, th, td {
                             <td align="center">
                                 <div class="heading">Indore Professional Logistics <span style="color:blue">Royal</span></div><br>
                                 <div style="text-transform: uppercase;">
-                                    No.:311/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaanagar,<br> Peelamedu, Coimbatore - 641004.<br>
+                                    No.:313/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaanagar,<br> Peelamedu, Coimbatore - 641004.<br>
                                         <strong>PHONE</strong>: 9443353836, 99949807771,773,774, 7339000885.<br>
                                     <span style="color:red"><u>gst in:33gjgps5589p1z2. pan:gjgps5589p</u></span>
                                 </div>
@@ -291,13 +291,39 @@ table, th, td {
                         <td align="center">{%if result.payment_status == "tbb"%}{{result.total_charges}}{%else%}---{%endif%}</td>
                         <td align="center">{%if result.payment_status == "paid"%}{{result.total_charges}}{%else%}---{%endif%}</td>
                     </tr>
-{% endfor %}
+                {% endfor %}
+                    <tr>
+                        <td colspan="6" class="bt-1 p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td align="right">
+                                    <strong>Total</strong>
+                                </td>
+                            </tr>
+                        </table></td>
+
+                        <td colspan="1" class="bt-1 p-0" align="right">
+                            <strong>{{pkgs_total}}</strong>
+                        </td>
+                        <td colspan="1" class="bt-1 p-0" align="right">
+                            <strong>{{weight_total}}</strong>
+                        </td>
+                        <td colspan="1" class="bt-1 p-0" align="right">
+                            <strong>{{topay_total}}</strong>
+                        </td>
+                        <td colspan="1" class="bt-1 p-0" align="right">
+                            <strong>{{tbb_total}}</strong>
+                        </td>
+                        <td colspan="1" class="bt-1 p-0" align="right">
+                            <strong>{{paid_total}}</strong>
+                        </td>
+                    </tr>
                 </tbody>
             </table></td>
         </tr>
         <tr>
-            <td valign="top" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-                <tr>
+            <td valign="top" class="p-0">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
                     <td valign="top" width="50%" class="p-0 br-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
                             <td valign="top">Received the above Goods in Good Condition</td>

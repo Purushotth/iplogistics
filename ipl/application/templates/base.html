@@ -36,7 +36,7 @@ td { font-size: 11px;}
                <span class="sr-only">Toggle Menu</span>
                </button>
             </div>
-            <div class="p-4 pt-5 side-bar">
+            <div class="p-4 pt-5 side-bar" id="id-sidebar">
                <h1><a href="" class="logo">IPL</a></h1>
                <ul class="list-unstyled components mb-5 side-bar-ul">
                    {% if not secondary_user %}
@@ -69,6 +69,9 @@ td { font-size: 11px;}
                         </li>
                         <li>
                            <a href="{{paid_url}}">PAID</a>
+                        </li>
+                        <li>
+                           <a href="{{cash_receipt_report_url}}">Cash Receipts</a>
                         </li>
                      </ul>
                   </li>

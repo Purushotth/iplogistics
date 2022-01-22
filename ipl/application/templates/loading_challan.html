@@ -33,6 +33,8 @@
                     {% endif %}
         <form method="POST" name="order-form" action="">
             {% csrf_token %}
+                              <input type="hidden" id="order-ids" name="order_list"  value="">
+
         <div class="form-group row">
             <label for="{{form.billing_date.id_for_label}}" class="col-sm-6 col-form-label">Billing Date
                 :</label>
@@ -197,6 +199,7 @@
       <table class="table table-bordered" id="ordersTable" >
         <thead>
           <tr>
+            <th scope="col" style="display:none;">Id</th>
             <th scope="col">CONSIGNOR</th>
             <th scope="col">CONSIGNEE</th>
             <th scope="col">G.C.NO</th>
@@ -212,6 +215,7 @@
         <tbody>
             {% for result in result_set %}
           <tr>
+            <td style="display:none;">{{result.id}}</td>
             <td>{{result.consignor.name}}</td>
             <td>{{result.consignee.name}}</td>
             <td>{{result.id}}</td>
@@ -290,6 +294,24 @@ $('select[name=driver]').attr("required");
 $(document).ready(function() {
     $("#ordersTable").DataTable();
     $('.dataTables_length').addClass('bs-select');
+    $("#generate-challan").hide();
+   $('#ordersTable tbody').on( 'click', 'tr', function () {
+        $(this).toggleClass('selected');
+        if ($('.selected').length > 0){
+           $("#generate-challan").show();
+        }
+        else{
+           $("#generate-challan").hide();
+        }
+    });
+        $('#generate-challan').click( function () {
+             var order_list = []
+             $('.selected').each(function(){
+               order_list.push($(this).children('td:first').html());
+             });
+             $('#order-ids').val(""+order_list);
+             $('#popupModal').modal('show');
+        });
 });
 </script>
 {% endblock other_scripts %}
