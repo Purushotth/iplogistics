@@ -43,15 +43,25 @@ class LandingPageView(LoginRequiredMixin, View):
             logger.info(
                 "[LANDINGPAGE] - UPDATE PAID AMOUNT | POST REQUEST| PARAMS - {} |USER - {}".format(self.post_params, request.user.email))
             new_paid_amount = self.post_params.get("modify-paid-amount-value", "")
-            obj = ShippingOrdersModel.objects.get(id=modify_order_id)
-            obj.paid_amount = new_paid_amount
-            if round(float(obj.total_charges),2) == round(float(new_paid_amount), 2):
-                obj.payment_status = "paid"
-            obj.save()
             form = ShippingOrdersForm()
             consignee_list = ConsigneeModel.objects.all().values('id', 'name', 'gstin')
             consignor_list = ConsignorModel.objects.all().values('id', 'name', 'gstin')
             order_list = ShippingOrdersModel.objects.all()
+
+            obj = ShippingOrdersModel.objects.get(id=modify_order_id)
+            obj.paid_amount = new_paid_amount
+            if round(float(obj.total_charges),2) == round(float(new_paid_amount), 2):
+                obj.payment_status = "paid"
+            elif float(new_paid_amount) > float(obj.total_charges):
+                self.context = {
+                    'form': form,
+                    'consignees': consignee_list,
+                    'consignors': consignor_list,
+                    'orders': order_list,
+                    "paid_amount_invalid": 1
+                }
+                return render(request, "landingpage.html", self.context)
+            obj.save()
             self.context = {
                 'form': form,
                 'consignees': consignee_list,
@@ -227,7 +237,7 @@ class BillGenerationView(LoginRequiredMixin, View):
                     result.payment_status = "paid"
                     result.paid_amount = result.total_charges
                     result.save()
-                    total_amount += result.total_charges
+                    total_amount += result.freight_charges
 
                 self.context = {
                     'r_method': "POST",
@@ -235,7 +245,6 @@ class BillGenerationView(LoginRequiredMixin, View):
                     "bill": form.instance,
                     "total_amount": total_amount,
                     "total_amount_in_words": convert_numbers_to_words(str(total_amount))
-
                 }
 
                 return render(request, "bill_copy.html", self.context)
@@ -254,12 +263,15 @@ class BillGenerationView(LoginRequiredMixin, View):
 
 class ReportsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        self.post_params = request.GET.copy()
-        payment_status = self.post_params.get("payment_status", None)
-        result_set = ShippingOrdersModel.objects.filter(payment_status=payment_status)
+        self.get_params = request.GET.copy()
+        payment_status = self.get_params.get("payment_status", None)
+        order_created_date = self.get_params.get("order_created_date", None)
+        result_set = []
         total_amount = 0
-        for obj in result_set:
-            total_amount += obj.total_charges
+        if order_created_date:
+            result_set = ShippingOrdersModel.objects.filter(payment_status=payment_status, created_dtm__lt=order_created_date)
+            for obj in result_set:
+                total_amount += obj.total_charges
         self.context = {
             "payment_status": payment_status,
             "result_set": result_set,

@@ -22,12 +22,17 @@
 {% block body_content %}
 <div class="main-content">
    <div class="wrapper">
-      {% if result_set|length == 0 %}
-               <h3 class="text-danger">No Orders found with Payment Status - {% if payment_status == "to_pay" %}TO PAY{% elif payment_status == "tbb" %}TO BE BILLED{% endif %}</h3>
-      {% endif %}
       <div class="row" id="matched-orders">
          <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <br><br><br><br><br><br>
+            <div id="date-section">
+         <div class="form-group row">
+            <label class="col-sm-6 col-form-label" style="font-size:20px;">Date
+                :</label>
+            <input class="required_field" id="order_created_date" name= "order_created_date" type="date" onchange="fetchData();">
+         </div>
+            <hr class="rounded">
+            </div>
             {% if payment_status == "to_pay" %}
             <h5 style="text-align:center">Orders with the status <b>TO PAY</b>:</h5>
             {% elif payment_status == "tbb" %}
@@ -63,8 +68,8 @@
                                     <tr>
                                        <td>{{result.id}}</td>
                                        <td>{{result.created_dtm|date:"d.m.y"}}</td>
-                                       <td>CONSIGNOR</td>
-                                       <td>CONSIGNEE</td>
+                                       <td>{{result.consignor.name}}</td>
+                                       <td>{{result.consignee.name}}</td>
                                        <td>{{result.consignor_place}}</td>
                                        <td>{{result.consignee_place}}</td>
                                        {% if payment_status == "tbb" %}
@@ -80,6 +85,8 @@
                               </table>
                            <h5 style="text-align:center">Grand Total: <b>Rs {{total_amount}}</b></h5>
 
+
+                           {% if result_set|length > 0 %}
                            <div class="form-group" >
                               <div class="controls col-md-8 ">
                                  <button id="download-button" type="button" class="btn btn-primary">
@@ -87,6 +94,7 @@
                                  </button>
                               </div>
                            </div>
+                           {% endif %}
                         </div>
                      </div>
                   </div>
@@ -99,14 +107,17 @@
 {% endblock body_content %}
 {% block other_scripts %}
 <script>
-{% if result_set|length > 0 %}
-    $('#matched-orders').show();
-{% else %}
-    $('#matched-orders').hide();
-{% endif %}
+
+function fetchData(){
+      if(window.location.href.includes("order_created_date")){
+         window.location.href = window.location.href.substr(0, window.location.href.indexOf('&')) + "&order_created_date="+$("#order_created_date").val();
+      }
+      else{
+      window.location.href += "&order_created_date="+$("#order_created_date").val();
+      }
+}
 
 $(document).ready(function() {
-
    function sleep(ms) {
      return new Promise(resolve => setTimeout(resolve, ms));
    }
@@ -129,6 +140,7 @@ $(document).ready(function() {
       $(".dataTables_length").show();
       $("#ordersTable_filter").show();
       $("#ordersTable_info").show();
+      $("#date-section").show();
    }
    $("#sidebarCollapse").on("click", function(){
       toggleNavBar();
@@ -162,6 +174,7 @@ $(document).ready(function() {
          $(".dataTables_length").hide();
          $("#ordersTable_info").hide();
          $("#ordersTable_filter").hide();
+         $("#date-section").hide();
          await sleep(750);
          printPdf().then(pdf=>postDownload());
       }

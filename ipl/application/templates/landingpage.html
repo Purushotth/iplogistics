@@ -54,6 +54,9 @@ td { font-size: 11px;}
             {% if paid_amount_modified %}
                 <div class="alert alert-success">Paid Amount Updated successfully</div>
             {% endif %}
+            {% if paid_amount_invalid %}
+                <div class="alert alert-danger">Paid Amount not updated! Please Enter a Valid Amount</div>
+            {% endif %}
                   <div class="form-group row">
                      <label for="{{form.billing_date.id_for_label}}" class="col-sm-6 col-form-label">Billing Date
                      :</label>
