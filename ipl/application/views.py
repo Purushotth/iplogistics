@@ -268,14 +268,19 @@ class ReportsView(LoginRequiredMixin, View):
         order_created_date = self.get_params.get("order_created_date", None)
         result_set = []
         total_amount = 0
+        from django.core.paginator import Paginator
+
         if order_created_date:
-            result_set = ShippingOrdersModel.objects.filter(payment_status=payment_status, created_dtm__lt=order_created_date)
-            for obj in result_set:
+            objects = ShippingOrdersModel.objects.filter(payment_status=payment_status, created_dtm__lt=order_created_date)
+            for obj in objects:
                 total_amount += obj.total_charges
+            paginator = Paginator(objects, 13)
+            for i in paginator.page_range:
+                result_set.append(iter(paginator.get_page(i)))
         self.context = {
             "payment_status": payment_status,
             "result_set": result_set,
-            "total_amount": total_amount
+            "total_amount": total_amount,
         }
         return render(request, "reports.html", self.context)
 

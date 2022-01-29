@@ -130,16 +130,16 @@
 <body>
 <div class="download-section">
     <br><br><br><br>
-                <table width="1000" border="0" cellspacing="0" cellpadding="0">
+                <table width="1000" border="0" cellspacing="0" cellpadding="0" style="margin-left:125px;margin-right:auto;">
             <tr>
                 <td id="order-type" style="color:red" align="right">Consignee Copy</td>
             </tr>
         </table>
-    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="margin-left:auto;margin-right:auto;">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="margin-left:125px;margin-right:auto;">
 
         <tr>
             <td valign="top" class="py-10">
-                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0" style="margin-left:auto;margin-right:auto;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
                         <td valign="top" width="120" class="px-15"><br><br><br><img src="{% static 'images/logo.jpg' %}" width="100" alt="Image"></td>
                         <td align="right">At Owner Risk
@@ -358,12 +358,12 @@
 </div>
 <div class="download-section">
     <br><br><br><br>
-                <table width="1000" border="0" cellspacing="0" cellpadding="0">
+                <table width="1000" border="0" cellspacing="0" cellpadding="0"  style="margin-left:125px;margin-right:auto;">
             <tr>
                 <td id="order-type" style="color:red" align="right">Consignor Copy</td>
             </tr>
         </table>
-    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="margin:20px;">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="margin-left:125px;margin-right:auto;">
 
         <tr>
             <td valign="top" class="py-10">
@@ -586,12 +586,12 @@
 </div>
 <div class="download-section">
     <br><br><br><br>
-                <table width="1000" border="0" cellspacing="0" cellpadding="0">
+                <table width="1000" border="0" cellspacing="0" cellpadding="0"  style="margin-left:125px;margin-right:auto;">
             <tr>
                 <td id="order-type" style="color:red" align="right">Driver Copy</td>
             </tr>
         </table>
-    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="margin:20px;">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="margin-left:125px;margin-right:auto;">
 
         <tr>
             <td valign="top" class="py-10">
@@ -814,12 +814,12 @@
 </div>
 <div class="download-section">
     <br><br><br><br>
-                <table width="1000" border="0" cellspacing="0" cellpadding="0">
+                <table width="1000" border="0" cellspacing="0" cellpadding="0"  style="margin-left:125px;margin-right:auto;">
             <tr>
                 <td id="order-type" style="color:red" align="right">IPL Copy</td>
             </tr>
         </table>
-    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="margin:20px;">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="margin-left:125px;margin-right:auto;">
 
         <tr>
             <td valign="top" class="py-10">
@@ -1067,7 +1067,7 @@ $(document).ready(function() {
     async function printPdf() {
       const pdf = html2PDF(page, {
             jsPDF: {
-                format: "b5",
+                format: "a5",
                 orientation: "p"
             },
             image: {type: 'jpeg', quality: 1},

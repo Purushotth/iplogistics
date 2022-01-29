@@ -22,10 +22,7 @@
 {% block body_content %}
 <div class="main-content">
    <div class="wrapper">
-      <div class="row" id="matched-orders">
-         <div class="table-wrapper-scroll-y my-custom-scrollbar">
-            <br><br><br><br><br><br>
-            <div id="date-section">
+                  <div id="date-section">
          <div class="form-group row">
             <label class="col-sm-6 col-form-label" style="font-size:20px;">Date
                 :</label>
@@ -33,6 +30,11 @@
          </div>
             <hr class="rounded">
             </div>
+      {% for result in result_set %}
+      <div  class="row matched-orders" style="margin-left:125px;margin-right:auto;">
+         <div class="table-wrapper-scroll-y my-custom-scrollbar">
+            <br><br><br><br><br><br>
+
             {% if payment_status == "to_pay" %}
             <h5 style="text-align:center">Orders with the status <b>TO PAY</b>:</h5>
             {% elif payment_status == "tbb" %}
@@ -64,37 +66,38 @@
                                     </tr>
                                  </thead>
                                  <tbody>
-                                    {% for result in result_set %}
+                                    {% for objects in result %}
                                     <tr>
-                                       <td>{{result.id}}</td>
-                                       <td>{{result.created_dtm|date:"d.m.y"}}</td>
-                                       <td>{{result.consignor.name}}</td>
-                                       <td>{{result.consignee.name}}</td>
-                                       <td>{{result.consignor_place}}</td>
-                                       <td>{{result.consignee_place}}</td>
+                                       <td>{{objects.id}}</td>
+                                       <td>{{objects.created_dtm|date:"d.m.y"}}</td>
+                                       <td>{{objects.consignor.name}}</td>
+                                       <td>{{objects.consignee.name}}</td>
+                                       <td>{{objects.consignor_place}}</td>
+                                       <td>{{objects.consignee_place}}</td>
                                        {% if payment_status == "tbb" %}
-                                       <td>{{result.total_charges}}</td>
-                                       <td>{{result.paid_amount}}</td>
-                                       <td>{{result.total_charges|do_subtract:result.paid_amount}}</td>
+                                       <td>{{objects.total_charges}}</td>
+                                       <td>{{objects.paid_amount}}</td>
+                                       <td>{{objects.total_charges|do_subtract:objects.paid_amount}}</td>
                                        {% else %}
-                                       <td>{{result.total_charges}}</td>
+                                       <td>{{objects.total_charges}}</td>
                                        {% endif %}
                                     </tr>
                                     {% endfor %}
                                  </tbody>
                               </table>
+                           {% if forloop.counter == result_set|length %}
                            <h5 style="text-align:center">Grand Total: <b>Rs {{total_amount}}</b></h5>
-
-
-                           {% if result_set|length > 0 %}
-                           <div class="form-group" >
-                              <div class="controls col-md-8 ">
-                                 <button id="download-button" type="button" class="btn btn-primary">
-                                 Download Report
-                                 </button>
-                              </div>
-                           </div>
                            {% endif %}
+
+<!--                           {% if result_set|length > 0 %}-->
+<!--                           <div class="form-group" >-->
+<!--                              <div class="controls col-md-8 ">-->
+<!--                                 <button id="download-button" type="button" class="btn btn-primary">-->
+<!--                                 Download Report-->
+<!--                                 </button>-->
+<!--                              </div>-->
+<!--                           </div>-->
+<!--                           {% endif %}-->
                         </div>
                      </div>
                   </div>
@@ -102,6 +105,7 @@
             </div>
          </div>
       </div>
+      {% endfor %}
    </div>
 </div>
 {% endblock body_content %}
@@ -146,11 +150,13 @@ $(document).ready(function() {
       toggleNavBar();
    });
 
-   $("#ordersTable").DataTable();
+<!--   $("#ordersTable").DataTable();-->
    $('.dataTables_length').addClass('bs-select');
-   $("#download-button").on("click", function(){
-      let page = $("#matched-orders");
+   {% if result_set|length > 0 %}
+      let page = $(".matched-orders");
+      console.log(page);
       async function printPdf() {
+         console.log("abcd");
          const pdf = html2PDF(page, {
             jsPDF: {
                format: "a4",
@@ -162,6 +168,7 @@ $(document).ready(function() {
             },
             output: "{{payment_status}}.pdf"
             });
+         console.log(pdf);
          return pdf;
       }
       async function sleepThenAct(){
@@ -179,7 +186,8 @@ $(document).ready(function() {
          printPdf().then(pdf=>postDownload());
       }
       sleepThenAct();
-      });
+
+{% endif %}
 });
 </script>
 <!--<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>-->
