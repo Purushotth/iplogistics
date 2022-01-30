@@ -413,7 +413,7 @@ $(document).ready(function() {
                 'pdf_data': btoa(pdf.output())
             }
         }).done(function (result) {
-<!--            window.open('/landingpage', "_self");-->
+            window.open('/landingpage', "_self");
         });
     }
     printPdf().then(pdf=>saveFile(pdf));

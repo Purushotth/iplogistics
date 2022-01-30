@@ -48,7 +48,7 @@ class TruckModel(models.Model):
 
 
 class ConsigneeModel(models.Model):
-    name = models.CharField(max_length=45)
+    name = models.CharField(max_length=150)
     contact_number = models.BigIntegerField()
     gstin = models.CharField(max_length=15)
     address = models.CharField(max_length=300)
@@ -61,7 +61,7 @@ class ConsigneeModel(models.Model):
 
 
 class ConsignorModel(models.Model):
-    name = models.CharField(max_length=45)
+    name = models.CharField(max_length=150)
     contact_number = models.BigIntegerField()
     gstin = models.CharField(max_length=15)
     address = models.CharField(max_length=300)

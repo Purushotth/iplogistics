@@ -3,10 +3,12 @@
 <head>
    <style type="text/css">
       body {
+      height:210mm;
+      width:148mm;
       margin: 0;
       padding: 0;
       font-family: Arial, 'Arial Narrow', Helvetica, sans-serif;
-      font-size: 13px;
+      font-size: 12px;
       line-height: 18px;
       color: #333266;
       -webkit-text-size-adjust: 100%;
@@ -68,7 +70,7 @@
       line-height: 28px;
       }
       .f-30 {
-      font-size: 30px;
+      font-size: 24px;
       line-height: 40px;
       }
       .dotted {
@@ -96,22 +98,23 @@
 <html>
    <body>
       <div id="download-section"><br><br>
-         <table width="800" border="0" cellspacing="0" cellpadding="0" style="margin-left:200px;">
+         <table width="800" border="0" cellspacing="0" cellpadding="0" style="width:138mm;margin-left:18px;margin-right:auto;">
             <tr>
                <td valign="top">
                   <table width="100%" border="0" cellspacing="0" cellpadding="0">
                      <tr>
                         <td width="110"><img src="{% static 'images/logo.jpg' %}" width="90"></td>
                         <td>
-                           <table border="0" cellspacing="0" cellpadding="0">
+                           <table width="100%" border="0" cellspacing="0" cellpadding="0">
                               <tr>
                                  <td align="center">
                                     <div class="f-30">Indore Proffesional Logistics <strong>Royal</strong></div>
-                                    <div>No. 313/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaa Nagar,<br>
-                                       Near IOC Petrol Bunk, Coimbatore - 641 004<br>
-                                       Phone : 0422-3254626 | 94433 53836 | 99949 80771,73,74
+                                    <div><span>No. 313/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaa Nagar,</span><br>
+                                       <span>Near IOC Petrol Bunk, Coimbatore - 641 004</span><br>
+                                       <span>Phone : 0422-3254626 | 94433 53836 | 99949 80771,73,74</span>
                                     </div>
-                                    <div>GSTIN: 33GJPS5589P1Z2</div>
+                                    <div><span>GSTIN: 33GJPS5589P1Z2</span></div>
+
                                  </td>
                               </tr>
                            </table>
@@ -143,13 +146,13 @@
                <td valign="top">
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table-pad">
                      <tr>
-                        <td>Received with thanks from <input class="required_field" id="received_from" name= "received_from" type="text" style="border:0;border-bottom: 2px dotted;" size="50"> in respect of TBB/Delivery</td>
+                        <td>Received with thanks from <br><input class="required_field" id="received_from" name= "received_from" type="text" style="border:0;border-bottom: 2px dotted;" size="50"> in respect of TBB/Delivery</td>
                      </tr>
                      <tr>
                         <td>GC No. <input class="required_field" id="gc_no" name= "gc_no" type="text" style="border:0;border-bottom: 2px dotted;" size="14"> Date <input class="required_field" type="date" style="border:0;border-bottom: 2px dotted;" size="20"></td>
                      </tr>
                      <tr>
-                        <td>Booked from <input class="required_field" id="booked_from" name= "booked_from" type="text" style="border:0;border-bottom: 2px dotted;" size="45"> to <input class="required_field" id="booked_to" name= "booked_to" type="text" style="border:0;border-bottom: 2px dotted;" size="45"></td>
+                        <td>Booked from <input class="required_field" id="booked_from" name= "booked_from" type="text" style="border:0;border-bottom: 2px dotted;" size="25">to <input class="required_field" id="booked_to" name= "booked_to" type="text" style="border:0;border-bottom: 2px dotted;" size="25"></td>
                      </tr>
                   </table>
                </td>
@@ -183,7 +186,7 @@
                </td>
             </tr>
             <tr>
-               <td valign="top">Rupees in Words <input id="amount_in_words" type="text" style="border:0;border-bottom: 2px dotted;" size="100" readonly></td>
+               <td valign="top">Rupees in Words <br><input id="amount_in_words" type="text" style="border:0;border-bottom: 2px dotted;" size="75" readonly></td>
             </tr>
             <tr>
                <td height="25" style="line-height: 1px;"></td>
@@ -270,7 +273,7 @@
                      $("#amount_in_words").val(result.amount_in_words);
                      $("#s_no").val(result.id);
                      $("#submit-button").hide();
-                     $("html").css("zoom", "1.2");
+<!--                     $("html").css("zoom", "1.2");-->
                      let page = $("#download-section");
                      async function printPdf() {
                         const pdf = html2PDF(page, {
