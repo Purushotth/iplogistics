@@ -7,12 +7,12 @@ def user_directory_path(instance, filename):
 
 
 class DriverModel(models.Model):
-    name = models.CharField(max_length=45)
+    name = models.CharField(max_length=100)
     contact_number = models.BigIntegerField(default=None)
     alternate_contact = models.BigIntegerField(default=None)
     family_contact = models.BigIntegerField(default=None, null=True, blank=True)
     date_of_joining = models.DateField(default=None)
-    license_number = models.CharField(max_length=45)
+    license_number = models.CharField(max_length=100)
     license_document = models.FileField(upload_to=user_directory_path)
     address_permanent = models.CharField(max_length=300, default=None)
     address_temporary = models.CharField(max_length=300, default=None)
@@ -29,14 +29,14 @@ class TruckModel(models.Model):
     class TruckTypes(models.TextChoices):
         open_type = 'open', ('Open')
         close_type = 'close', ('Close')
-    truck_number = models.CharField(max_length=45)
+    truck_number = models.CharField(max_length=100)
     no_of_wheels = models.IntegerField(default=None)
-    model = models.CharField(max_length=45)
+    model = models.CharField(max_length=100)
     feet = models.IntegerField(default=None)
     mileage = models.IntegerField(default=0, null=True, blank=True)
-    manufacture_name = models.CharField(max_length=45)
+    manufacture_name = models.CharField(max_length=100)
     manufacture_date = models.DateField(default=None)
-    truck_type = models.CharField(max_length=45, choices=TruckTypes.choices, default=None)
+    truck_type = models.CharField(max_length=100, choices=TruckTypes.choices, default=None)
     tonnage = models.IntegerField(default=None)
     created_dtm = models.DateTimeField(auto_now_add=True)
     updated_dtm = models.DateTimeField(auto_now=True)
@@ -92,8 +92,8 @@ class LoadingChallanModel(models.Model):
 
     lc_no = models.AutoField(primary_key=True)
     billing_date = models.DateField(default=None)
-    place_of_receipt = models.CharField(max_length=45, default="Coimbatore")
-    place_of_delivery = models.CharField(max_length=45, choices=ConsigneePlaces.choices, default=None)
+    place_of_receipt = models.CharField(max_length=100, default="Coimbatore")
+    place_of_delivery = models.CharField(max_length=100, choices=ConsigneePlaces.choices, default=None)
     driver = models.ForeignKey(DriverModel, on_delete=CASCADE)
     vehicle_no = models.ForeignKey(TruckModel, on_delete=CASCADE)
     supplier = models.CharField(max_length=45)
@@ -128,11 +128,11 @@ class ShippingOrdersModel(models.Model):
 
     consignor = models.ForeignKey(ConsignorModel, on_delete=CASCADE)
     consignor_gst = models.CharField(max_length=15)
-    consignor_place = models.CharField(max_length=15, default="Coimbatore")
+    consignor_place = models.CharField(max_length=100, default="Coimbatore")
     consignee = models.ForeignKey(ConsigneeModel, on_delete=CASCADE)
     consignee_gst = models.CharField(max_length=15)
-    consignee_place = models.CharField(max_length=15, choices=ConsigneePlaces.choices, default=None)
-    no_of_packages = models.CharField(max_length=15)
+    consignee_place = models.CharField(max_length=100, choices=ConsigneePlaces.choices, default=None)
+    no_of_packages = models.CharField(max_length=100)
     package_value = models.IntegerField(null=True, default=None, blank=True)
     package_description = models.CharField(max_length=1000)
     actual_weight = models.FloatField(default=None, null=True)
@@ -147,10 +147,10 @@ class ShippingOrdersModel(models.Model):
     total_charges = models.FloatField()
     paid_amount = models.FloatField(default=None, null=True)
     payment_status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=None)
-    invoice_no = models.CharField(max_length=45)
+    invoice_no = models.CharField(max_length=100)
     invoice_date = models.DateField(default=None)
     billing_date = models.DateField(default=None)
-    gs_tax_payable = models.CharField(max_length=45, choices=TaxPayable.choices, default=None)
+    gs_tax_payable = models.CharField(max_length=100, choices=TaxPayable.choices, default=None)
     created_dtm = models.DateTimeField(auto_now_add=True)
     updated_dtm = models.DateTimeField(auto_now=True)
     loading_challan = models.ForeignKey(LoadingChallanModel, on_delete=CASCADE, default=None, null=True)
@@ -171,13 +171,13 @@ class PaymentNotificationModel(models.Model):
 
 
 class CashReceiptsModel(models.Model):
-    gc_no = models.CharField(max_length=45)
+    gc_no = models.CharField(max_length=100)
     received_from = models.CharField(max_length=125)
     receipt_date = models.DateField(default=None)
     booked_from = models.CharField(max_length=125)
     booked_to = models.CharField(max_length=125)
     total_amount = models.FloatField()
-    payment_status = models.CharField(max_length=45, default="")
+    payment_status = models.CharField(max_length=100, default="")
     created_dtm = models.DateTimeField(auto_now_add=True)
 
     class Meta:
