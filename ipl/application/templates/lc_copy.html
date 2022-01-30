@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <head>
 <style type="text/css">
+
 body {
+    height:297mm;
+    width:210mm;
     margin: 0;
     padding: 0;
     font-family: Arial, 'Arial Narrow', Helvetica, sans-serif;
@@ -10,6 +13,9 @@ body {
     color: #000000;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+}
+.table-content td{
+font-size:10px;
 }
 table {
     table-layout: fixed;
@@ -138,9 +144,13 @@ table, th, td {
     border-radius: 8px;
 }
 .heading{
-    font-size:45px;
+    font-size:32px;
     color:red;
 }
+.sub-heading{
+    font-size:12px;
+}
+
 .sup {
  vertical-align: super;
  color:red;
@@ -155,7 +165,8 @@ table, th, td {
 <body>
 <div id="download-section">
     <br><br><br><br><br>
-    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="margin:0 auto;">
+    <div>
+    <table id="table-download-section" width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:200mm;margin-left:18px;margin-right:auto;">
         <tr>
             <td align="center" valign="top" class="py-10"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                 <tr>
@@ -164,7 +175,7 @@ table, th, td {
                         <tr>
                             <td align="center">
                                 <div class="heading">Indore Professional Logistics <span style="color:blue">Royal</span></div><br>
-                                <div style="text-transform: uppercase;">
+                                <div class="sub-heading" style="text-transform: uppercase;">
                                     No.:313/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaanagar,<br> Peelamedu, Coimbatore - 641004.<br>
                                         <strong>PHONE</strong>: 9443353836, 99949807771,773,774, 7339000885.<br>
                                     <span style="color:red"><u>gst in:33gjgps5589p1z2. pan:gjgps5589p</u></span>
@@ -178,7 +189,7 @@ table, th, td {
         <tr>
             <td class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td valign="top" width="220" class="br-0 pr-0"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0 b-1">
+                    <td valign="top" width="175" class="br-0 pr-0"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0 b-1">
                         <tr>
                             <td align="center" class="text-blue text-line f-15"><strong>LOADING CHALLAN</strong></td>
                         </tr>
@@ -194,19 +205,19 @@ table, th, td {
                     <td valign="top">
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0 b-1">
                             <tr>
-                                <td>
+                                <td width="30%">
                                     <strong>
                                         <span class="text-red">From: </span>
                                         {{lc.place_of_receipt}}
                                     </strong>
                                 </td>
-                                <td>
+                                <td width="30%">
                                     <strong>
                                         <span class="text-red">To: </span>
                                         {{lc.place_of_delivery}}
                                     </strong>
                                 </td>
-                                <td>
+                                <td width="40%">
                                     <strong>
                                         <span class="text-red">DriverName: </span>
                                         {{lc.driver.name}}
@@ -216,19 +227,19 @@ table, th, td {
                         </table>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0 b-1 mt-5">
                             <tr>
-                                <td>
+                                <td width="40%">
                                     <strong>
                                         <span class="text-red">Vehicle No: </span>
                                         {{lc.vehicle_no.truck_number}}
                                     </strong>
                                 </td>
-                                <td>
+                                <td width="25%">
                                     <strong>
                                         <span class="text-red">Supplier: </span>
                                         {{lc.supplier}}
                                     </strong>
                                 </td>
-                                <td>
+                                <td width="35%">
                                     <strong>
                                         <span class="text-red">Mobile: </span>
                                         {{lc.driver.contact_number}}
@@ -238,17 +249,17 @@ table, th, td {
                         </table>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0 b-1 mt-5">
                             <tr>
-                                <td>
+                                <td width="11">
                                     <strong><span class="text-red">Weight: </span>{{lc.weight}}</strong>
                                 </td>
-                                <td>
+                                <td width="17">
                                     <strong><span class="text-red">Vehicle Hire: </span>{{lc.vehicle_hire}}</strong>
                                 </td>
-                                <td>
+                                <td width="36">
                                     <strong><span class="text-red">Advance:</span>
                                     Rs. {{lc.advance_amount}}/-</strong>
                                 </td>
-                                <td>
+                                <td width="36">
                                     <strong><span class="text-red">Balance: </span>Rs. {{lc.balance_amount}}/-</strong>
                                 </td>
                             </tr>
@@ -258,31 +269,31 @@ table, th, td {
             </table></td>
         </tr>
         <tr>
-            <td valign="top" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="bt-0">
+            <td valign="top" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="bt-0 table-content">
                 <thead>
                     <tr class="bb-1">
-                        <th width="35">S.NO</th>
-                        <th width="110">Consignor<br>Name</th>
-                        <th width="110">Consignee<br>Name</th>
-                        <th width="50">G.C.NO</th>
-                        <th width="70">Date</th>
-                        <th width="110">To</th>
-                        <th width="40">PKGS</th>
-                        <th width="40">Weight</th>
-                        <th width="40">ToPay</th>
-                        <th width="40">TBB</th>
-                        <th width="40">Paid</th>
+                        <th align="left" width="8%">S.<br>NO</th>
+                        <th width="23%">Consignor<br>Name</th>
+                        <th width="23%">Consignee<br>Name</th>
+                        <th align="center" width="15%">G.C.<br>NO</th>
+                        <th width="20%">Date</th>
+                        <th width="23%">To</th>
+                        <th width="15%">PKGS</th>
+                        <th align="left" width="15%">Weight</th>
+                        <th align="left" width="13%">ToPay</th>
+                        <th align="left" width="13%">TBB</th>
+                        <th align="left" width="13%">Paid</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for result in result_set %}
                     <tr>
                         <td align="center">{{forloop.counter}}</td>
-                        <td>{{result.consignor.name}}</td>
-                        <td>{{result.consignee.name}}</td>
+                        <td class="need-split" align="left">{{result.consignor.name}}</td>
+                        <td class="need-split" align="left">{{result.consignee.name}}</td>
                         <td align="center">{{result.id}}</td>
-                        <td align="center">{{result.billing_date|date:"Y-m-d"}}</td>
-                        <td align="center">
+                        <td align="left">{{result.billing_date|date:"Y-m-d"}}</td>
+                        <td align="left">
                             <strong>{{result.consignee_place}}</strong>
                         </td>
                         <td align="center">{{result.no_of_packages}}</td>
@@ -352,6 +363,7 @@ table, th, td {
             <td valign="bottom" align="center" height="25">Note: The driver, owners & Lorry Supplier responsible for all consignments.</td>
         </tr>
     </table>
+    </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
@@ -374,9 +386,10 @@ $(document).ready(function() {
         return cookieValue;
     }
     const csrftoken = getCookie('csrftoken');
-
     let page = $("#download-section");
-
+    $(".need-split").each(function(i, obj){
+        $(obj).html($(obj).html().match(/.{1,12}/g).join("<br>"));
+    })
     async function printPdf() {
       const pdf = html2PDF(page, {
             jsPDF: {
@@ -400,7 +413,7 @@ $(document).ready(function() {
                 'pdf_data': btoa(pdf.output())
             }
         }).done(function (result) {
-            window.open('/landingpage', "_self");
+<!--            window.open('/landingpage', "_self");-->
         });
     }
     printPdf().then(pdf=>saveFile(pdf));
