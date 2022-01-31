@@ -23,12 +23,32 @@
 <div class="main-content">
    <div class="wrapper">
                   <div id="date-section">
+                     <div class="row">
+                        <div class="col-6">
          <div class="form-group row">
-            <label class="col-sm-6 col-form-label" style="font-size:20px;">Date
+            <label class="col-sm-6 col-form-label" style="font-size:20px;">From Date
                 :</label>
-            <input class="required_field" id="order_created_date" name= "order_created_date" type="date" onchange="fetchData();">
+            <input class="required_field order_dates" id="order_created_date_from" name= "order_created_date_from" type="date" onchange="validateData();">
          </div>
+                        </div>
+                        <div class="col-6">
+         <div class="form-group row">
+            <label class="col-sm-6 col-form-label" style="font-size:20px;">To Date
+                :</label>
+            <input class="required_field order_dates" id="order_created_date_to" name= "order_created_date_to" type="date" onchange="validateData();">
+         </div>
+                        </div>
+                     </div>
+        <div class="form-group">
+            <div class="aab controls col-md-4 "></div>
+            <div class="controls col-md-4 ">
+            <button id="fetch-data-button" type="button" class="btn btn-primary" onclick="fetchData()">
+                Fetch Orders
+            </button>
+            </div>
+        </div>
             <hr class="rounded">
+
             </div>
       {% for result in result_set %}
       <div  class="row matched-orders" style="margin-left:200px;margin-right:auto;">
@@ -111,18 +131,40 @@
 {% endblock body_content %}
 {% block other_scripts %}
 <script>
+var redirectUrl = true;
+function validateData(){
+    $('.order_dates').each(function(i, obj){
+        if ($(obj).val() === ""){
+            redirectUrl = false;
+        }
+        else{
+            redirectUrl = true;
+        }
+     })
+     if (redirectUrl === false){
+        $("#fetch-data-button").hide();
+     }
+     else{
+        $("#fetch-data-button").show();
+     }
+}
 
 function fetchData(){
-      if(window.location.href.includes("order_created_date")){
-         window.location.href = window.location.href.substr(0, window.location.href.indexOf('&')) + "&order_created_date="+$("#order_created_date").val();
-      }
-      else{
-      window.location.href += "&order_created_date="+$("#order_created_date").val();
-      }
+   var newUrl = window.location.href;
+   if (newUrl.indexOf('&') !==-1){
+       newUrl = newUrl.substr(0, newUrl.indexOf('&')) + "&order_created_date_from="+$("#order_created_date_from").val() +
+       "&order_created_date_to="+$("#order_created_date_to").val();
+   }
+   else{
+    newUrl += "&order_created_date_from="+$("#order_created_date_from").val() +
+       "&order_created_date_to="+$("#order_created_date_to").val();
+   }
+   window.location.href = newUrl;
 }
 
 $(document).ready(function() {
-   function sleep(ms) {
+    $("#fetch-data-button").hide();
+    function sleep(ms) {
      return new Promise(resolve => setTimeout(resolve, ms));
    }
 
@@ -145,6 +187,7 @@ $(document).ready(function() {
       $("#ordersTable_filter").show();
       $("#ordersTable_info").show();
       $("#date-section").show();
+      $("fetch-data-button").attr("disabled", true);
    }
    $("#sidebarCollapse").on("click", function(){
       toggleNavBar();
@@ -152,11 +195,9 @@ $(document).ready(function() {
 
 <!--   $("#ordersTable").DataTable();-->
    $('.dataTables_length').addClass('bs-select');
-   {% if result_set|length > 0 %}
+   {% if enable_download %}
       let page = $(".matched-orders");
-      console.log(page);
       async function printPdf() {
-         console.log("abcd");
          const pdf = html2PDF(page, {
             jsPDF: {
                format: "a4",
@@ -168,7 +209,6 @@ $(document).ready(function() {
             },
             output: "{{payment_status}}.pdf"
             });
-         console.log(pdf);
          return pdf;
       }
       async function sleepThenAct(){
