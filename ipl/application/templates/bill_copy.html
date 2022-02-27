@@ -3,9 +3,9 @@
 <head>
 <style type="text/css">
 body {
-    height:297mm;
-    width:210mm;
-    margin: 0;
+    width: 297mm;
+    max-height: 210mm;
+    margin: 0 auto;
     padding: 0;
     font-family: Arial, 'Arial Narrow', Helvetica, sans-serif;
     font-size: 13px;
@@ -13,9 +13,6 @@ body {
     color: #000000;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
-}
-table {
-    table-layout: fixed;
 }
 table td {
     word-break: break-word;
@@ -129,7 +126,7 @@ table, th, td {
     border-radius: 8px;
 }
 .heading{
-    font-size:32px;
+    font-size:26px;
     color:red;
 }
 .sub-heading{
@@ -143,18 +140,18 @@ table, th, td {
 </head>
 <html>
 <body>
-<div id="download-section"><br><br>
-    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:200mm;margin-left:18px;margin-right:auto;">
+<div id="download-section">
+    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:100%;">
         <tr>
             <td valign="top" class="py-10"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                 <tr>
-                    <td valign="top" width="110" class="px-15"><img src="images/logo.jpg" width="100" alt="Image"></td>
-                    <td class="px-0"><table border="0" cellspacing="0" cellpadding="0">
+                    <td valign="top" width="100" class="px-15"><img src="logo.jpg" width="100" alt="Image"></td>
+                    <td class="px-0"><table border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
                         <tr>
                             <td align="center">
                                 <div class="heading">Indore Professional Logistics <span style="color:blue">Royal</span></div><br>
                                 <div><strong><u>Loading Transporters For</u></strong><br> Telangana, Madhya Pradesh, Maharastra, Chhatishghar<br>
-                                    No.:313/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaanagar, Peelamedu, Coimbatore - 641004.<br>
+                                    No.:313/1,3rd Shriram Nagar,FCI Main Road,Gandhimaanagar,Peelamedu,Coimbatore-641004<br>
                                         <strong>PHONE</strong>: 9443353836,7339000885,99949807771,773,774 <strong>EMAIL ID :</strong> iplroyal2017@gmail.com
                                         </div>
                             </td>
@@ -197,12 +194,12 @@ table, th, td {
                     <tr class="bb-1">
                         <th>S.NO</th>
                         <th>G.R.NO</th>
-                        <th width="10%">DATE</th>
+                        <th>DATE</th>
                         <th>NO.OF.<br>PKGS</th>
-                        <th width="10%">WEIGHT<br>Kgs</th>
-                        <th align="center" width="130">DESTINATION</th>
-                        <th align="center">RATE<br>Per Kgs</th>
-                        <th valign="top" colspan="2" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <th>WEIGHT<br>Kgs</th>
+                        <th align="center" style="width: 20%;">DESTINATION</th>
+                        <th align="center" style="width: 10%;">RATE<br>Per Kgs</th>
+                        <th valign="top" colspan="2" class="p-0" style="width: 20%;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
                                 <td>
                                     <div>FREIGHT</div>
@@ -242,7 +239,7 @@ table, th, td {
                     <tr>
                         <td colspan="5" class="bt-1 p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
-                                <td width="105" class="br-0 text-line">
+                                <td width="150" class="br-0 text-line">
                                     <strong>Amount in Words:</strong>
                                 </td>
                                 <td>
@@ -293,7 +290,7 @@ table, th, td {
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
 $(document).ready(function() {
-     $("html").css("zoom", "1.1");
+     //$("html").css("zoom", "1.1");
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -317,7 +314,7 @@ $(document).ready(function() {
       const pdf = html2PDF(page, {
             jsPDF: {
                 format: "a4",
-                orientation: "p"
+                orientation: "l"
             },
             image: {type: 'jpeg', quality: 1},
             output: {{bill.id}}+'_bill.pdf'
@@ -336,7 +333,7 @@ $(document).ready(function() {
                 'pdf_data': btoa(pdf.output())
             }
         }).done(function (result) {
-            window.open('/landingpage', "_self");
+<!--            window.open('/landingpage', "_self");-->
         });
     }
     printPdf().then(pdf=>saveFile(pdf));

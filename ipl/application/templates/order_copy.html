@@ -1,24 +1,17 @@
-{%load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <style type="text/css">
 body{
-    height:210mm;
-    width:148mm;
-    font-size: 11px;
-}
-{
-    margin: 0;
+	width: 270mm;
+	max-height: 148mm;
+    margin: 0 auto;
     padding: 0;
     font-size: 12px;
     line-height: 17px;
     color: #000000;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
-}
- table {
-    table-layout: fixed;
 }
  table td {
     word-break: break-word;
@@ -137,32 +130,46 @@ body{
 <body>
 <div class="download-section">
     <br>
-                <table width="1000" border="0" cellspacing="0" cellpadding="0" style="width:138mm;margin-left:18px;margin-right:auto;">
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%;">
             <tr>
-                <td id="order-type" style="color:red" align="right">Consignee&nbspCopy</td>
+                <td id="order-type" style="color:red">
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                    Consignee&nbspCopy
+                </td>
             </tr>
         </table>
-    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:138mm;margin-left:18px;margin-right:auto;">
-
+    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:95%;">
         <tr>
-            <td valign="top" class="py-10">
+            <td valign="top" style="padding:0px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
-                        <td valign="top" width="75" class="px-15"><br><br><br><img src="{% static 'images/logo.jpg' %}" width="100" alt="Image"></td>
-                        <td align="right">At Owner Risk
-                            <table border="0" cellspacing="0" cellpadding="0">
+                        <td valign="top" width="75" class="px-15"><img src="logo.jpg" width="90" alt="Image"></td>
+                        <td align="center">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
-                                    <td align="center">
+                                    <td align="center" style="padding: 0;">
                                         <div class="heading">Indore Professional Logistics Royal<span class="sup">&#174;</span></div>
                                         <div class="sub-heading">Loading Transporters for: Telangana, Madhya Pradesh, Maharastra, Chhatishghar<br>
-                                        Site No.:313/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaanagar, Peelamedu, Coimbatore - 4.<br>
-                                        <strong>PHONE</strong>: 9443353836,7339000885,99949807771,773,774, 0422-3254626 <br> <strong>EMAIL ID :</strong> iplroyal2017@gmail.com<br>
-                                            <span style="color:red;text-transform: uppercase;"><u>gst in:33gjgps5589p1z2. pan:gjgps5589p</u></span>
+                                        No.:313/1,3rd Shriram Nagar,FCI MainRoad,Gandhimaanagar,Peelamedu,<br>
+                                        Coimbatore-4 <strong>Phone</strong>: 9443353836,7339000885,99949807771,773,774, 0422-3254626 <br>
+										<strong>Email :</strong> iplroyal2017@gmail.com <span style="color:red; text-transform: uppercase;"><u>gst in:33gjgps5589p1z2,pan:gjgps5589p</u></span><br>
+                                            
                                         </div>
                                     </td>
                                 </tr>
                             </table>
                         </td>
+						<td align="right" style="vertical-align: top;">At Owner Risk</td>
                     </tr>
                 </table>
             </td>
@@ -172,23 +179,24 @@ body{
         <tr>
             <td valign="top" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td valign="top" width="60%" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <td valign="top" width="60%" class="p-0">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td valign="top" width="47%">
+                            <td valign="top" width="50%">
                                 <div><strong>Consignor Name :</strong></div>
-                                <div class="px-10 pt-5">
-                                    <strong>{{order.consignor.name}}</strong><br><br>
+                                <div style="height: 105px;">
+                                    <strong>{{order.consignor.name}}</strong><br>
                                     {{order.consignor.address}}<br>
-                                    {{order.consignor.contact_number}}</br>
+                                    {{order.consignor.contact_number}}<br>
                                     <strong>GST No : {{order.consignor.gstin}}</strong>
                                 </div>
                             </td>
                             <td valign="top">
                                 <div><strong>Consignee Name :</strong></div>
-                                <div class="px-10 pt-5">
-                                    <strong>{{order.consignee.name}}</strong><br><br>
+                                <div>
+                                    <strong>{{order.consignee.name}}</strong></br>
                                     {{order.consignee.address}}<br>
-                                    {{order.consignee.contact_number}}</br>
+                                    {{order.consignee.contact_number}}<br>
                                     <strong>GST No : {{order.consignee.gstin}}</strong>
                                 </div>
                             </td>
@@ -197,9 +205,9 @@ body{
                             <td valign="top" colspan="2" class="p-0">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="bt-1">
                                 <tr>
-                                    <td valign="top" width="90" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <td valign="top" width="60" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td valign="top" height="80">
+                                            <td valign="top" height="">
                                                 <strong>PKGS:</strong><br>
                                                 {{order.no_of_packages}}
                                             </td>
@@ -208,13 +216,13 @@ body{
                                             <td class="bt-1">Total : {{order.no_of_packages}}</td>
                                         </tr>
                                     </table></td>
-                                    <td valign="top">
+                                    <td valign="top" width="160">
                                         <strong>Description of Goods:</strong>
-                                        <div>
+                                        <div style="height: 120px;">
                                             {{order.package_description|linebreaks}}
                                         </div>
                                     </td>
-                                    <td valign="top" width="90" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <td valign="top" width="95" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td valign="top">
                                                 <strong>Actual Weight:</strong><br>
@@ -292,14 +300,20 @@ body{
                                 <strong>Time :</strong> {{order.billing_date}}
                             </td>
                         </tr>
-                        <tr>
+						<tr>
+                            <td valign="top" class="bt-1">
+                                <strong>Vehicle No :</strong> </br>TN 02 AJ 5458
+                            </td>
+                            <td valign="top" class="bt-1">
+                                <strong>Place Name :</strong> </br>SECUNDRABAD
+                            </td>
                         </tr>
                         <tr>
                             <td class="bt-1">
                                 <strong>Freight Charge :</strong>
                             </td>
                             <td align="right" class="bt-1">
-                                {%if order.freight_charges %}{{order.freight_charges}}{%else%}0{%endif%}
+                              {%if order.freight_charges %}{{order.freight_charges}}{%else%}0{%endif%}
                             </td>
                         </tr>
                         <tr>
@@ -316,7 +330,7 @@ body{
                                 <strong>Hamali :</strong>
                             </td>
                             <td align="right" class="bt-1">
-                                {%if order.hamali_charges %}{{order.hamali_charges}}{%else%}0{%endif%}
+                             {%if order.hamali_charges %}{{order.hamali_charges}}{%else%}0{%endif%}
                             </td>
                         </tr>
                         <tr>
@@ -354,9 +368,11 @@ body{
                         </tr>
                         <tr>
                             <td valign="bottom" height="70" align="left" colspan="2" class="bt-1">
-                                <span style="color:blue;font-size:10px;">For Indore&nbspProfessional&nbspLogistics&nbspRoyal<span class="sup">&#174;</span></span><br><br>
-                                <br><br><br>
+							<div style="height: 105px;">
+                                <span style="color:blue;font-size:12px;">For Indore&nbspProfessional&nbspLogistics&nbspRoyal<span class="sup">&#174;</span></span><br><br>
+                                <br></br></br>
                                 Authorised&nbspSignatory
+							</div>
                             </td>
                         </tr>
                     </table></td>
@@ -365,34 +381,49 @@ body{
         </tr>
     </table>
 </div>
+
 <div class="download-section">
     <br>
-                <table width="1000" border="0" cellspacing="0" cellpadding="0" style="width:138mm;margin-left:18px;margin-right:auto;">
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%;">
             <tr>
-                <td id="order-type" style="color:red" align="right">Consignor&nbspCopy</td>
+                <td id="order-type" style="color:red">
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                    Consignor&nbspCopy
+                </td>
             </tr>
         </table>
-    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:138mm;margin-left:18px;margin-right:auto;">
-
+    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:95%;">
         <tr>
-            <td valign="top" class="py-10">
+            <td valign="top" style="padding:0px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
-                        <td valign="top" width="75" class="px-15"><br><br><br><img src="{% static 'images/logo.jpg' %}" width="100" alt="Image"></td>
-                        <td align="right">At Owner Risk
-                            <table border="0" cellspacing="0" cellpadding="0">
+                        <td valign="top" width="75" class="px-15"><img src="logo.jpg" width="90" alt="Image"></td>
+                        <td align="center">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
-                                    <td align="center">
+                                    <td align="center" style="padding: 0;">
                                         <div class="heading">Indore Professional Logistics Royal<span class="sup">&#174;</span></div>
                                         <div class="sub-heading">Loading Transporters for: Telangana, Madhya Pradesh, Maharastra, Chhatishghar<br>
-                                        Site No.:313/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaanagar, Peelamedu, Coimbatore - 4.<br>
-                                        <strong>PHONE</strong>: 9443353836,7339000885,99949807771,773,774, 0422-3254626 <br> <strong>EMAIL ID :</strong> iplroyal2017@gmail.com<br>
-                                            <span style="color:red;text-transform: uppercase;"><u>gst in:33gjgps5589p1z2. pan:gjgps5589p</u></span>
+                                        No.:313/1,3rd Shriram Nagar,FCI MainRoad,Gandhimaanagar,Peelamedu,<br>
+                                        Coimbatore-4 <strong>Phone</strong>: 9443353836,7339000885,99949807771,773,774, 0422-3254626 <br>
+										<strong>Email :</strong> iplroyal2017@gmail.com <span style="color:red; text-transform: uppercase;"><u>gst in:33gjgps5589p1z2,pan:gjgps5589p</u></span><br>
+
                                         </div>
                                     </td>
                                 </tr>
                             </table>
                         </td>
+						<td align="right" style="vertical-align: top;">At Owner Risk</td>
                     </tr>
                 </table>
             </td>
@@ -402,23 +433,24 @@ body{
         <tr>
             <td valign="top" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td valign="top" width="60%" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <td valign="top" width="60%" class="p-0">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td valign="top" width="47%">
+                            <td valign="top" width="50%">
                                 <div><strong>Consignor Name :</strong></div>
-                                <div class="px-10 pt-5">
-                                    <strong>{{order.consignor.name}}</strong><br><br>
+                                <div style="height: 105px;">
+                                    <strong>{{order.consignor.name}}</strong><br>
                                     {{order.consignor.address}}<br>
-                                    {{order.consignor.contact_number}}</br>
+                                    {{order.consignor.contact_number}}<br>
                                     <strong>GST No : {{order.consignor.gstin}}</strong>
                                 </div>
                             </td>
                             <td valign="top">
                                 <div><strong>Consignee Name :</strong></div>
-                                <div class="px-10 pt-5">
-                                    <strong>{{order.consignee.name}}</strong><br><br>
+                                <div>
+                                    <strong>{{order.consignee.name}}</strong></br>
                                     {{order.consignee.address}}<br>
-                                    {{order.consignee.contact_number}}</br>
+                                    {{order.consignee.contact_number}}<br>
                                     <strong>GST No : {{order.consignee.gstin}}</strong>
                                 </div>
                             </td>
@@ -427,9 +459,9 @@ body{
                             <td valign="top" colspan="2" class="p-0">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="bt-1">
                                 <tr>
-                                    <td valign="top" width="90" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <td valign="top" width="60" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td valign="top" height="80">
+                                            <td valign="top" height="">
                                                 <strong>PKGS:</strong><br>
                                                 {{order.no_of_packages}}
                                             </td>
@@ -438,13 +470,13 @@ body{
                                             <td class="bt-1">Total : {{order.no_of_packages}}</td>
                                         </tr>
                                     </table></td>
-                                    <td valign="top">
+                                    <td valign="top" width="160">
                                         <strong>Description of Goods:</strong>
-                                        <div>
+                                        <div style="height: 120px;">
                                             {{order.package_description|linebreaks}}
                                         </div>
                                     </td>
-                                    <td valign="top" width="90" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <td valign="top" width="95" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td valign="top">
                                                 <strong>Actual Weight:</strong><br>
@@ -522,14 +554,20 @@ body{
                                 <strong>Time :</strong> {{order.billing_date}}
                             </td>
                         </tr>
-                        <tr>
+						<tr>
+                            <td valign="top" class="bt-1">
+                                <strong>Vehicle No :</strong> </br>TN 02 AJ 5458
+                            </td>
+                            <td valign="top" class="bt-1">
+                                <strong>Place Name :</strong> </br>SECUNDRABAD
+                            </td>
                         </tr>
                         <tr>
                             <td class="bt-1">
                                 <strong>Freight Charge :</strong>
                             </td>
                             <td align="right" class="bt-1">
-                                {%if order.freight_charges %}{{order.freight_charges}}{%else%}0{%endif%}
+                              {%if order.freight_charges %}{{order.freight_charges}}{%else%}0{%endif%}
                             </td>
                         </tr>
                         <tr>
@@ -546,7 +584,7 @@ body{
                                 <strong>Hamali :</strong>
                             </td>
                             <td align="right" class="bt-1">
-                                {%if order.hamali_charges %}{{order.hamali_charges}}{%else%}0{%endif%}
+                             {%if order.hamali_charges %}{{order.hamali_charges}}{%else%}0{%endif%}
                             </td>
                         </tr>
                         <tr>
@@ -584,9 +622,11 @@ body{
                         </tr>
                         <tr>
                             <td valign="bottom" height="70" align="left" colspan="2" class="bt-1">
-                                <span style="color:blue;font-size:10px;">For Indore&nbspProfessional&nbspLogistics&nbspRoyal<span class="sup">&#174;</span></span><br><br>
-                                <br><br><br>
+							<div style="height: 105px;">
+                                <span style="color:blue;font-size:12px;">For Indore&nbspProfessional&nbspLogistics&nbspRoyal<span class="sup">&#174;</span></span><br><br>
+                                <br></br></br>
                                 Authorised&nbspSignatory
+							</div>
                             </td>
                         </tr>
                     </table></td>
@@ -595,34 +635,49 @@ body{
         </tr>
     </table>
 </div>
+
 <div class="download-section">
     <br>
-                <table width="1000" border="0" cellspacing="0" cellpadding="0" style="width:138mm;margin-left:18px;margin-right:auto;">
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%;">
             <tr>
-                <td id="order-type" style="color:red" align="right">Driver&nbspCopy</td>
+                <td id="order-type" style="color:red">
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                    Driver&nbspCopy
+                </td>
             </tr>
         </table>
-    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:138mm;margin-left:18px;margin-right:auto;">
-
+    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:95%;">
         <tr>
-            <td valign="top" class="py-10">
+            <td valign="top" style="padding:0px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
-                        <td valign="top" width="75" class="px-15"><br><br><br><img src="{% static 'images/logo.jpg' %}" width="100" alt="Image"></td>
-                        <td align="right">At Owner Risk
-                            <table border="0" cellspacing="0" cellpadding="0">
+                        <td valign="top" width="75" class="px-15"><img src="logo.jpg" width="90" alt="Image"></td>
+                        <td align="center">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
-                                    <td align="center">
+                                    <td align="center" style="padding: 0;">
                                         <div class="heading">Indore Professional Logistics Royal<span class="sup">&#174;</span></div>
                                         <div class="sub-heading">Loading Transporters for: Telangana, Madhya Pradesh, Maharastra, Chhatishghar<br>
-                                        Site No.:313/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaanagar, Peelamedu, Coimbatore - 4.<br>
-                                        <strong>PHONE</strong>: 9443353836,7339000885,99949807771,773,774, 0422-3254626 <br> <strong>EMAIL ID :</strong> iplroyal2017@gmail.com<br>
-                                            <span style="color:red;text-transform: uppercase;"><u>gst in:33gjgps5589p1z2. pan:gjgps5589p</u></span>
+                                        No.:313/1,3rd Shriram Nagar,FCI MainRoad,Gandhimaanagar,Peelamedu,<br>
+                                        Coimbatore-4 <strong>Phone</strong>: 9443353836,7339000885,99949807771,773,774, 0422-3254626 <br>
+										<strong>Email :</strong> iplroyal2017@gmail.com <span style="color:red; text-transform: uppercase;"><u>gst in:33gjgps5589p1z2,pan:gjgps5589p</u></span><br>
+
                                         </div>
                                     </td>
                                 </tr>
                             </table>
                         </td>
+						<td align="right" style="vertical-align: top;">At Owner Risk</td>
                     </tr>
                 </table>
             </td>
@@ -632,23 +687,24 @@ body{
         <tr>
             <td valign="top" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td valign="top" width="60%" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <td valign="top" width="60%" class="p-0">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td valign="top" width="47%">
+                            <td valign="top" width="50%">
                                 <div><strong>Consignor Name :</strong></div>
-                                <div class="px-10 pt-5">
-                                    <strong>{{order.consignor.name}}</strong><br><br>
+                                <div style="height: 105px;">
+                                    <strong>{{order.consignor.name}}</strong><br>
                                     {{order.consignor.address}}<br>
-                                    {{order.consignor.contact_number}}</br>
+                                    {{order.consignor.contact_number}}<br>
                                     <strong>GST No : {{order.consignor.gstin}}</strong>
                                 </div>
                             </td>
                             <td valign="top">
                                 <div><strong>Consignee Name :</strong></div>
-                                <div class="px-10 pt-5">
-                                    <strong>{{order.consignee.name}}</strong><br><br>
+                                <div>
+                                    <strong>{{order.consignee.name}}</strong></br>
                                     {{order.consignee.address}}<br>
-                                    {{order.consignee.contact_number}}</br>
+                                    {{order.consignee.contact_number}}<br>
                                     <strong>GST No : {{order.consignee.gstin}}</strong>
                                 </div>
                             </td>
@@ -657,9 +713,9 @@ body{
                             <td valign="top" colspan="2" class="p-0">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="bt-1">
                                 <tr>
-                                    <td valign="top" width="90" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <td valign="top" width="60" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td valign="top" height="80">
+                                            <td valign="top" height="">
                                                 <strong>PKGS:</strong><br>
                                                 {{order.no_of_packages}}
                                             </td>
@@ -668,13 +724,13 @@ body{
                                             <td class="bt-1">Total : {{order.no_of_packages}}</td>
                                         </tr>
                                     </table></td>
-                                    <td valign="top">
+                                    <td valign="top" width="160">
                                         <strong>Description of Goods:</strong>
-                                        <div>
+                                        <div style="height: 120px;">
                                             {{order.package_description|linebreaks}}
                                         </div>
                                     </td>
-                                    <td valign="top" width="90" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <td valign="top" width="95" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td valign="top">
                                                 <strong>Actual Weight:</strong><br>
@@ -752,14 +808,20 @@ body{
                                 <strong>Time :</strong> {{order.billing_date}}
                             </td>
                         </tr>
-                        <tr>
+						<tr>
+                            <td valign="top" class="bt-1">
+                                <strong>Vehicle No :</strong> </br>TN 02 AJ 5458
+                            </td>
+                            <td valign="top" class="bt-1">
+                                <strong>Place Name :</strong> </br>SECUNDRABAD
+                            </td>
                         </tr>
                         <tr>
                             <td class="bt-1">
                                 <strong>Freight Charge :</strong>
                             </td>
                             <td align="right" class="bt-1">
-                                {%if order.freight_charges %}{{order.freight_charges}}{%else%}0{%endif%}
+                              {%if order.freight_charges %}{{order.freight_charges}}{%else%}0{%endif%}
                             </td>
                         </tr>
                         <tr>
@@ -776,7 +838,7 @@ body{
                                 <strong>Hamali :</strong>
                             </td>
                             <td align="right" class="bt-1">
-                                {%if order.hamali_charges %}{{order.hamali_charges}}{%else%}0{%endif%}
+                             {%if order.hamali_charges %}{{order.hamali_charges}}{%else%}0{%endif%}
                             </td>
                         </tr>
                         <tr>
@@ -814,9 +876,11 @@ body{
                         </tr>
                         <tr>
                             <td valign="bottom" height="70" align="left" colspan="2" class="bt-1">
-                                <span style="color:blue;font-size:10px;">For Indore&nbspProfessional&nbspLogistics&nbspRoyal<span class="sup">&#174;</span></span><br><br>
-                                <br><br><br>
+							<div style="height: 105px;">
+                                <span style="color:blue;font-size:12px;">For Indore&nbspProfessional&nbspLogistics&nbspRoyal<span class="sup">&#174;</span></span><br><br>
+                                <br></br></br>
                                 Authorised&nbspSignatory
+							</div>
                             </td>
                         </tr>
                     </table></td>
@@ -825,34 +889,49 @@ body{
         </tr>
     </table>
 </div>
+
 <div class="download-section">
     <br>
-                <table width="1000" border="0" cellspacing="0" cellpadding="0" style="width:138mm;margin-left:18px;margin-right:auto;">
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%;">
             <tr>
-                <td id="order-type" style="color:red" align="right">IPL&nbspCopy</td>
+                <td id="order-type" style="color:red">
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                    IPL&nbspCopy
+                </td>
             </tr>
         </table>
-    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:138mm;margin-left:18px;margin-right:auto;">
-
+    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:95%;">
         <tr>
-            <td valign="top" class="py-10">
+            <td valign="top" style="padding:0px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
-                        <td valign="top" width="75" class="px-15"><br><br><br><img src="{% static 'images/logo.jpg' %}" width="100" alt="Image"></td>
-                        <td align="right">At Owner Risk
-                            <table border="0" cellspacing="0" cellpadding="0">
+                        <td valign="top" width="75" class="px-15"><img src="logo.jpg" width="90" alt="Image"></td>
+                        <td align="center">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
-                                    <td align="center">
+                                    <td align="center" style="padding: 0;">
                                         <div class="heading">Indore Professional Logistics Royal<span class="sup">&#174;</span></div>
                                         <div class="sub-heading">Loading Transporters for: Telangana, Madhya Pradesh, Maharastra, Chhatishghar<br>
-                                        Site No.:313/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaanagar, Peelamedu, Coimbatore - 4.<br>
-                                        <strong>PHONE</strong>: 9443353836,7339000885,99949807771,773,774, 0422-3254626 <br> <strong>EMAIL ID :</strong> iplroyal2017@gmail.com<br>
-                                            <span style="color:red;text-transform: uppercase;"><u>gst in:33gjgps5589p1z2. pan:gjgps5589p</u></span>
+                                        No.:313/1,3rd Shriram Nagar,FCI MainRoad,Gandhimaanagar,Peelamedu,<br>
+                                        Coimbatore-4 <strong>Phone</strong>: 9443353836,7339000885,99949807771,773,774, 0422-3254626 <br>
+										<strong>Email :</strong> iplroyal2017@gmail.com <span style="color:red; text-transform: uppercase;"><u>gst in:33gjgps5589p1z2,pan:gjgps5589p</u></span><br>
+
                                         </div>
                                     </td>
                                 </tr>
                             </table>
                         </td>
+						<td align="right" style="vertical-align: top;">At Owner Risk</td>
                     </tr>
                 </table>
             </td>
@@ -862,23 +941,24 @@ body{
         <tr>
             <td valign="top" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td valign="top" width="60%" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <td valign="top" width="60%" class="p-0">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td valign="top" width="47%">
+                            <td valign="top" width="50%">
                                 <div><strong>Consignor Name :</strong></div>
-                                <div class="px-10 pt-5">
-                                    <strong>{{order.consignor.name}}</strong><br><br>
+                                <div style="height: 105px;">
+                                    <strong>{{order.consignor.name}}</strong><br>
                                     {{order.consignor.address}}<br>
-                                    {{order.consignor.contact_number}}</br>
+                                    {{order.consignor.contact_number}}<br>
                                     <strong>GST No : {{order.consignor.gstin}}</strong>
                                 </div>
                             </td>
                             <td valign="top">
                                 <div><strong>Consignee Name :</strong></div>
-                                <div class="px-10 pt-5">
-                                    <strong>{{order.consignee.name}}</strong><br><br>
+                                <div>
+                                    <strong>{{order.consignee.name}}</strong></br>
                                     {{order.consignee.address}}<br>
-                                    {{order.consignee.contact_number}}</br>
+                                    {{order.consignee.contact_number}}<br>
                                     <strong>GST No : {{order.consignee.gstin}}</strong>
                                 </div>
                             </td>
@@ -887,9 +967,9 @@ body{
                             <td valign="top" colspan="2" class="p-0">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="bt-1">
                                 <tr>
-                                    <td valign="top" width="90" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <td valign="top" width="60" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td valign="top" height="80">
+                                            <td valign="top" height="">
                                                 <strong>PKGS:</strong><br>
                                                 {{order.no_of_packages}}
                                             </td>
@@ -898,13 +978,13 @@ body{
                                             <td class="bt-1">Total : {{order.no_of_packages}}</td>
                                         </tr>
                                     </table></td>
-                                    <td valign="top">
+                                    <td valign="top" width="160">
                                         <strong>Description of Goods:</strong>
-                                        <div>
+                                        <div style="height: 120px;">
                                             {{order.package_description|linebreaks}}
                                         </div>
                                     </td>
-                                    <td valign="top" width="90" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <td valign="top" width="95" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td valign="top">
                                                 <strong>Actual Weight:</strong><br>
@@ -982,14 +1062,20 @@ body{
                                 <strong>Time :</strong> {{order.billing_date}}
                             </td>
                         </tr>
-                        <tr>
+						<tr>
+                            <td valign="top" class="bt-1">
+                                <strong>Vehicle No :</strong> </br>TN 02 AJ 5458
+                            </td>
+                            <td valign="top" class="bt-1">
+                                <strong>Place Name :</strong> </br>SECUNDRABAD
+                            </td>
                         </tr>
                         <tr>
                             <td class="bt-1">
                                 <strong>Freight Charge :</strong>
                             </td>
                             <td align="right" class="bt-1">
-                                {%if order.freight_charges %}{{order.freight_charges}}{%else%}0{%endif%}
+                              {%if order.freight_charges %}{{order.freight_charges}}{%else%}0{%endif%}
                             </td>
                         </tr>
                         <tr>
@@ -1006,7 +1092,7 @@ body{
                                 <strong>Hamali :</strong>
                             </td>
                             <td align="right" class="bt-1">
-                                {%if order.hamali_charges %}{{order.hamali_charges}}{%else%}0{%endif%}
+                             {%if order.hamali_charges %}{{order.hamali_charges}}{%else%}0{%endif%}
                             </td>
                         </tr>
                         <tr>
@@ -1044,9 +1130,11 @@ body{
                         </tr>
                         <tr>
                             <td valign="bottom" height="70" align="left" colspan="2" class="bt-1">
-                                <span style="color:blue;font-size:10px;">For Indore&nbspProfessional&nbspLogistics&nbspRoyal<span class="sup">&#174;</span></span><br><br>
-                                <br><br><br>
+							<div style="height: 105px;">
+                                <span style="color:blue;font-size:12px;">For Indore&nbspProfessional&nbspLogistics&nbspRoyal<span class="sup">&#174;</span></span><br><br>
+                                <br></br></br>
                                 Authorised&nbspSignatory
+							</div>
                             </td>
                         </tr>
                     </table></td>
@@ -1055,7 +1143,6 @@ body{
         </tr>
     </table>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
@@ -1084,10 +1171,10 @@ $(document).ready(function() {
       const pdf = html2PDF(page, {
             jsPDF: {
                 format: "a5",
-                orientation: "p"
+                orientation: "l"
             },
             image: {type: 'jpeg', quality: 1},
-            output: {{order.id}}+'.pdf'
+            output: 100+'.pdf'
           });
       return pdf;
     }
@@ -1098,12 +1185,12 @@ $(document).ready(function() {
             url: '/downloads?download_type=order',
             headers: {'X-CSRFToken': csrftoken},
             data: {
-                'id': {{order.id}},
+                'id': 100,
                 'type': 'order',
                 'pdf_data': btoa(pdf.output())
             }
         }).done(function (result) {
-            window.open('/landingpage?order_saved=1', "_self");
+<!--            window.open('/landingpage?order_saved=1', "_self");-->
         });
     }
     printPdf().then(pdf=>saveFile(pdf));
