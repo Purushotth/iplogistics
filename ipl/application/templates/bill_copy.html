@@ -1,3 +1,4 @@
+{%load static%}
 {% load decimal_split %}
 <!DOCTYPE html>
 <head>
@@ -145,7 +146,7 @@ table, th, td {
         <tr>
             <td valign="top" class="py-10"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                 <tr>
-                    <td valign="top" width="100" class="px-15"><img src="logo.jpg" width="100" alt="Image"></td>
+                    <td valign="top" width="100" class="px-15"><img src="{% static 'images/logo.jpg' %}" width="100" alt="Image"></td>
                     <td class="px-0"><table border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
                         <tr>
                             <td align="center">
