@@ -1,11 +1,12 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <style type="text/css">
 body{
-	width: 270mm;
+	width: 240mm;
 	max-height: 148mm;
-    margin: 0 auto;
+    margin: 0 50px;
     padding: 0;
     font-size: 12px;
     line-height: 17px;
@@ -148,12 +149,12 @@ body{
                 </td>
             </tr>
         </table>
-    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:95%;">
+    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:100%;">
         <tr>
             <td valign="top" style="padding:0px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
-                        <td valign="top" width="75" class="px-15"><img src="logo.jpg" width="90" alt="Image"></td>
+                        <td valign="top" width="75" class="px-15"><img src="{% static 'images/logo.jpg' %}" width="90" alt="Image"></td>
                         <td align="center">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
@@ -402,12 +403,12 @@ body{
                 </td>
             </tr>
         </table>
-    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:95%;">
+    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:100%;">
         <tr>
             <td valign="top" style="padding:0px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
-                        <td valign="top" width="75" class="px-15"><img src="logo.jpg" width="90" alt="Image"></td>
+                        <td valign="top" width="75" class="px-15"><img src="{% static 'images/logo.jpg' %}" width="90" alt="Image"></td>
                         <td align="center">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
@@ -656,12 +657,12 @@ body{
                 </td>
             </tr>
         </table>
-    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:95%;">
+    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:100%;">
         <tr>
             <td valign="top" style="padding:0px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
-                        <td valign="top" width="75" class="px-15"><img src="logo.jpg" width="90" alt="Image"></td>
+                        <td valign="top" width="75" class="px-15"><img src="{% static 'images/logo.jpg' %}" width="90" alt="Image"></td>
                         <td align="center">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
@@ -910,12 +911,12 @@ body{
                 </td>
             </tr>
         </table>
-    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:95%;">
+    <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:100%;">
         <tr>
             <td valign="top" style="padding:0px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
-                        <td valign="top" width="75" class="px-15"><img src="logo.jpg" width="90" alt="Image"></td>
+                        <td valign="top" width="75" class="px-15"><img src="{% static 'images/logo.jpg' %}" width="90" alt="Image"></td>
                         <td align="center">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
@@ -1174,7 +1175,7 @@ $(document).ready(function() {
                 orientation: "l"
             },
             image: {type: 'jpeg', quality: 1},
-            output: 100+'.pdf'
+            output: {{order.id}}+'.pdf'
           });
       return pdf;
     }
@@ -1185,7 +1186,7 @@ $(document).ready(function() {
             url: '/downloads?download_type=order',
             headers: {'X-CSRFToken': csrftoken},
             data: {
-                'id': 100,
+                'id': {{order.id}},
                 'type': 'order',
                 'pdf_data': btoa(pdf.output())
             }
