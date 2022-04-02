@@ -122,11 +122,11 @@ class LoadingChallanView(LoginRequiredMixin, View):
         if form.is_valid():
             logger.info("[LOADING CHALLAN] - FORM VALIDATED | USER - {}".format(request.user.email))
             result_set = ShippingOrdersModel.objects.filter(
-                billing_date__lt=form.cleaned_data.get("billing_date"),
+                billing_date__lte=form.cleaned_data.get("billing_date"),
                 consignor_place=form.cleaned_data.get("place_of_receipt"),
                 consignee_place=form.cleaned_data.get("place_of_delivery"),
                 loading_challan=None
-            ).exclude(payment_status="to_pay")
+            )
             if generate_challan and result_set:
                 logger.info("[LOADING CHALLAN] - GENERATING CHALLAN | USER - {}".format(request.user.email))
                 order_list = tuple(map(int, ''.join(request.POST.getlist("order_list")).split(',')))
@@ -159,7 +159,6 @@ class LoadingChallanView(LoginRequiredMixin, View):
                     "weight_total": weight_total,
                     "pkgs_total": pkgs_total
                 }
-
                 return render(request, "lc_copy.html", self.context)
 
             driver_list = DriverModel.objects.all().values('id', 'name', 'contact_number')
@@ -272,11 +271,11 @@ class ReportsView(LoginRequiredMixin, View):
         from django.core.paginator import Paginator
         enable_download = 0
         if order_created_date_from and order_created_date_to:
-            objects = ShippingOrdersModel.objects.filter(payment_status=payment_status, created_dtm__gte=order_created_date_from, created_dtm__lte=order_created_date_to)
+            objects = ShippingOrdersModel.objects.filter(payment_status=payment_status, billing_date__gte=order_created_date_from, billing_date__lte=order_created_date_to)
             enable_download = 1 if len(objects) > 0 else 0
             for obj in objects:
                 total_amount += obj.total_charges
-            paginator = Paginator(objects, 13)
+            paginator = Paginator(objects, 15)
             for i in paginator.page_range:
                 result_set.append(iter(paginator.get_page(i)))
         self.context = {
