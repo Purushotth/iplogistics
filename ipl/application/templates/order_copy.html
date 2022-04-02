@@ -1,18 +1,37 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <style type="text/css">
-body{
-	width: 240mm;
-	max-height: 148mm;
-    margin: 0 50px;
+@page {
+  size: A4;
+}
+@media print {
+	@page {
+		size: portrait;
+		}
+		}
+		
+@font-face {
+    font-family: 'peignotbold';
+    src: url('peignot_bold-webfont.woff2') format('woff2'),
+         url('peignot_bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+.download-section{
+	width: 794px;
+	max-height: 561px;
+    margin: 0px;
     padding: 0;
     font-size: 12px;
     line-height: 17px;
     color: #000000;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+	page-break-before:always;
+	clear: all;
 }
  table td {
     word-break: break-word;
@@ -118,6 +137,7 @@ body{
 .heading{
     font-size:20px;
         color:blue;
+		font-family: peignotbold;
 }
 .sub-heading{
     font-size:12px;
@@ -130,32 +150,18 @@ body{
 </head>
 <body>
 <div class="download-section">
-    <br>
                 <table border="0" cellspacing="0" cellpadding="0" style="width:100%;">
             <tr>
-                <td id="order-type" style="color:red">
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-
-                    Consignee&nbspCopy
-                </td>
+                <td id="order-type" style="color:red" align="right">Consignee&nbspCopy</td>
             </tr>
         </table>
     <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:100%;">
+
         <tr>
             <td valign="top" style="padding:0px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
-                        <td valign="top" width="75" class="px-15"><img src="{% static 'images/logo.jpg' %}" width="90" alt="Image"></td>
+                        <td valign="top" width="75" class="px-15"><img src="{% static 'images/logo.jpg' %}"  width="90" alt="Image"></td>
                         <td align="center">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
@@ -181,10 +187,9 @@ body{
         <tr>
             <td valign="top" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td valign="top" width="60%" class="p-0">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <td valign="top" width="60%" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td valign="top" width="50%">
+                            <td valign="top" width="47%">
                                 <div><strong>Consignor Name :</strong></div>
                                 <div style="height: 105px;">
                                     <strong>{{order.consignor.name}}</strong><br>
@@ -299,7 +304,7 @@ body{
                                 <strong>Date :</strong> {{order.billing_date|date:"Y-m-d"}}
                             </td>
                             <td valign="top" class="bt-1">
-                                <strong>Time :</strong> {{order.billing_date|date:"Y-m-d"}}
+                                <strong>Time :</strong> {{order.billing_date|time:"G:i:s"}}
                             </td>
                         </tr>
                         <tr>
@@ -377,32 +382,18 @@ body{
 </div>
 
 <div class="download-section">
-    <br>
                 <table border="0" cellspacing="0" cellpadding="0" style="width:100%;">
             <tr>
-                <td id="order-type" style="color:red">
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-
-                    Consignor&nbspCopy
-                </td>
+                <td id="order-type" style="color:red" align="right">Consignor&nbspCopy</td>
             </tr>
         </table>
     <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:100%;">
+
         <tr>
             <td valign="top" style="padding:0px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
-                        <td valign="top" width="75" class="px-15"><img src="{% static 'images/logo.jpg' %}" width="90" alt="Image"></td>
+                        <td valign="top" width="75" class="px-15"><img src="{% static 'images/logo.jpg' %}"  width="90" alt="Image"></td>
                         <td align="center">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
@@ -428,10 +419,9 @@ body{
         <tr>
             <td valign="top" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td valign="top" width="60%" class="p-0">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <td valign="top" width="60%" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td valign="top" width="50%">
+                            <td valign="top" width="47%">
                                 <div><strong>Consignor Name :</strong></div>
                                 <div style="height: 105px;">
                                     <strong>{{order.consignor.name}}</strong><br>
@@ -546,15 +536,7 @@ body{
                                 <strong>Date :</strong> {{order.billing_date|date:"Y-m-d"}}
                             </td>
                             <td valign="top" class="bt-1">
-                                <strong>Time :</strong> {{order.billing_date}}
-                            </td>
-                        </tr>
-						<tr>
-                            <td valign="top" class="bt-1">
-                                <strong>Vehicle No :</strong> </br>TN 02 AJ 5458
-                            </td>
-                            <td valign="top" class="bt-1">
-                                <strong>Place Name :</strong> </br>SECUNDRABAD
+                                <strong>Time :</strong> {{order.billing_date|time:"G:i:s"}}
                             </td>
                         </tr>
                         <tr>
@@ -632,32 +614,18 @@ body{
 </div>
 
 <div class="download-section">
-    <br>
                 <table border="0" cellspacing="0" cellpadding="0" style="width:100%;">
             <tr>
-                <td id="order-type" style="color:red">
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-
-                    Driver&nbspCopy
-                </td>
+                <td id="order-type" style="color:red" align="right">IPL&nbspCopy</td>
             </tr>
         </table>
     <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:100%;">
+
         <tr>
             <td valign="top" style="padding:0px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
-                        <td valign="top" width="75" class="px-15"><img src="{% static 'images/logo.jpg' %}" width="90" alt="Image"></td>
+                        <td valign="top" width="75" class="px-15"><img src="{% static 'images/logo.jpg' %}"  width="90" alt="Image"></td>
                         <td align="center">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
@@ -683,10 +651,9 @@ body{
         <tr>
             <td valign="top" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td valign="top" width="60%" class="p-0">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <td valign="top" width="60%" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td valign="top" width="50%">
+                            <td valign="top" width="47%">
                                 <div><strong>Consignor Name :</strong></div>
                                 <div style="height: 105px;">
                                     <strong>{{order.consignor.name}}</strong><br>
@@ -801,15 +768,7 @@ body{
                                 <strong>Date :</strong> {{order.billing_date|date:"Y-m-d"}}
                             </td>
                             <td valign="top" class="bt-1">
-                                <strong>Time :</strong> {{order.billing_date}}
-                            </td>
-                        </tr>
-						<tr>
-                            <td valign="top" class="bt-1">
-                                <strong>Vehicle No :</strong> </br>TN 02 AJ 5458
-                            </td>
-                            <td valign="top" class="bt-1">
-                                <strong>Place Name :</strong> </br>SECUNDRABAD
+                                <strong>Time :</strong> {{order.billing_date|time:"G:i:s"}}
                             </td>
                         </tr>
                         <tr>
@@ -887,31 +846,18 @@ body{
 </div>
 
 <div class="download-section">
-    <br>
                 <table border="0" cellspacing="0" cellpadding="0" style="width:100%;">
             <tr>
-                <td id="order-type" style="color:red">
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    IPL&nbspCopy
-                </td>
+                <td id="order-type" style="color:red" align="right">Driver&nbspCopy</td>
             </tr>
         </table>
     <table border="0" cellspacing="0" cellpadding="0" class="table-bordered table-pad" style="width:100%;">
+
         <tr>
             <td valign="top" style="padding:0px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="t-b-0">
                     <tr>
-                        <td valign="top" width="75" class="px-15"><img src="{% static 'images/logo.jpg' %}" width="90" alt="Image"></td>
+                        <td valign="top" width="75" class="px-15"><img src="{% static 'images/logo.jpg' %}"  width="90" alt="Image"></td>
                         <td align="center">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
@@ -937,10 +883,9 @@ body{
         <tr>
             <td valign="top" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td valign="top" width="60%" class="p-0">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <td valign="top" width="60%" class="p-0"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td valign="top" width="50%">
+                            <td valign="top" width="47%">
                                 <div><strong>Consignor Name :</strong></div>
                                 <div style="height: 105px;">
                                     <strong>{{order.consignor.name}}</strong><br>
@@ -1055,15 +1000,7 @@ body{
                                 <strong>Date :</strong> {{order.billing_date|date:"Y-m-d"}}
                             </td>
                             <td valign="top" class="bt-1">
-                                <strong>Time :</strong> {{order.billing_date}}
-                            </td>
-                        </tr>
-						<tr>
-                            <td valign="top" class="bt-1">
-                                <strong>Vehicle No :</strong> </br>TN 02 AJ 5458
-                            </td>
-                            <td valign="top" class="bt-1">
-                                <strong>Place Name :</strong> </br>SECUNDRABAD
+                                <strong>Time :</strong> {{order.billing_date|time:"G:i:s"}}
                             </td>
                         </tr>
                         <tr>
@@ -1167,7 +1104,7 @@ $(document).ready(function() {
       const pdf = html2PDF(page, {
             jsPDF: {
                 format: "a5",
-                orientation: "l"
+                orientation: "p"
             },
             image: {type: 'jpeg', quality: 1},
             output: {{order.id}}+'.pdf'
@@ -1186,7 +1123,7 @@ $(document).ready(function() {
                 'pdf_data': btoa(pdf.output())
             }
         }).done(function (result) {
-<!--            window.open('/landingpage?order_saved=1', "_self");-->
+            window.open('/landingpage?order_saved=1', "_self");
         });
     }
     printPdf().then(pdf=>saveFile(pdf));
