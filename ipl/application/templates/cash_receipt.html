@@ -1,21 +1,40 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <head>
    <style type="text/css">
+   @page {
+  size: A4;
+}
+@media print {
+	@page {
+		size: portrait;
+		}
+		}
+		
+@font-face {
+    font-family: 'peignotbold';
+    src: url('peignot_bold-webfont.woff2') format('woff2'),
+         url('peignot_bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
       body {
-      height:210mm;
-      width:148mm;
-      margin: 0;
+      width: 794px;
+	  max-height: 561px;
+      margin: 0px auto;
       padding: 0;
       font-family: Arial, 'Arial Narrow', Helvetica, sans-serif;
       font-size: 12px;
-      line-height: 18px;
+      line-height: 12px;
       color: #333266;
       -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
+	  page-break-before:always;
+	clear: all;
       }
       table {
-      table-layout: fixed;
+      /*table-layout: fixed;*/
       }
       table td {
       word-break: break-word;
@@ -97,18 +116,18 @@
 </head>
 <html>
    <body>
-      <div id="download-section">
-         <table width="800" border="0" cellspacing="0" cellpadding="0" style="width:138mm;margin-left:18px;margin-right:auto;">
+      <div id="download-section" style="width:100%;">
+         <table border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
             <tr>
-               <td valign="top">
+               <td>
                   <table width="100%" border="0" cellspacing="0" cellpadding="0">
                      <tr>
-                        <td width="110"><img src="{% static 'images/logo.jpg' %}" width="90"></td>
+                        <td width="110"><img src="{% static 'images/logo.jpg' %}" width="100"></td>
                         <td>
-                           <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                           <table style="width:90%;" border="0" cellspacing="0" cellpadding="0">
                               <tr>
                                  <td align="center">
-                                    <div class="f-30">Indore Proffesional Logistics <strong>Royal</strong></div>
+                                    <div class="f-30" style="font-family: peignotbold;">Indore Proffesional Logistics <strong>Royal</strong></div>
                                     <div><span>No. 313/1, 3rd Shriram Nagar, FCI Main Road, Gandhimaa Nagar,</span><br>
                                        <span>Near IOC Petrol Bunk, Coimbatore - 641 004</span><br>
                                        <span>Phone : 0422-3254626 | 94433 53836 | 99949 80771,73,74</span>
@@ -127,14 +146,14 @@
                <td height="15" style="line-height: 1px;"></td>
             </tr>
             <tr>
-               <td valign="top">
+               <td>
                   <table width="100%" border="0" cellspacing="0" cellpadding="0">
                      <tr>
                         <td width="20%">S. No. <input id="s_no" type="text" style="border:0;border-bottom: 2px dotted;" size="4" readonly></td>
                         <td align="center">
                            <span class="border-box">CASH RECEIPT</span>
                         </td>
-                        <td width="40%">Date :<input class="required_field" id="receipt_date" name= "receipt_date" type="date" style="border:0;border-bottom: 2px dotted;" size="5"></td>
+                        <td width="20%">Date :<input class="required_field" id="receipt_date" name= "receipt_date" type="date" style="border:0;border-bottom: 2px dotted;" size="5"></td>
                      </tr>
                   </table>
                </td>
@@ -143,10 +162,10 @@
                <td height="15" style="line-height: 1px;"></td>
             </tr>
             <tr>
-               <td valign="top">
+               <td>
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table-pad">
                      <tr>
-                        <td>Received with thanks from <br><input class="required_field" id="received_from" name= "received_from" type="text" style="border:0;border-bottom: 2px dotted;" size="50"> in respect of TBB/Delivery</td>
+                        <td>Received with thanks from <input class="required_field" id="received_from" name= "received_from" type="text" style="border:0;border-bottom: 2px dotted;" size="50"> in respect of TBB/Delivery</td>
                      </tr>
                      <tr>
                         <td>GC No. <input class="required_field" id="gc_no" name= "gc_no" type="text" style="border:0;border-bottom: 2px dotted;" size="14"> Date <input class="required_field" type="date" style="border:0;border-bottom: 2px dotted;" size="20"></td>
@@ -158,43 +177,42 @@
                </td>
             </tr>
             <tr>
-               <td valign="top">
+               <td>
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table-pad">
                      <tr>
-                        <td valign="top">
+                        <td>
                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                              <tr>
+                              <tr style="width:50%;float: left;">
                                  <td>Pkgs <input class="required_field" type="number" style="border:0;border-bottom: 2px dotted;" size="35"></td>
                               </tr>
-                              <tr>
+                              <tr style="width:50%;float: left;">
                                  <td>Freight. Rs <input class="required_field charges" type="number" style="border:0;border-bottom: 2px dotted;"></td>
                               </tr>
-                              <tr>
+                              <tr style="width:50%;float: left;">
                                  <td>LR.Charge. Rs <input class="required_field charges" type="number" style="border:0;border-bottom: 2px dotted;"></td>
                               </tr>
-                              <tr>
+                              <tr style="width:50%;float: left;">
                                  <td>Labour. Rs <input class="required_field charges" type="number" style="border:0;border-bottom: 2px dotted;"></td>
                               </tr>
-                              <tr>
+                              <tr style="width:50%;float: left;">
                                  <td>Total. Rs <input class="required_field" id="total_amount" name= "total_amount" type="number" style="border:0;border-bottom: 2px dotted;" readonly></td>
                               </tr>
                            </table>
                         </td>
-                        <td width="45%" valign="top" align="center"><img src="images/logo.jpg" width="140"></td>
+                        <td align="center"><img src="{% static 'images/logo.jpg' %}" width="120"></td>
                      </tr>
                   </table>
                </td>
             </tr>
             <tr>
-               <td valign="top">Rupees in Words <br><input id="amount_in_words" type="text" style="border:0;border-bottom: 2px dotted;" size="75" readonly></td>
+               <td>Rupees in Words<input id="amount_in_words" type="text" style="border:0;border-bottom: 2px dotted;" size="75" readonly></td>
             </tr>
-            <tr>
-               <td height="25" style="line-height: 1px;"></td>
-            </tr>
+			
+			
             <tr>
 
-               <td valign="top">
-                 <br> <br> <br>  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+               <td>
+                 <br> <br> <br><br> <br>  <table width="100%" border="0" cellspacing="0" cellpadding="0">
                      <tr>
                         <td width="50%"><i>Sign of Consignee</i></td>
                         <td align="right">For Indore Proffesional Logistics Royal</td>
@@ -209,6 +227,8 @@
 
          <input type="submit" id="submit-button">
       </div>
+	  
+	  
       <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
       <script>
          $(document).ready(function() {
@@ -273,7 +293,6 @@
                      $("#amount_in_words").val(result.amount_in_words);
                      $("#s_no").val(result.id);
                      $("#submit-button").hide();
-<!--                     $("html").css("zoom", "1.2");-->
                      let page = $("#download-section");
                      async function printPdf() {
                         const pdf = html2PDF(page, {
