@@ -149,7 +149,7 @@ class ShippingOrdersModel(models.Model):
     payment_status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=None)
     invoice_no = models.CharField(max_length=100)
     invoice_date = models.DateField(default=None)
-    billing_date = models.DateTimeField(default=None)
+    billing_date = models.DateField(default=None)
     gs_tax_payable = models.CharField(max_length=100, choices=TaxPayable.choices, default=None)
     created_dtm = models.DateTimeField(auto_now_add=True)
     updated_dtm = models.DateTimeField(auto_now=True)
