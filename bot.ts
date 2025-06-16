@@ -65,14 +65,21 @@ const sessionDetails = {
   conversationId: 'conversation-id'
 };
 
+// Create a local instance for testing
+let botService: BotService;
+
+beforeEach(() => {
+  botService = new BotService();
+});
+
 describe('BotService', () => {
   it('should create a new bot resource', async () => {
-    const botResource = await BotService.getBotIfExists(sessionDetails, botDetails);
+    const botResource = await botService.constructor.getBotIfExists(sessionDetails, botDetails);
     expect(botResource).toBeDefined();
   });
 
   it('should return initial bot response', async () => {
-    const botResource = await BotService.getBotIfExists(sessionDetails, botDetails);
+    const botResource = await botService.constructor.getBotIfExists(sessionDetails, botDetails);
     const response = await botResource.getInitialBotResponse();
     expect(response.text).toBe('Initial response');
     expect(response.confidence).toBe(1);
@@ -80,7 +87,7 @@ describe('BotService', () => {
   });
 
   it('should return a response from streamed audio', async () => {
-    const botResource = await BotService.getBotIfExists(sessionDetails, botDetails);
+    const botResource = await botService.constructor.getBotIfExists(sessionDetails, botDetails);
     const data = new Uint8Array([10, 20, 30]);
     const response = await botResource.getBotResponse(data);
     expect(response.text).toBe('Hello');
