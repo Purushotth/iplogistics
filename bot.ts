@@ -1,4 +1,5 @@
-import { BotService, BotResponse } from './bot-service';
+import { BotService } from './bot-service';
+import { BotResource, BotResponse } from './bot-service';
 import { BotDetails } from '../models/bot-details';
 import { SessionsClient } from '@google-cloud/dialogflow-cx';
 import { Readable } from 'stream';
@@ -65,36 +66,36 @@ const sessionDetails = {
   conversationId: 'conversation-id'
 };
 
-// Create a local instance for testing
-let botService: BotService;
-
-beforeEach(() => {
-  botService = new BotService();
+describe('BotService.getBotIfExists', () => {
+  it('should return a BotResource instance', async () => {
+    const resource = await BotService.getBotIfExists(sessionDetails, botDetails);
+    expect(resource).toBeInstanceOf(BotResource);
+  });
 });
 
-describe('BotService', () => {
-  it('should create a new bot resource', async () => {
-    const botResource = await botService.constructor.getBotIfExists(sessionDetails, botDetails);
-    expect(botResource).toBeDefined();
+describe('BotResource', () => {
+  let resource: BotResource;
+
+  beforeEach(async () => {
+    resource = await BotService.getBotIfExists(sessionDetails, botDetails);
   });
 
   it('should return initial bot response', async () => {
-    const botResource = await botService.constructor.getBotIfExists(sessionDetails, botDetails);
-    const response = await botResource.getInitialBotResponse();
+    const response = await resource.getInitialBotResponse();
     expect(response.text).toBe('Initial response');
     expect(response.confidence).toBe(1);
     expect(response.audioBytes).toBeInstanceOf(Uint8Array);
   });
 
   it('should return a response from streamed audio', async () => {
-    const botResource = await botService.constructor.getBotIfExists(sessionDetails, botDetails);
-    const data = new Uint8Array([10, 20, 30]);
-    const response = await botResource.getBotResponse(data);
+    const response = await resource.getBotResponse(new Uint8Array([10, 20, 30]));
     expect(response.text).toBe('Hello');
     expect(response.confidence).toBe(0.9);
     expect(response.audioBytes).toBeInstanceOf(Uint8Array);
   });
+});
 
+describe('BotResponse', () => {
   it('should support fluent API on BotResponse', () => {
     const response = new BotResponse('match', 'text')
       .withConfidence(0.95)
