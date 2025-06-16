@@ -45,6 +45,7 @@ jest.mock('@google-cloud/dialogflow-cx', () => {
   }
 });
 
+
 const sessionDetails: SessionDetails = {
   organizationId: 'org1',
   correlationId: 'corr1',
@@ -62,7 +63,8 @@ const botDetails: BotDetails = {
   outputAudioEncoding: protos.google.cloud.dialogflow.cx.v3.OutputAudioEncoding.OUTPUT_AUDIO_ENCODING_LINEAR_16,
   inputAudioEncoding: protos.google.cloud.dialogflow.cx.v3.AudioEncoding.AUDIO_ENCODING_LINEAR_16,
   sampleRateHertz: 16000,
-  initialEventName: 'WELCOME'
+  initialEventName: 'WELCOME',
+  outputVariables: {} // ensure this is defined to avoid undefined access errors
 };
 
 describe('BotService and BotResource Integration', () => {
