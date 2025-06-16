@@ -48,13 +48,17 @@ let mockWSServerFactory: any;
 };
 
 mockWSServerFactory = jest.fn(() => mockWSServer);
+const mockWSServer = {
+  on: jest.fn(),
+  emit: jest.fn(),
+  handleUpgrade: jest.fn()
+};
+    const secretServiceMock = {
+  verify: jest.fn(() => Promise.resolve({ code: 'VERIFIED' }))
+};
+const webSocketServerFactory = jest.fn(() => mockWSServer);
+server = new Server(jest.fn(), jest.fn(), webSocketServerFactory, secretServiceMock);
 
-server = new Server(
-  jest.fn(),
-  jest.fn(),
-  mockWSServerFactory,
-  { verify: jest.fn(() => Promise.resolve({ code: 'VERIFIED' })) }
-);
 
     mockWS = {
       on: jest.fn(),
@@ -89,7 +93,7 @@ const rejectWSServer = {
 const rejectServer = new Server(
   jest.fn(),
   jest.fn(),
-  jest.fn(() => rejectWSServer),
+  webSocketServerFactory,
   rejectSecretService
 );
 
