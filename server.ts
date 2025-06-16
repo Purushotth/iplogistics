@@ -78,12 +78,20 @@ server = new Server(
   });
 
   it('should reject request if signature is invalid', async () => {
-    const rejectServer = new Server(
-      jest.fn(),
-      jest.fn(),
-      jest.fn(() => ({ on: jest.fn(), emit: jest.fn(), handleUpgrade: jest.fn() })),
-      { verify: jest.fn(() => Promise.resolve({ code: 'INVALID' })) }
-    );
+    const rejectSecretService = {
+  verify: jest.fn(() => Promise.resolve({ code: 'INVALID' }))
+};
+const rejectWSServer = {
+  on: jest.fn(),
+  emit: jest.fn(),
+  handleUpgrade: jest.fn()
+};
+const rejectServer = new Server(
+  jest.fn(),
+  jest.fn(),
+  jest.fn(() => rejectWSServer),
+  rejectSecretService
+);
 
     const socketMock = { write: jest.fn(), destroy: jest.fn() };
     await rejectServer['verifyRequestSignature']({} as Request, rejectServer['secretService'], socketMock);
