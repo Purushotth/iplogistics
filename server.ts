@@ -36,19 +36,25 @@ const createMockRequest = () => ({
 describe('Server WebSocket Handling', () => {
   let server: Server;
   let mockWS: any;
-  let mockSocket: any;
+let mockSocket: any;
+let mockWSServer: any;
+let mockWSServerFactory: any;
 
   beforeEach(() => {
-    server = new Server(
-      jest.fn(),
-      jest.fn(),
-      jest.fn(() => ({
-        on: jest.fn(),
-        emit: jest.fn(),
-        handleUpgrade: jest.fn()
-      })),
-      { verify: jest.fn(() => Promise.resolve({ code: 'VERIFIED' })) }
-    );
+    mockWSServer = {
+  on: jest.fn(),
+  emit: jest.fn(),
+  handleUpgrade: jest.fn()
+};
+
+mockWSServerFactory = jest.fn(() => mockWSServer);
+
+server = new Server(
+  jest.fn(),
+  jest.fn(),
+  mockWSServerFactory,
+  { verify: jest.fn(() => Promise.resolve({ code: 'VERIFIED' })) }
+);
 
     mockWS = {
       on: jest.fn(),
