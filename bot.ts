@@ -45,37 +45,44 @@ jest.mock('@google-cloud/dialogflow-cx', () => {
   }
 });
 
+let sessionDetails: SessionDetails;
+let botDetails: BotDetails;
+let botResource: BotResource;
 
-const sessionDetails: SessionDetails = {
-  organizationId: 'org1',
-  correlationId: 'corr1',
-  sessionId: 'sess1',
-  conversationId: 'conv1'
-};
+beforeEach(async () => {
+  sessionDetails = {
+    organizationId: 'org1',
+    correlationId: 'corr1',
+    sessionId: 'sess1',
+    conversationId: 'conv1'
+  };
 
-const botDetails: BotDetails = {
-  projectId: 'proj1',
-  location: 'us-central1',
-  agentId: 'agent1',
-  environment: 'draft',
-  inputVariables: { foo: 'bar' },
-  languageCode: 'en',
-  outputAudioEncoding: protos.google.cloud.dialogflow.cx.v3.OutputAudioEncoding.OUTPUT_AUDIO_ENCODING_LINEAR_16,
-  inputAudioEncoding: protos.google.cloud.dialogflow.cx.v3.AudioEncoding.AUDIO_ENCODING_LINEAR_16,
-  sampleRateHertz: 16000,
-  initialEventName: 'WELCOME',
-  outputVariables: {} // ensure this is defined to avoid undefined access errors
-};
+  botDetails = {
+    projectId: 'proj1',
+    location: 'us-central1',
+    agentId: 'agent1',
+    environment: 'draft',
+    inputVariables: { foo: 'bar' },
+    languageCode: 'en',
+    outputAudioEncoding: protos.google.cloud.dialogflow.cx.v3.OutputAudioEncoding.OUTPUT_AUDIO_ENCODING_LINEAR_16,
+    inputAudioEncoding: protos.google.cloud.dialogflow.cx.v3.AudioEncoding.AUDIO_ENCODING_LINEAR_16,
+    sampleRateHertz: 16000,
+    initialEventName: 'WELCOME',
+    outputVariables: {}
+  };
+
+  botResource = await BotService.getBotIfExists(sessionDetails, botDetails);
+});
 
 describe('BotService and BotResource Integration', () => {
   it('should create and return a BotResource instance', async () => {
-    const resource = await BotService.getBotIfExists(sessionDetails, botDetails);
+    expect(botResource).toBeInstanceOf(BotResource);
     expect(resource).toBeInstanceOf(BotResource);
   });
 
   it('should return valid initial response from detectIntent', async () => {
     const resource = await BotService.getBotIfExists(sessionDetails, botDetails);
-    const response = await resource.getInitialBotResponse();
+    const response = await botResource.getInitialBotResponse();
     expect(response.text).toBe('Hi there!');
     expect(response.audioBytes).toBeInstanceOf(Uint8Array);
     expect(response.confidence).toBeCloseTo(0.88);
@@ -83,7 +90,7 @@ describe('BotService and BotResource Integration', () => {
 
   it('should return valid response from streamingDetectIntent', async () => {
     const resource = await BotService.getBotIfExists(sessionDetails, botDetails);
-    const response = await resource.getBotResponse(new Uint8Array([10, 20]));
+    const response = await botResource.getBotResponse(new Uint8Array([10, 20]));
     expect(response.text).toBe('Streamed response');
     expect(response.audioBytes).toBeInstanceOf(Uint8Array);
     expect(response.confidence).toBeCloseTo(0.9);
