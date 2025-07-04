@@ -1,0 +1,41 @@
+import wave
+import os
+
+def convert_wav_to_chunks(wav_file_path, output_dir, chunk_ms=20):
+    """
+    Converts a WAV file (Linear PCM, 16-bit) into headerless audio chunks like the AudioHook implementation.
+
+    :param wav_file_path: Path to input .wav file
+    :param output_dir: Directory to store chunk files
+    :param chunk_ms: Duration of each chunk in milliseconds
+    """
+    with wave.open(wav_file_path, 'rb') as wf:
+        nchannels = wf.getnchannels()
+        sampwidth = wf.getsampwidth()
+        framerate = wf.getframerate()
+        nframes = wf.getnframes()
+
+        assert sampwidth == 2, "Only 16-bit PCM supported"
+        assert framerate in [8000, 16000, 44100, 48000], "Unsupported sample rate"
+        assert wf.getcomptype() == "NONE", "Compressed audio not supported"
+
+        os.makedirs(output_dir, exist_ok=True)
+
+        frames_per_chunk = int((framerate * chunk_ms) / 1000)
+        chunk_index = 0
+
+        while True:
+            data = wf.readframes(frames_per_chunk)
+            if not data:
+                break
+
+            chunk_path = os.path.join(output_dir, f"chunk_{chunk_index:05}.raw")
+            with open(chunk_path, 'wb') as f:
+                f.write(data)
+
+            chunk_index += 1
+
+    print(f"✅ Done. Extracted {chunk_index} chunks of {chunk_ms}ms each.")
+
+# Example usage
+# convert_wav_to_chunks("input.wav", "chunks", chunk_ms=20)
