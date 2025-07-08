@@ -1,0 +1,57 @@
+import { Session } from './session';
+import { WebSocket } from 'ws';
+
+describe('Session class', () => {
+  let mockWs: WebSocket;
+  let session: Session;
+
+  beforeEach(() => {
+    mockWs = {
+      close: jest.fn()
+    } as any as WebSocket;
+
+    session = new Session(mockWs);
+  });
+
+  test('initializes session with correct defaults', () => {
+    expect((session as any).closed).toBe(false);
+    expect((session as any)._isAudioPlaying).toBe(false);
+    expect((session as any)._isBargedInEnabled).toBe(false);
+    expect((session as any)._isInitialEventServed).toBe(false);
+  });
+
+  test('set and get isAudioPlaying', () => {
+    session.isAudioPlaying = true;
+    expect(session.isAudioPlaying).toBe(true);
+  });
+
+  test('set and get isBargedInEnabled', () => {
+    session.isBargedInEnabled = true;
+    expect(session.isBargedInEnabled).toBe(true);
+  });
+
+  test('set and get isInitialEventServed', () => {
+    session.isInitialEventServed = true;
+    expect(session.isInitialEventServed).toBe(true);
+  });
+
+  test('close() should close WebSocket and clean resources', () => {
+    const endMock = jest.fn();
+    const resetMock = jest.fn();
+    (session as any)._inputAudioTransform = { writableEnded: false, end: endMock };
+    (session as any).dtmfService = { reset: resetMock };
+
+    session.close();
+
+    expect(mockWs.close).toHaveBeenCalled();
+    expect(endMock).toHaveBeenCalled();
+    expect(resetMock).toHaveBeenCalled();
+    expect((session as any).closed).toBe(true);
+  });
+
+  test('close() should not fail if already closed', () => {
+    (session as any).closed = true;
+    session.close();
+    expect(mockWs.close).not.toHaveBeenCalled();
+  });
+});
