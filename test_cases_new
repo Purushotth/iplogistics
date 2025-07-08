@@ -1,57 +1,169 @@
 import { Session } from './session';
 import { WebSocket } from 'ws';
+import * as registry from './websocket/message-handlers/message-handler-registry';
+import { createVariablesAndSendDisconnect } from './utils/form-output-variables';
 
-describe('Session class', () => {
-  let mockWs: WebSocket;
+jest.mock('./utils/form-output-variables');
+const mockCreateVariablesAndSendDisconnect = createVariablesAndSendDisconnect as jest.Mock;
+
+describe('Session', () => {
+  let wsMock: WebSocket;
   let session: Session;
 
   beforeEach(() => {
-    mockWs = {
-      close: jest.fn()
+    wsMock = {
+      send: jest.fn(),
+      close: jest.fn(),
     } as any as WebSocket;
 
-    session = new Session(mockWs);
+    session = new Session(wsMock);
+    (session as any)._sessionDetails = {
+      clientSessionId: 'abc',
+    };
   });
 
-  test('initializes session with correct defaults', () => {
+  // 1. Initialization and flags
+  test('should initialize with correct defaults', () => {
     expect((session as any).closed).toBe(false);
     expect((session as any)._isAudioPlaying).toBe(false);
     expect((session as any)._isBargedInEnabled).toBe(false);
     expect((session as any)._isInitialEventServed).toBe(false);
   });
 
-  test('set and get isAudioPlaying', () => {
+  test('should set and get isAudioPlaying', () => {
     session.isAudioPlaying = true;
     expect(session.isAudioPlaying).toBe(true);
   });
 
-  test('set and get isBargedInEnabled', () => {
+  test('should set and get isBargedInEnabled', () => {
     session.isBargedInEnabled = true;
     expect(session.isBargedInEnabled).toBe(true);
   });
 
-  test('set and get isInitialEventServed', () => {
+  test('should set and get isInitialEventServed', () => {
     session.isInitialEventServed = true;
     expect(session.isInitialEventServed).toBe(true);
   });
 
-  test('close() should close WebSocket and clean resources', () => {
+  // 2. close()
+  test('should close WebSocket and clean up resources', () => {
     const endMock = jest.fn();
     const resetMock = jest.fn();
+
     (session as any)._inputAudioTransform = { writableEnded: false, end: endMock };
     (session as any).dtmfService = { reset: resetMock };
 
     session.close();
 
-    expect(mockWs.close).toHaveBeenCalled();
+    expect(wsMock.close).toHaveBeenCalled();
     expect(endMock).toHaveBeenCalled();
     expect(resetMock).toHaveBeenCalled();
     expect((session as any).closed).toBe(true);
   });
 
-  test('close() should not fail if already closed', () => {
+  test('should skip close if already closed', () => {
     (session as any).closed = true;
     session.close();
-    expect(mockWs.close).not.toHaveBeenCalled();
+    expect(wsMock.close).not.toHaveBeenCalled();
+  });
+
+  // 3. createMessage()
+  test('should create server message correctly', () => {
+    (session as any)._sessionDetails.clientSessionId = 'test-id';
+    (session as any)._lastServerSequenceNumber = 3;
+    (session as any)._lastClientSequenceNumber = 1;
+
+    const msg = session.createMessage('MY_EVENT' as any, { foo: 'bar' });
+
+    expect(msg).toEqual({
+      id: 'test-id',
+      version: '2',
+      seq: 4,
+      clientseq: 1,
+      type: 'MY_EVENT',
+      parameters: { foo: 'bar' },
+    });
+  });
+
+  // 4. send()
+  test('should stringify and send message', () => {
+    const msg = {
+      type: 'event',
+      parameters: { entities: {} },
+    } as any;
+
+    session.send(msg);
+    expect(wsMock.send).toHaveBeenCalledWith(JSON.stringify(msg));
+  });
+
+  // 5. processTextMessage()
+  test('should skip processing if session is closed', () => {
+    (session as any).closed = true;
+    session.processTextMessage('{"id":"abc"}');
+    expect(mockCreateVariablesAndSendDisconnect).not.toHaveBeenCalled();
+  });
+
+  test('should handle invalid JSON and trigger disconnect', () => {
+    session.processTextMessage('not-json');
+    expect(mockCreateVariablesAndSendDisconnect).toHaveBeenCalledWith(expect.anything(), 'parsingError');
+  });
+
+  test('should handle invalid client seq', () => {
+    const msg = JSON.stringify({
+      id: 'abc',
+      seq: 2,
+      serverseq: 0,
+    });
+
+    (session as any)._lastClientSequenceNumber = 0;
+
+    session.processTextMessage(msg);
+    expect(mockCreateVariablesAndSendDisconnect).toHaveBeenCalledWith(
+      expect.anything(),
+      'invalidClientSequenceNo',
+      expect.objectContaining({
+        expectedId: '1',
+        providedId: '2',
+      }),
+    );
+  });
+
+  test('should handle invalid server seq', () => {
+    const msg = JSON.stringify({
+      id: 'abc',
+      seq: 1,
+      serverseq: 3,
+    });
+
+    (session as any)._lastClientSequenceNumber = 0;
+    (session as any)._lastServerSequenceNumber = 1;
+
+    session.processTextMessage(msg);
+    expect(mockCreateVariablesAndSendDisconnect).toHaveBeenCalledWith(
+      expect.anything(),
+      'invalidServerSequenceNo',
+      expect.objectContaining({
+        expectedId: '2',
+        providedId: '3',
+      }),
+    );
+  });
+
+  test('should call handler if present', () => {
+    const handlerMock = { handleMessage: jest.fn() };
+    jest.spyOn(registry.MessageHandlerRegistry, 'getHandler').mockReturnValue(handlerMock);
+
+    const msg = JSON.stringify({
+      id: 'abc',
+      seq: 1,
+      serverseq: 0,
+      type: 'handler-type',
+    });
+
+    (session as any)._lastClientSequenceNumber = 0;
+    (session as any)._lastServerSequenceNumber = 0;
+
+    session.processTextMessage(msg);
+    expect(handlerMock.handleMessage).toHaveBeenCalledWith(expect.anything(), session);
   });
 });
